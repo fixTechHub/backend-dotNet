@@ -3,48 +3,56 @@
   "WorkspaceRootPath": "D:\\DATN\\WebApiDotNet\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{97199CD6-6CF7-4EC4-B5BD-2ED46BC05CA5}|WebApiDotNet\\WebApiDotNet.csproj|d:\\datn\\webapidotnet\\webapidotnet\\repository\\couponrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{97199CD6-6CF7-4EC4-B5BD-2ED46BC05CA5}|WebApiDotNet\\WebApiDotNet.csproj|solutionrelative:webapidotnet\\repository\\couponrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{97199CD6-6CF7-4EC4-B5BD-2ED46BC05CA5}|WebApiDotNet\\WebApiDotNet.csproj|d:\\datn\\webapidotnet\\webapidotnet\\dtos\\createcoupondto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{97199CD6-6CF7-4EC4-B5BD-2ED46BC05CA5}|WebApiDotNet\\WebApiDotNet.csproj|solutionrelative:webapidotnet\\dtos\\createcoupondto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{97199CD6-6CF7-4EC4-B5BD-2ED46BC05CA5}|WebApiDotNet\\WebApiDotNet.csproj|d:\\datn\\webapidotnet\\webapidotnet\\dtos\\coupondto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{97199CD6-6CF7-4EC4-B5BD-2ED46BC05CA5}|WebApiDotNet\\WebApiDotNet.csproj|solutionrelative:webapidotnet\\dtos\\coupondto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{97199CD6-6CF7-4EC4-B5BD-2ED46BC05CA5}|WebApiDotNet\\WebApiDotNet.csproj|d:\\datn\\webapidotnet\\webapidotnet\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{97199CD6-6CF7-4EC4-B5BD-2ED46BC05CA5}|WebApiDotNet\\WebApiDotNet.csproj|solutionrelative:webapidotnet\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{97199CD6-6CF7-4EC4-B5BD-2ED46BC05CA5}|WebApiDotNet\\WebApiDotNet.csproj|d:\\datn\\webapidotnet\\webapidotnet\\services\\couponservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{97199CD6-6CF7-4EC4-B5BD-2ED46BC05CA5}|WebApiDotNet\\WebApiDotNet.csproj|solutionrelative:webapidotnet\\services\\couponservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{97199CD6-6CF7-4EC4-B5BD-2ED46BC05CA5}|WebApiDotNet\\WebApiDotNet.csproj|d:\\datn\\webapidotnet\\webapidotnet\\controllers\\couponcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{97199CD6-6CF7-4EC4-B5BD-2ED46BC05CA5}|WebApiDotNet\\WebApiDotNet.csproj|solutionrelative:webapidotnet\\controllers\\couponcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{97199CD6-6CF7-4EC4-B5BD-2ED46BC05CA5}|WebApiDotNet\\WebApiDotNet.csproj|d:\\datn\\webapidotnet\\webapidotnet\\services\\couponservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{97199CD6-6CF7-4EC4-B5BD-2ED46BC05CA5}|WebApiDotNet\\WebApiDotNet.csproj|solutionrelative:webapidotnet\\services\\couponservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{97199CD6-6CF7-4EC4-B5BD-2ED46BC05CA5}|WebApiDotNet\\WebApiDotNet.csproj|d:\\datn\\webapidotnet\\webapidotnet\\data\\mappingprofile.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{97199CD6-6CF7-4EC4-B5BD-2ED46BC05CA5}|WebApiDotNet\\WebApiDotNet.csproj|solutionrelative:webapidotnet\\data\\mappingprofile.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{97199CD6-6CF7-4EC4-B5BD-2ED46BC05CA5}|WebApiDotNet\\WebApiDotNet.csproj|d:\\datn\\webapidotnet\\webapidotnet\\services\\icouponservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{97199CD6-6CF7-4EC4-B5BD-2ED46BC05CA5}|WebApiDotNet\\WebApiDotNet.csproj|solutionrelative:webapidotnet\\services\\icouponservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{97199CD6-6CF7-4EC4-B5BD-2ED46BC05CA5}|WebApiDotNet\\WebApiDotNet.csproj|d:\\datn\\webapidotnet\\webapidotnet\\dtos\\updatecoupondto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{97199CD6-6CF7-4EC4-B5BD-2ED46BC05CA5}|WebApiDotNet\\WebApiDotNet.csproj|solutionrelative:webapidotnet\\dtos\\updatecoupondto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{97199CD6-6CF7-4EC4-B5BD-2ED46BC05CA5}|WebApiDotNet\\WebApiDotNet.csproj|d:\\datn\\webapidotnet\\webapidotnet\\repository\\irepository\\icouponrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{97199CD6-6CF7-4EC4-B5BD-2ED46BC05CA5}|WebApiDotNet\\WebApiDotNet.csproj|solutionrelative:webapidotnet\\repository\\irepository\\icouponrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{97199CD6-6CF7-4EC4-B5BD-2ED46BC05CA5}|WebApiDotNet\\WebApiDotNet.csproj|d:\\datn\\webapidotnet\\webapidotnet\\dtos\\coupondto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{97199CD6-6CF7-4EC4-B5BD-2ED46BC05CA5}|WebApiDotNet\\WebApiDotNet.csproj|solutionrelative:webapidotnet\\dtos\\coupondto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{97199CD6-6CF7-4EC4-B5BD-2ED46BC05CA5}|WebApiDotNet\\WebApiDotNet.csproj|d:\\datn\\webapidotnet\\webapidotnet\\data\\mongodbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{97199CD6-6CF7-4EC4-B5BD-2ED46BC05CA5}|WebApiDotNet\\WebApiDotNet.csproj|solutionrelative:webapidotnet\\data\\mongodbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{97199CD6-6CF7-4EC4-B5BD-2ED46BC05CA5}|WebApiDotNet\\WebApiDotNet.csproj|d:\\datn\\webapidotnet\\webapidotnet\\data\\mongodbsettings.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{97199CD6-6CF7-4EC4-B5BD-2ED46BC05CA5}|WebApiDotNet\\WebApiDotNet.csproj|solutionrelative:webapidotnet\\data\\mongodbsettings.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{97199CD6-6CF7-4EC4-B5BD-2ED46BC05CA5}|WebApiDotNet\\WebApiDotNet.csproj|d:\\datn\\webapidotnet\\webapidotnet\\services\\icouponservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{97199CD6-6CF7-4EC4-B5BD-2ED46BC05CA5}|WebApiDotNet\\WebApiDotNet.csproj|solutionrelative:webapidotnet\\services\\icouponservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{97199CD6-6CF7-4EC4-B5BD-2ED46BC05CA5}|WebApiDotNet\\WebApiDotNet.csproj|d:\\datn\\webapidotnet\\webapidotnet\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{97199CD6-6CF7-4EC4-B5BD-2ED46BC05CA5}|WebApiDotNet\\WebApiDotNet.csproj|solutionrelative:webapidotnet\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{97199CD6-6CF7-4EC4-B5BD-2ED46BC05CA5}|WebApiDotNet\\WebApiDotNet.csproj|d:\\datn\\webapidotnet\\webapidotnet\\dtos\\createcoupondto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{97199CD6-6CF7-4EC4-B5BD-2ED46BC05CA5}|WebApiDotNet\\WebApiDotNet.csproj|solutionrelative:webapidotnet\\dtos\\createcoupondto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{97199CD6-6CF7-4EC4-B5BD-2ED46BC05CA5}|WebApiDotNet\\WebApiDotNet.csproj|d:\\datn\\webapidotnet\\webapidotnet\\repository\\couponrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{97199CD6-6CF7-4EC4-B5BD-2ED46BC05CA5}|WebApiDotNet\\WebApiDotNet.csproj|solutionrelative:webapidotnet\\repository\\couponrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{97199CD6-6CF7-4EC4-B5BD-2ED46BC05CA5}|WebApiDotNet\\WebApiDotNet.csproj|d:\\datn\\webapidotnet\\webapidotnet\\repository\\irepository\\icouponrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{97199CD6-6CF7-4EC4-B5BD-2ED46BC05CA5}|WebApiDotNet\\WebApiDotNet.csproj|solutionrelative:webapidotnet\\repository\\irepository\\icouponrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{97199CD6-6CF7-4EC4-B5BD-2ED46BC05CA5}|WebApiDotNet\\WebApiDotNet.csproj|d:\\datn\\webapidotnet\\webapidotnet\\models\\coupon.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{97199CD6-6CF7-4EC4-B5BD-2ED46BC05CA5}|WebApiDotNet\\WebApiDotNet.csproj|solutionrelative:webapidotnet\\models\\coupon.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{97199CD6-6CF7-4EC4-B5BD-2ED46BC05CA5}|WebApiDotNet\\WebApiDotNet.csproj|d:\\datn\\webapidotnet\\webapidotnet\\data\\mongodbsettings.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{97199CD6-6CF7-4EC4-B5BD-2ED46BC05CA5}|WebApiDotNet\\WebApiDotNet.csproj|solutionrelative:webapidotnet\\data\\mongodbsettings.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{97199CD6-6CF7-4EC4-B5BD-2ED46BC05CA5}|WebApiDotNet\\WebApiDotNet.csproj|d:\\datn\\webapidotnet\\webapidotnet\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
@@ -62,7 +70,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 63,
+          "SelectedChildIndex": 60,
           "Children": [
             {
               "$type": "Bookmark",
@@ -306,57 +314,81 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 5,
+              "DocumentIndex": 0,
               "Title": "CouponService.cs",
               "DocumentMoniker": "D:\\DATN\\WebApiDotNet\\WebApiDotNet\\Services\\CouponService.cs",
               "RelativeDocumentMoniker": "WebApiDotNet\\Services\\CouponService.cs",
-              "ToolTip": "D:\\DATN\\WebApiDotNet\\WebApiDotNet\\Services\\CouponService.cs",
-              "RelativeToolTip": "WebApiDotNet\\Services\\CouponService.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAD8AAAAJAAAAAAAAAA==",
+              "ToolTip": "D:\\DATN\\WebApiDotNet\\WebApiDotNet\\Services\\CouponService.cs*",
+              "RelativeToolTip": "WebApiDotNet\\Services\\CouponService.cs*",
+              "ViewState": "AgIAABsAAAAAAAAAAAAAADIAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-06-08T18:06:27.318Z"
+              "WhenOpened": "2025-06-08T18:06:27.318Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 1,
-              "Title": "CreateCouponDto.cs",
-              "DocumentMoniker": "D:\\DATN\\WebApiDotNet\\WebApiDotNet\\DTOs\\CreateCouponDto.cs",
-              "RelativeDocumentMoniker": "WebApiDotNet\\DTOs\\CreateCouponDto.cs",
-              "ToolTip": "D:\\DATN\\WebApiDotNet\\WebApiDotNet\\DTOs\\CreateCouponDto.cs",
-              "RelativeToolTip": "WebApiDotNet\\DTOs\\CreateCouponDto.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA8AAAAtAAAAAAAAAA==",
+              "Title": "CouponController.cs",
+              "DocumentMoniker": "D:\\DATN\\WebApiDotNet\\WebApiDotNet\\Controllers\\CouponController.cs",
+              "RelativeDocumentMoniker": "WebApiDotNet\\Controllers\\CouponController.cs",
+              "ToolTip": "D:\\DATN\\WebApiDotNet\\WebApiDotNet\\Controllers\\CouponController.cs*",
+              "RelativeToolTip": "WebApiDotNet\\Controllers\\CouponController.cs*",
+              "ViewState": "AgIAACAAAAAAAAAAAAAgwDIAAAA1AAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-06-08T20:00:55.419Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Bookmark",
-              "Name": "ST:0:0:{1c4feeaa-4718-4aa9-859d-94ce25d182ba}"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "CouponRepository.cs",
-              "DocumentMoniker": "D:\\DATN\\WebApiDotNet\\WebApiDotNet\\Repository\\CouponRepository.cs",
-              "RelativeDocumentMoniker": "WebApiDotNet\\Repository\\CouponRepository.cs",
-              "ToolTip": "D:\\DATN\\WebApiDotNet\\WebApiDotNet\\Repository\\CouponRepository.cs",
-              "RelativeToolTip": "WebApiDotNet\\Repository\\CouponRepository.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAcAAAABAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-06-08T18:56:28.596Z",
+              "WhenOpened": "2025-06-08T20:04:29.37Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 7,
-              "Title": "ICouponRepository.cs",
-              "DocumentMoniker": "D:\\DATN\\WebApiDotNet\\WebApiDotNet\\Repository\\IRepository\\ICouponRepository.cs",
-              "RelativeDocumentMoniker": "WebApiDotNet\\Repository\\IRepository\\ICouponRepository.cs",
-              "ToolTip": "D:\\DATN\\WebApiDotNet\\WebApiDotNet\\Repository\\IRepository\\ICouponRepository.cs",
-              "RelativeToolTip": "WebApiDotNet\\Repository\\IRepository\\ICouponRepository.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA0AAAAAAAAAAAAAAA==",
+              "DocumentIndex": 2,
+              "Title": "MappingProfile.cs",
+              "DocumentMoniker": "D:\\DATN\\WebApiDotNet\\WebApiDotNet\\Data\\MappingProfile.cs",
+              "RelativeDocumentMoniker": "WebApiDotNet\\Data\\MappingProfile.cs",
+              "ToolTip": "D:\\DATN\\WebApiDotNet\\WebApiDotNet\\Data\\MappingProfile.cs*",
+              "RelativeToolTip": "WebApiDotNet\\Data\\MappingProfile.cs*",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABYAAABMAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-06-08T18:56:00.89Z"
+              "WhenOpened": "2025-06-09T13:17:28.276Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "MongoDbContext.cs",
+              "DocumentMoniker": "D:\\DATN\\WebApiDotNet\\WebApiDotNet\\Data\\MongoDbContext.cs",
+              "RelativeDocumentMoniker": "WebApiDotNet\\Data\\MongoDbContext.cs",
+              "ToolTip": "D:\\DATN\\WebApiDotNet\\WebApiDotNet\\Data\\MongoDbContext.cs",
+              "RelativeToolTip": "WebApiDotNet\\Data\\MongoDbContext.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABcAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-06-08T16:59:31.494Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "CouponDto.cs",
+              "DocumentMoniker": "D:\\DATN\\WebApiDotNet\\WebApiDotNet\\DTOs\\CouponDto.cs",
+              "RelativeDocumentMoniker": "WebApiDotNet\\DTOs\\CouponDto.cs",
+              "ToolTip": "D:\\DATN\\WebApiDotNet\\WebApiDotNet\\DTOs\\CouponDto.cs",
+              "RelativeToolTip": "WebApiDotNet\\DTOs\\CouponDto.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAoAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-06-08T20:00:09.044Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "UpdateCouponDto.cs",
+              "DocumentMoniker": "D:\\DATN\\WebApiDotNet\\WebApiDotNet\\DTOs\\UpdateCouponDto.cs",
+              "RelativeDocumentMoniker": "WebApiDotNet\\DTOs\\UpdateCouponDto.cs",
+              "ToolTip": "D:\\DATN\\WebApiDotNet\\WebApiDotNet\\DTOs\\UpdateCouponDto.cs*",
+              "RelativeToolTip": "WebApiDotNet\\DTOs\\UpdateCouponDto.cs*",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA8AAAAFAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-06-09T13:26:27.529Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
@@ -364,87 +396,94 @@
               "Title": "ICouponService.cs",
               "DocumentMoniker": "D:\\DATN\\WebApiDotNet\\WebApiDotNet\\Services\\ICouponService.cs",
               "RelativeDocumentMoniker": "WebApiDotNet\\Services\\ICouponService.cs",
-              "ToolTip": "D:\\DATN\\WebApiDotNet\\WebApiDotNet\\Services\\ICouponService.cs",
-              "RelativeToolTip": "WebApiDotNet\\Services\\ICouponService.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAkAAAA0AAAAAAAAAA==",
+              "ToolTip": "D:\\DATN\\WebApiDotNet\\WebApiDotNet\\Services\\ICouponService.cs*",
+              "RelativeToolTip": "WebApiDotNet\\Services\\ICouponService.cs*",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAsAAAAqAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-06-08T19:56:20.973Z"
+              "WhenOpened": "2025-06-08T19:56:20.973Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 7,
               "Title": "Program.cs",
               "DocumentMoniker": "D:\\DATN\\WebApiDotNet\\WebApiDotNet\\Program.cs",
               "RelativeDocumentMoniker": "WebApiDotNet\\Program.cs",
               "ToolTip": "D:\\DATN\\WebApiDotNet\\WebApiDotNet\\Program.cs",
               "RelativeToolTip": "WebApiDotNet\\Program.cs",
-              "ViewState": "AgIAAAUAAAAAAAAAAAAAABAAAAA8AAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABUAAAAhAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-06-08T16:30:19.049Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "CouponDto.cs",
-              "DocumentMoniker": "D:\\DATN\\WebApiDotNet\\WebApiDotNet\\DTOs\\CouponDto.cs",
-              "RelativeDocumentMoniker": "WebApiDotNet\\DTOs\\CouponDto.cs",
-              "ToolTip": "D:\\DATN\\WebApiDotNet\\WebApiDotNet\\DTOs\\CouponDto.cs",
-              "RelativeToolTip": "WebApiDotNet\\DTOs\\CouponDto.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAcAAAApAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-06-08T20:00:09.044Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 4,
-              "Title": "CouponController.cs",
-              "DocumentMoniker": "D:\\DATN\\WebApiDotNet\\WebApiDotNet\\Controllers\\CouponController.cs",
-              "RelativeDocumentMoniker": "WebApiDotNet\\Controllers\\CouponController.cs",
-              "ToolTip": "D:\\DATN\\WebApiDotNet\\WebApiDotNet\\Controllers\\CouponController.cs",
-              "RelativeToolTip": "WebApiDotNet\\Controllers\\CouponController.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAcAAAAfAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-06-08T20:04:29.37Z"
+              "WhenOpened": "2025-06-08T16:30:19.049Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 8,
-              "Title": "MongoDbContext.cs",
-              "DocumentMoniker": "D:\\DATN\\WebApiDotNet\\WebApiDotNet\\Data\\MongoDbContext.cs",
-              "RelativeDocumentMoniker": "WebApiDotNet\\Data\\MongoDbContext.cs",
-              "ToolTip": "D:\\DATN\\WebApiDotNet\\WebApiDotNet\\Data\\MongoDbContext.cs",
-              "RelativeToolTip": "WebApiDotNet\\Data\\MongoDbContext.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA0AAABJAAAAAAAAAA==",
+              "Title": "CreateCouponDto.cs",
+              "DocumentMoniker": "D:\\DATN\\WebApiDotNet\\WebApiDotNet\\DTOs\\CreateCouponDto.cs",
+              "RelativeDocumentMoniker": "WebApiDotNet\\DTOs\\CreateCouponDto.cs",
+              "ToolTip": "D:\\DATN\\WebApiDotNet\\WebApiDotNet\\DTOs\\CreateCouponDto.cs",
+              "RelativeToolTip": "WebApiDotNet\\DTOs\\CreateCouponDto.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAIAAAAgAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-06-08T16:59:31.494Z"
+              "WhenOpened": "2025-06-08T20:00:55.419Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 9,
-              "Title": "MongoDbSettings.cs",
-              "DocumentMoniker": "D:\\DATN\\WebApiDotNet\\WebApiDotNet\\Data\\MongoDbSettings.cs",
-              "RelativeDocumentMoniker": "WebApiDotNet\\Data\\MongoDbSettings.cs",
-              "ToolTip": "D:\\DATN\\WebApiDotNet\\WebApiDotNet\\Data\\MongoDbSettings.cs",
-              "RelativeToolTip": "WebApiDotNet\\Data\\MongoDbSettings.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAIAAAAYAAAAAAAAAA==",
+              "Title": "CouponRepository.cs",
+              "DocumentMoniker": "D:\\DATN\\WebApiDotNet\\WebApiDotNet\\Repository\\CouponRepository.cs",
+              "RelativeDocumentMoniker": "WebApiDotNet\\Repository\\CouponRepository.cs",
+              "ToolTip": "D:\\DATN\\WebApiDotNet\\WebApiDotNet\\Repository\\CouponRepository.cs",
+              "RelativeToolTip": "WebApiDotNet\\Repository\\CouponRepository.cs",
+              "ViewState": "AgIAABAAAAAAAAAAAAAAAB8AAAAFAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-06-08T09:04:54.001Z"
+              "WhenOpened": "2025-06-09T13:08:10.694Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 10,
+              "Title": "ICouponRepository.cs",
+              "DocumentMoniker": "D:\\DATN\\WebApiDotNet\\WebApiDotNet\\Repository\\IRepository\\ICouponRepository.cs",
+              "RelativeDocumentMoniker": "WebApiDotNet\\Repository\\IRepository\\ICouponRepository.cs",
+              "ToolTip": "D:\\DATN\\WebApiDotNet\\WebApiDotNet\\Repository\\IRepository\\ICouponRepository.cs",
+              "RelativeToolTip": "WebApiDotNet\\Repository\\IRepository\\ICouponRepository.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAsAAAAFAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-06-08T18:56:00.89Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 11,
               "Title": "Coupon.cs",
               "DocumentMoniker": "D:\\DATN\\WebApiDotNet\\WebApiDotNet\\Models\\Coupon.cs",
               "RelativeDocumentMoniker": "WebApiDotNet\\Models\\Coupon.cs",
               "ToolTip": "D:\\DATN\\WebApiDotNet\\WebApiDotNet\\Models\\Coupon.cs",
               "RelativeToolTip": "WebApiDotNet\\Models\\Coupon.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAACkAAAAEAAAAAAAAAA==",
+              "ViewState": "AgIAAAsAAAAAAAAAAAA1wCgAAAAFAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-06-08T18:02:50.604Z"
+              "WhenOpened": "2025-06-08T18:02:50.604Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 11,
+              "DocumentIndex": 12,
+              "Title": "MongoDbSettings.cs",
+              "DocumentMoniker": "D:\\DATN\\WebApiDotNet\\WebApiDotNet\\Data\\MongoDbSettings.cs",
+              "RelativeDocumentMoniker": "WebApiDotNet\\Data\\MongoDbSettings.cs",
+              "ToolTip": "D:\\DATN\\WebApiDotNet\\WebApiDotNet\\Data\\MongoDbSettings.cs",
+              "RelativeToolTip": "WebApiDotNet\\Data\\MongoDbSettings.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAYAAAAFAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-06-08T09:04:54.001Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 13,
               "Title": "appsettings.json",
               "DocumentMoniker": "D:\\DATN\\WebApiDotNet\\WebApiDotNet\\appsettings.json",
               "RelativeDocumentMoniker": "WebApiDotNet\\appsettings.json",
@@ -452,11 +491,12 @@
               "RelativeToolTip": "WebApiDotNet\\appsettings.json",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAwAAAABAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
-              "WhenOpened": "2025-06-08T09:02:29.369Z"
+              "WhenOpened": "2025-06-08T09:02:29.369Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 12,
+              "DocumentIndex": 14,
               "Title": "WebApiDotNet.csproj",
               "DocumentMoniker": "D:\\DATN\\WebApiDotNet\\WebApiDotNet\\WebApiDotNet.csproj",
               "RelativeDocumentMoniker": "WebApiDotNet\\WebApiDotNet.csproj",
@@ -464,7 +504,8 @@
               "RelativeToolTip": "WebApiDotNet\\WebApiDotNet.csproj",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
-              "WhenOpened": "2025-06-08T16:27:16.367Z"
+              "WhenOpened": "2025-06-08T16:27:16.367Z",
+              "EditorCaption": ""
             }
           ]
         },

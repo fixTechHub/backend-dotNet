@@ -33,5 +33,33 @@ namespace WebApiDotNet.Controllers
             await _service.CreateCouponAsync(dto);
             return Ok(new { message = "Created successfully" });
         }
+        [HttpPut("{id}")]
+        public async Task<IActionResult> Update(string id, UpdateCouponDto dto)
+        {
+            try
+            {
+                await _service.UpdateCouponAsync(id, dto);
+                return Ok(new { message = "Updated successfully" });
+            }
+            catch (Exception ex)
+            {
+                return NotFound(new { message = ex.Message });
+            }
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Delete(string id)
+        {
+            try
+            {
+                await _service.DeleteCouponAsync(id);
+                return Ok(new { message = "Deleted successfully" });
+            }
+            catch (Exception ex)
+            {
+                return NotFound(new { message = ex.Message });
+            }
+        }
     }
+
 }

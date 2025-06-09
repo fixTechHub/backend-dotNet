@@ -8,5 +8,7 @@ namespace WebApiDotNet.Services
         Task<List<CouponDto>> GetAllCouponsAsync();
         Task<CouponDto> GetCouponByIdAsync(string id);
         Task CreateCouponAsync(CreateCouponDto dto);
+        Task UpdateCouponAsync(string id, UpdateCouponDto dto);
+        Task DeleteCouponAsync(string id);
     }
 }

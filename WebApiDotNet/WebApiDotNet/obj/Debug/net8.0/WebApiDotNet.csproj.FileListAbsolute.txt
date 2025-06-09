@@ -40,3 +40,5 @@ D:\DATN\WebApiDotNet\WebApiDotNet\obj\Debug\net8.0\refint\WebApiDotNet.dll
 D:\DATN\WebApiDotNet\WebApiDotNet\obj\Debug\net8.0\WebApiDotNet.pdb
 D:\DATN\WebApiDotNet\WebApiDotNet\obj\Debug\net8.0\WebApiDotNet.genruntimeconfig.cache
 D:\DATN\WebApiDotNet\WebApiDotNet\obj\Debug\net8.0\ref\WebApiDotNet.dll
+D:\DATN\WebApiDotNet\WebApiDotNet\bin\Debug\net8.0\AutoMapper.dll
+D:\DATN\WebApiDotNet\WebApiDotNet\obj\Debug\net8.0\WebApiDotNet.sourcelink.json
