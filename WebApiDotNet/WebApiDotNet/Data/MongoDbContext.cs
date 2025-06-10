@@ -9,13 +9,19 @@ namespace WebApiDotNet.Data
     {
         private readonly IMongoDatabase _database;
 
-        public MongoDbContext(IOptions<MongoDbSettings> settings)
+        public MongoDbContext(IOptions<MongoDbSettings> options, ILogger<MongoDbContext> logger)
         {
-            var client = new MongoClient(settings.Value.ConnectionString);
-            _database = client.GetDatabase(settings.Value.DatabaseName);
+            logger.LogInformation("🔌 Bắt đầu kết nối MongoDB...");
+
+            var client = new MongoClient(options.Value.ConnectionString);
+            _database = client.GetDatabase(options.Value.DatabaseName);
+
+            logger.LogInformation("✅ Kết nối MongoDB thành công với database: {DatabaseName}", options.Value.DatabaseName);
         }
 
-        public IMongoCollection<Coupon> Coupons => _database.GetCollection<Coupon>("Coupons");
+        public IMongoDatabase Database => _database;
+
+        public IMongoCollection<Coupon> Coupons => _database.GetCollection<Coupon>("coupons");
 
         // Ví dụ tạo các collection (collection tương ứng với bảng trong SQL)
         // Thêm các collection khác tương tự

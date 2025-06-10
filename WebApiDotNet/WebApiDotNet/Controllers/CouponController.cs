@@ -16,8 +16,19 @@ namespace WebApiDotNet.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAll() =>
-            Ok(await _service.GetAllCouponsAsync());
+        public async Task<IActionResult> GetAll()
+        {
+            try
+            {
+                var result = await _service.GetAllCouponsAsync();
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("❌ Lỗi khi lấy coupon: " + ex.Message);
+                return StatusCode(500, new { message = "Lỗi server", error = ex.Message });
+            }
+        }
 
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(string id)
@@ -28,11 +39,23 @@ namespace WebApiDotNet.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create(CreateCouponDto dto)
+        public async Task<IActionResult> Create([FromBody] CreateCouponDto dto)
         {
-            await _service.CreateCouponAsync(dto);
-            return Ok(new { message = "Created successfully" });
+            if (dto == null)
+                return BadRequest(new { message = "Dữ liệu không hợp lệ" });
+
+            try
+            {
+                await _service.CreateCouponAsync(dto);
+                return Ok(new { message = "Created successfully" });
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("❌ Lỗi khi tạo coupon: " + ex.Message);
+                return StatusCode(500, new { message = "Lỗi server", error = ex.Message });
+            }
         }
+
         [HttpPut("{id}")]
         public async Task<IActionResult> Update(string id, UpdateCouponDto dto)
         {
