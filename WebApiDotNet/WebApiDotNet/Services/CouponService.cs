@@ -11,11 +11,13 @@ namespace WebApiDotNet.Services
     {
         private readonly ICouponRepository _repository;
         private readonly IMapper _mapper;
+        private readonly ICouponUsageRepository _logRepo;
 
-        public CouponService(ICouponRepository repository, IMapper mapper)
+        public CouponService(ICouponRepository repository, IMapper mapper, ICouponUsageRepository logRepo)
         {
             _repository = repository;
             _mapper = mapper;
+            _logRepo = logRepo;
         }
 
         public async Task<List<CouponDto>> GetAllCouponsAsync()
@@ -57,5 +59,6 @@ namespace WebApiDotNet.Services
             if (existing == null) throw new Exception("Coupon not found");
             await _repository.DeleteAsync(id);
         }
+
     }
 }

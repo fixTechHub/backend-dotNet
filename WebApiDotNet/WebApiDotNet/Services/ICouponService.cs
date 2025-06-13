@@ -10,5 +10,6 @@ namespace WebApiDotNet.Services
         Task CreateCouponAsync(CreateCouponDto dto);
         Task UpdateCouponAsync(string id, UpdateCouponDto dto);
         Task DeleteCouponAsync(string id);
+
     }
 }

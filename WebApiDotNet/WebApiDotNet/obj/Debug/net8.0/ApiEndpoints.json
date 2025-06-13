@@ -79,6 +79,32 @@
     "ReturnTypes": []
   },
   {
+    "ContainingType": "WebApiDotNet.Controllers.CouponUsageController",
+    "Method": "GetAll",
+    "RelativePath": "api/CouponUsage",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "WebApiDotNet.Controllers.CouponUsageController",
+    "Method": "GetByCouponId",
+    "RelativePath": "api/CouponUsage/{couponId}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "couponId",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
     "ContainingType": "WebApiDotNet.Controllers.WeatherForecastController",
     "Method": "Get",
     "RelativePath": "WeatherForecast",

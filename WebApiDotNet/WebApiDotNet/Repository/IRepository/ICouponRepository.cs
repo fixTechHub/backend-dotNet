@@ -9,5 +9,6 @@ namespace WebApiDotNet.Repository.IRepository
         Task CreateAsync(Coupon coupon);
         Task UpdateAsync(string id, Coupon coupon);
         Task DeleteAsync(string id);
+        //Task<Coupon> GetByCodeAsync(string code);
     }
 }

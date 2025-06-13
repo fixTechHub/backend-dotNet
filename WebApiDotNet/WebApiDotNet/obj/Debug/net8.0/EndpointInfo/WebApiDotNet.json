@@ -127,6 +127,40 @@
         }
       }
     },
+    "/api/CouponUsage": {
+      "get": {
+        "tags": [
+          "CouponUsage"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/CouponUsage/{couponId}": {
+      "get": {
+        "tags": [
+          "CouponUsage"
+        ],
+        "parameters": [
+          {
+            "name": "couponId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
     "/WeatherForecast": {
       "get": {
         "tags": [

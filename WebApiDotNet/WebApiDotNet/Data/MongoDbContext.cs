@@ -22,6 +22,7 @@ namespace WebApiDotNet.Data
         public IMongoDatabase Database => _database;
 
         public IMongoCollection<Coupon> Coupons => _database.GetCollection<Coupon>("coupons");
+        public IMongoCollection<CouponUsage> Couponusages => _database.GetCollection<CouponUsage>("couponusages");
 
         // Ví dụ tạo các collection (collection tương ứng với bảng trong SQL)
         // Thêm các collection khác tương tự

@@ -1,0 +1,11 @@
+﻿using WebApiDotNet.Models;
+
+namespace WebApiDotNet.Repository.IRepository
+{
+    public interface ICouponUsageRepository
+    {
+        Task<List<CouponUsage>> GetAllAsync();
+        Task<List<CouponUsage>> GetByCouponIdAsync(string couponId);
+        Task CreateAsync(CouponUsage usage);
+    }
+}

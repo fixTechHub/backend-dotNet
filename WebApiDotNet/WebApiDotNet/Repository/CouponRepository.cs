@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Options;
+using MongoDB.Bson;
 using MongoDB.Driver;
 using WebApiDotNet.Data;
 using WebApiDotNet.Models;
@@ -29,5 +30,6 @@ namespace WebApiDotNet.Repository
 
         public async Task DeleteAsync(string id) =>
             await _coupons.DeleteOneAsync(c => c.Id == id);
+
     }
 }
