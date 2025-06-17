@@ -16,13 +16,16 @@ namespace WebApiDotNet.Data
                 .ForMember(dest => dest.Id, opt => opt.Ignore())
                 .ForMember(dest => dest.CreatedAt, opt => opt.Ignore())
                 .ForMember(dest => dest.UpdatedAt, opt => opt.Ignore())
-                .ForMember(dest => dest.UsedCount, opt => opt.Ignore());
+                .ForMember(dest => dest.UsedCount, opt => opt.Ignore())
+                .ForMember(dest => dest.Type, opt => opt.MapFrom(src => src.Type)); ;
             CreateMap<UpdateCouponDto, Coupon>()
                 .ForMember(dest => dest.Id, opt => opt.Ignore())
                 .ForMember(dest => dest.CreatedAt, opt => opt.Ignore())
                 .ForMember(dest => dest.UsedCount, opt => opt.Ignore())
-                .ForMember(dest => dest.UpdatedAt, opt => opt.Ignore());
+                .ForMember(dest => dest.UpdatedAt, opt => opt.Ignore())
+                .ForMember(dest => dest.Type, opt => opt.MapFrom(src => src.Type)); ;
             CreateMap<CouponUsage, CouponUsageDto>().ReverseMap();
+
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using MongoDB.Bson;
 using MongoDB.Driver;
+using System.Linq.Expressions;
 using WebApiDotNet.Data;
 using WebApiDotNet.Models;
 using WebApiDotNet.Repository.IRepository;
@@ -23,6 +24,10 @@ namespace WebApiDotNet.Repository
 
         public async Task CreateAsync(CouponUsage usage) =>
             await _collection.InsertOneAsync(usage);
+        public async Task<CouponUsage?> GetByConditionAsync(Expression<Func<CouponUsage, bool>> filter)
+        {
+            return await _collection.Find(filter).FirstOrDefaultAsync();
+        }
 
     }
 }

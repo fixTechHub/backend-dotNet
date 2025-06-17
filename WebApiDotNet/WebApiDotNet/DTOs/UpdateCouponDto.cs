@@ -2,6 +2,7 @@
 {
     public class UpdateCouponDto
     {
+        public string Code { get; set; }
         public string Description { get; set; }
         public string Type { get; set; } // PERCENT, FIXED
         public double Value { get; set; }

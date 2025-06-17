@@ -1,4 +1,5 @@
-﻿using WebApiDotNet.Models;
+﻿using System.Linq.Expressions;
+using WebApiDotNet.Models;
 
 namespace WebApiDotNet.Repository.IRepository
 {
@@ -7,5 +8,6 @@ namespace WebApiDotNet.Repository.IRepository
         Task<List<CouponUsage>> GetAllAsync();
         Task<List<CouponUsage>> GetByCouponIdAsync(string couponId);
         Task CreateAsync(CouponUsage usage);
+        Task<CouponUsage?> GetByConditionAsync(Expression<Func<CouponUsage, bool>> filter);
     }
 }

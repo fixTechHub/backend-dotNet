@@ -42,6 +42,9 @@ namespace WebApiDotNet.Models
         [BsonElement("isActive")]
         public bool IsActive { get; set; }
 
+        [BsonElement("isDeleted")]
+        public bool IsDeleted { get; set; } = false;
+
         [BsonElement("startDate")]
         public DateTime StartDate { get; set; }
 
@@ -53,6 +56,9 @@ namespace WebApiDotNet.Models
 
         [BsonElement("updatedAt")]
         public DateTime UpdatedAt { get; set; }
+
+        [BsonElement("deletedAt")]
+        public DateTime? DeletedAt { get; set; }
     }
     
 }

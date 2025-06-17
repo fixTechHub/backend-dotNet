@@ -1,6 +1,4 @@
 ﻿using AutoMapper;
-using MongoDB.Driver;
-using WebApiDotNet.Data;
 using WebApiDotNet.DTOs;
 using WebApiDotNet.Models;
 using WebApiDotNet.Repository.IRepository;
@@ -11,13 +9,11 @@ namespace WebApiDotNet.Services
     {
         private readonly ICouponRepository _repository;
         private readonly IMapper _mapper;
-        private readonly ICouponUsageRepository _logRepo;
 
-        public CouponService(ICouponRepository repository, IMapper mapper, ICouponUsageRepository logRepo)
+        public CouponService(ICouponRepository repository, IMapper mapper)
         {
             _repository = repository;
             _mapper = mapper;
-            _logRepo = logRepo;
         }
 
         public async Task<List<CouponDto>> GetAllCouponsAsync()
@@ -26,39 +22,55 @@ namespace WebApiDotNet.Services
             return _mapper.Map<List<CouponDto>>(coupons);
         }
 
+        public async Task<List<CouponDto>> GetDeletedCouponsAsync()
+        {
+            var coupons = await _repository.GetDeletedAsync();
+            return _mapper.Map<List<CouponDto>>(coupons);
+        }
+
         public async Task<CouponDto> GetCouponByIdAsync(string id)
         {
-            var c = await _repository.GetByIdAsync(id);
-            return c == null ? null : _mapper.Map<CouponDto>(c);
+            var coupon = await _repository.GetByIdAsync(id);
+            return _mapper.Map<CouponDto>(coupon);
         }
 
         public async Task CreateCouponAsync(CreateCouponDto dto)
         {
-            var coupon = _mapper.Map<Coupon>(dto);
-            var now = DateTime.UtcNow;
-            coupon.CreatedAt = now;
-            coupon.UpdatedAt = now;
-            coupon.UsedCount = 0;
+            if (await _repository.ExistsByCodeAsync(dto.Code))
+                throw new Exception("Mã coupon đã tồn tại");
 
+            var coupon = _mapper.Map<Coupon>(dto);
             await _repository.CreateAsync(coupon);
         }
+
         public async Task UpdateCouponAsync(string id, UpdateCouponDto dto)
         {
-            var existing = await _repository.GetByIdAsync(id);
-            if (existing == null) throw new Exception("Coupon not found");
+            if (!await _repository.ExistsAsync(id))
+                throw new Exception("Không tìm thấy coupon");
 
-            _mapper.Map(dto, existing);
-            existing.UpdatedAt = DateTime.UtcNow;
-            await _repository.UpdateAsync(id, existing);
-
+            var coupon = await _repository.GetByIdAsync(id);
+            _mapper.Map(dto, coupon);
+            await _repository.UpdateAsync(id, coupon);
         }
 
         public async Task DeleteCouponAsync(string id)
         {
-            var existing = await _repository.GetByIdAsync(id);
-            if (existing == null) throw new Exception("Coupon not found");
+            if (!await _repository.ExistsAsync(id))
+                throw new Exception("Không tìm thấy coupon");
+
             await _repository.DeleteAsync(id);
         }
 
+        public async Task RestoreCouponAsync(string id)
+        {
+            try
+            {
+                await _repository.RestoreAsync(id);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Không tìm thấy coupon đã xóa");
+            }
+        }
     }
 }

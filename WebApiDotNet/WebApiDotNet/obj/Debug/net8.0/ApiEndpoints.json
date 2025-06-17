@@ -105,6 +105,22 @@
     "ReturnTypes": []
   },
   {
+    "ContainingType": "WebApiDotNet.Controllers.BookingPaymentController",
+    "Method": "PayBooking",
+    "RelativePath": "api/payment/{bookingId}",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "bookingId",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
     "ContainingType": "WebApiDotNet.Controllers.WeatherForecastController",
     "Method": "Get",
     "RelativePath": "WeatherForecast",

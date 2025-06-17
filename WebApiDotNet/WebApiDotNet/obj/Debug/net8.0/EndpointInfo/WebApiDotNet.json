@@ -5,6 +5,28 @@
     "version": "1.0"
   },
   "paths": {
+    "/api/payment/{bookingId}": {
+      "post": {
+        "tags": [
+          "BookingPayment"
+        ],
+        "parameters": [
+          {
+            "name": "bookingId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
     "/api/Coupon": {
       "get": {
         "tags": [
@@ -262,6 +284,10 @@
       "UpdateCouponDto": {
         "type": "object",
         "properties": {
+          "code": {
+            "type": "string",
+            "nullable": true
+          },
           "description": {
             "type": "string",
             "nullable": true

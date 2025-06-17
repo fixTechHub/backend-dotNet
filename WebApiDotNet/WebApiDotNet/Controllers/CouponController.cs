@@ -30,6 +30,21 @@ namespace WebApiDotNet.Controllers
             }
         }
 
+        [HttpGet("deleted")]
+        public async Task<IActionResult> GetDeleted()
+        {
+            try
+            {
+                var result = await _service.GetDeletedCouponsAsync();
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("❌ Lỗi khi lấy danh sách coupon đã xóa: " + ex.Message);
+                return StatusCode(500, new { message = "Lỗi server", error = ex.Message });
+            }
+        }
+
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(string id)
         {
@@ -47,7 +62,7 @@ namespace WebApiDotNet.Controllers
             try
             {
                 await _service.CreateCouponAsync(dto);
-                return Ok(new { message = "Created successfully" });
+                return Ok(new { message = "Tạo coupon thành công" });
             }
             catch (Exception ex)
             {
@@ -57,12 +72,12 @@ namespace WebApiDotNet.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> Update(string id, UpdateCouponDto dto)
+        public async Task<IActionResult> Update(string id, [FromBody] UpdateCouponDto dto)
         {
             try
             {
                 await _service.UpdateCouponAsync(id, dto);
-                return Ok(new { message = "Updated successfully" });
+                return Ok(new { message = "Cập nhật coupon thành công" });
             }
             catch (Exception ex)
             {
@@ -76,7 +91,7 @@ namespace WebApiDotNet.Controllers
             try
             {
                 await _service.DeleteCouponAsync(id);
-                return Ok(new { message = "Deleted successfully" });
+                return Ok(new { message = "Đã ẩn coupon thành công" });
             }
             catch (Exception ex)
             {
@@ -84,7 +99,18 @@ namespace WebApiDotNet.Controllers
             }
         }
 
-        
+        [HttpPost("{id}/restore")]
+        public async Task<IActionResult> Restore(string id)
+        {
+            try
+            {
+                await _service.RestoreCouponAsync(id);
+                return Ok(new { message = "Khôi phục coupon thành công" });
+            }
+            catch (Exception ex)
+            {
+                return NotFound(new { message = ex.Message });
+            }
+        }
     }
-
 }
