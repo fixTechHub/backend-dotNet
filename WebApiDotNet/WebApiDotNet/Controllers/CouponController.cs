@@ -6,7 +6,7 @@ namespace WebApiDotNet.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class CouponController : Controller
+    public class CouponController : ControllerBase
     {
         private readonly ICouponService _service;
 

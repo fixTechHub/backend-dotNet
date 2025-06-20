@@ -12,13 +12,25 @@ builder.Logging.AddConsole(); // Thêm dòng này nếu chưa có
 
 // Add services to the container.
 builder.Services.Configure<MongoDbSettings>(builder.Configuration.GetSection("MongoDbSettings"));
-
 builder.Services.AddSingleton<MongoDbContext>();
+
 builder.Services.AddAutoMapper(typeof(MappingProfile));
+
 builder.Services.AddScoped<ICouponRepository, CouponRepository>();
 builder.Services.AddScoped<ICouponUsageRepository, CouponUsageRepository>();
+builder.Services.AddScoped<IReportRepository, ReportRepository>();
+builder.Services.AddScoped<ISystemReportRepository, SystemReportRepository>();
+builder.Services.AddScoped<IBookingRepository, BookingRepository>();
+builder.Services.AddScoped<ITechnicianRepository, TechnicianRepository>();
+builder.Services.AddScoped<IUserRepository, UserRepository>();
+
 builder.Services.AddScoped<ICouponService, CouponService>();
 builder.Services.AddScoped<ICouponUsageService, CouponUsageService>();
+builder.Services.AddScoped<IReportService, ReportService>();
+builder.Services.AddScoped<ISystemReportService, SystemReportService>();
+builder.Services.AddScoped<IBookingService, BookingService>();
+builder.Services.AddScoped<IUserService, UserService>();    
+builder.Services.AddScoped<ITechnicianService, TechnicianService>();
 
 builder.Services.AddCors(options =>
 {

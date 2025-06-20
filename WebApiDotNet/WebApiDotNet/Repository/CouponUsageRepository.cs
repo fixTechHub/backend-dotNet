@@ -29,5 +29,9 @@ namespace WebApiDotNet.Repository
             return await _collection.Find(filter).FirstOrDefaultAsync();
         }
 
+        public async Task<CouponUsage?> GetByIdAsync(string id)
+        {
+            return await _collection.Find(x => x.Id == id).FirstOrDefaultAsync();
+        }
     }
 }

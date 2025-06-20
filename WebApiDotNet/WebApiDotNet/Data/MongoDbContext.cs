@@ -23,8 +23,10 @@ namespace WebApiDotNet.Data
 
         public IMongoCollection<Coupon> Coupons => _database.GetCollection<Coupon>("coupons");
         public IMongoCollection<CouponUsage> Couponusages => _database.GetCollection<CouponUsage>("couponusages");
-
-        // Ví dụ tạo các collection (collection tương ứng với bảng trong SQL)
-        // Thêm các collection khác tương tự
+        public IMongoCollection<Report> Reports => _database.GetCollection<Report>("reports");
+        public IMongoCollection<SystemReport> SystemReports => _database.GetCollection<SystemReport>("systemreports");
+        public IMongoCollection<User> Users => _database.GetCollection<User>("users");  
+        public IMongoCollection<Booking> Bookings => _database.GetCollection<Booking>("bookings");
+        public IMongoCollection<Technician> Technicians => _database.GetCollection<Technician>("technicians");
     }
 }

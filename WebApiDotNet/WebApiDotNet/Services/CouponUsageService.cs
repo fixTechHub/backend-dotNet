@@ -57,5 +57,11 @@ namespace WebApiDotNet.Services
             await _repository.CreateAsync(usage);
             await _couponRepository.UpdateAsync(couponId, coupon);
         }
+
+        public async Task<CouponUsageDto?> GetByIdAsync(string id)
+        {
+            var usage = await _repository.GetByIdAsync(id);
+            return usage == null ? null : _mapper.Map<CouponUsageDto>(usage);
+        }
     }
 }

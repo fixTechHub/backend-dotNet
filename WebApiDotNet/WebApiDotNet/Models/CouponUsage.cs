@@ -6,7 +6,8 @@ namespace WebApiDotNet.Models
     public class CouponUsage
     {
         [BsonId]
-        public ObjectId Id { get; set; }
+        [BsonRepresentation(BsonType.ObjectId)]
+        public string Id { get; set; }
 
         [BsonElement("couponId")]
         public ObjectId CouponId { get; set; }
