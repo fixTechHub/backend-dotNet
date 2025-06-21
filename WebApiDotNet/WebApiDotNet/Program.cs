@@ -69,7 +69,7 @@ else
 }
 
 app.UseCors("AllowFrontend");
-app.UseHttpsRedirection();
+// app.UseHttpsRedirection(); // This is not needed behind Render's proxy
 app.UseAuthorization();
 app.MapControllers();
 app.Run();
