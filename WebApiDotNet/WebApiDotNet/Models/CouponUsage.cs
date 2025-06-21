@@ -3,6 +3,7 @@ using MongoDB.Bson;
 
 namespace WebApiDotNet.Models
 {
+    [BsonIgnoreExtraElements]
     public class CouponUsage
     {
         [BsonId]

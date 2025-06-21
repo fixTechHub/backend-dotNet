@@ -1,0 +1,79 @@
+version: '3.8'
+
+services:
+  # === DỊCH VỤ CỦA BẠN ===
+  # Backend API Service (.NET)
+  backend:
+    build:
+      context: ./WebApiDotNet # Thư mục code .NET của bạn
+      dockerfile: Dockerfile
+    container_name: fixtech-backend
+    ports:
+      - "5000:80"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
+      - ASPNETCORE_URLS=http://+:80
+      - Logging__LogLevel__Default=Debug
+    env_file:
+      - .env
+    networks:
+      - fixtech-network
+    restart: unless-stopped
+    privileged: true
+
+  # Frontend Service (của bạn)
+  frontend:
+    build:
+      context: ./FrontEnd # Thư mục code frontend của bạn
+      dockerfile: Dockerfile
+    container_name: fixtech-frontend
+    ports:
+      - "3000:80"
+    depends_on:
+      - backend
+    networks:
+      - fixtech-network
+    restart: unless-stopped
+
+  # === DỊCH VỤ CỦA BẠN BÈ BẠN ===
+  # Backend Service (ví dụ: Node.js)
+  friends-backend:
+    build:
+      # THAY ĐỔI: Sửa './TEN_THU_MUC_BACKEND_CUA_BAN' thành tên thư mục chứa code Node.js
+      context: ./TEN_THU_MUC_BACKEND_CUA_BAN
+      dockerfile: Dockerfile
+    container_name: friends-backend-container
+    ports:
+      # THAY ĐỔI: Sửa '8080' thành cổng mà Node.js service đang chạy
+      - "8080:8080"
+    networks:
+      - fixtech-network
+    restart: unless-stopped
+    environment:
+      # QUAN TRỌNG: Đây là cách service Node.js biết địa chỉ API .NET của bạn
+      # Tên 'backend' chính là tên service .NET ở trên.
+      - PAYMENT_API_URL=http://backend/api/payment # Thay đổi URL nếu cần
+
+  # Frontend Service (của bạn bè bạn)
+  friends-frontend:
+    build:
+      # THAY ĐỔI: Sửa './TEN_THU_MUC_FRONTEND_CUA_BAN' thành tên thư mục chứa code frontend của họ
+      context: ./TEN_THU_MUC_FRONTEND_CUA_BAN
+      dockerfile: Dockerfile
+    container_name: friends-frontend-container
+    ports:
+      # Chọn một cổng khác 3000, ví dụ 3001
+      - "3001:80"
+    networks:
+      - fixtech-network
+    restart: unless-stopped
+    depends_on:
+      - friends-backend
+
+networks:
+  fixtech-network:
+    driver: bridge
+
+volumes:
+  backend-logs:
+  frontend-logs: 

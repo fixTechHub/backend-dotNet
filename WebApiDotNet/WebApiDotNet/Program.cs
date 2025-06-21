@@ -36,7 +36,11 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowFrontend", policy =>
     {
-        policy.WithOrigins("http://localhost:5173") // React default port
+        policy.WithOrigins(
+                "http://localhost:5173", // React development port
+                "http://localhost:3000", // Docker frontend port
+                "http://frontend:80"     // Docker internal network
+              )
               .AllowAnyHeader()
               .AllowAnyMethod()
               .AllowCredentials(); // nếu dùng cookie
@@ -57,6 +61,13 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+else
+{
+    // In production, still enable Swagger for API documentation
+    app.UseSwagger();
+    app.UseSwaggerUI();
+}
+
 app.UseCors("AllowFrontend");
 app.UseHttpsRedirection();
 app.UseAuthorization();
