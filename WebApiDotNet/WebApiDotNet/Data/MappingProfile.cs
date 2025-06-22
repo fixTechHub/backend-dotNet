@@ -33,6 +33,7 @@ namespace WebApiDotNet.Data
             CreateMap<Technician, TechnicianDto>().ReverseMap();
             CreateMap<BankAccount, BankAccountDto>().ReverseMap();
             CreateMap<UpdateUserDto, User>();
+            CreateMap<Role, RoleDto>();
         }
     }
 }

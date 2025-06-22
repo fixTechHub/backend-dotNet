@@ -14,6 +14,7 @@ namespace WebApiDotNet.Controllers
         private readonly ICouponUsageService _couponUsageService;
         private readonly IReportService _reportService;
         private readonly ISystemReportService _systemReportService;
+        private readonly IRoleService _roleService;
 
         public DashboardController(
             IUserService userService,
@@ -21,7 +22,8 @@ namespace WebApiDotNet.Controllers
             ITechnicianService technicianService,
             ICouponUsageService couponUsageService,
             IReportService reportService,
-            ISystemReportService systemReportService)
+            ISystemReportService systemReportService,
+            IRoleService roleService)
         {
             _userService = userService;
             _bookingService = bookingService;
@@ -29,6 +31,7 @@ namespace WebApiDotNet.Controllers
             _couponUsageService = couponUsageService;
             _reportService = reportService;
             _systemReportService = systemReportService;
+            _roleService = roleService;
         }
 
         // USER
@@ -150,6 +153,14 @@ namespace WebApiDotNet.Controllers
             if (updated == null)
                 return NotFound(new { message = "Report not found" });
             return Ok(updated);
+        }
+
+        // ROLE
+        [HttpGet("roles")]
+        public async Task<IActionResult> GetAllRoles()
+        {
+            var roles = await _roleService.GetAllAsync();
+            return Ok(roles);
         }
     }
 }

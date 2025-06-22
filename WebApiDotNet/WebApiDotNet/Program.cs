@@ -23,6 +23,8 @@ builder.Services.AddScoped<ISystemReportRepository, SystemReportRepository>();
 builder.Services.AddScoped<IBookingRepository, BookingRepository>();
 builder.Services.AddScoped<ITechnicianRepository, TechnicianRepository>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<IRoleRepository, RoleRepository>();
+
 
 builder.Services.AddScoped<ICouponService, CouponService>();
 builder.Services.AddScoped<ICouponUsageService, CouponUsageService>();
@@ -31,19 +33,14 @@ builder.Services.AddScoped<ISystemReportService, SystemReportService>();
 builder.Services.AddScoped<IBookingService, BookingService>();
 builder.Services.AddScoped<IUserService, UserService>();    
 builder.Services.AddScoped<ITechnicianService, TechnicianService>();
-
+builder.Services.AddScoped<IRoleService, RoleService>();
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowFrontend", policy =>
     {
-        policy.WithOrigins(
-                "http://localhost:5173", // React development port
-                "http://localhost:3000", // Docker frontend port
-                "http://frontend:80"     // Docker internal network
-              )
+        policy.AllowAnyOrigin() // Cho phép tất cả các nguồn gốc
               .AllowAnyHeader()
-              .AllowAnyMethod()
-              .AllowCredentials(); // nếu dùng cookie
+              .AllowAnyMethod();
     });
 });
 
