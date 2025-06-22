@@ -3,7 +3,7 @@ using MongoDB.Bson.Serialization.Attributes;
 
 namespace WebApiDotNet.Models
 {
-    [BsonIgnoreExtraElements]
+    
     public class Booking
     {
         [BsonId]
