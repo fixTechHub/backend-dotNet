@@ -26,12 +26,13 @@ namespace WebApiDotNet.Data
                 .ForMember(dest => dest.Type, opt => opt.MapFrom(src => src.Type)); ;
             CreateMap<CouponUsage, CouponUsageDto>().ReverseMap();
             CreateMap<User, UserDto>().ReverseMap();
-        CreateMap<Address, AddressDto>().ReverseMap();
-        CreateMap<Booking, BookingDto>().ReverseMap();
-        CreateMap<BookingLocation, BookingLocationDto>().ReverseMap();
-        CreateMap<GeoJson, GeoJsonDto>().ReverseMap();
-        CreateMap<Technician, TechnicianDto>().ReverseMap();
-        CreateMap<BankAccount, BankAccountDto>().ReverseMap();
+            CreateMap<Address, AddressDto>().ReverseMap();
+            CreateMap<Booking, BookingDto>().ReverseMap();
+            CreateMap<BookingLocation, BookingLocationDto>().ReverseMap();
+            CreateMap<GeoJson, GeoJsonDto>().ReverseMap();
+            CreateMap<Technician, TechnicianDto>().ReverseMap();
+            CreateMap<BankAccount, BankAccountDto>().ReverseMap();
+            CreateMap<UpdateUserDto, User>();
         }
     }
 }

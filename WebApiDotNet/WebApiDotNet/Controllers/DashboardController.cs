@@ -43,6 +43,24 @@ namespace WebApiDotNet.Controllers
             return Ok(user);
         }
 
+        [HttpPut("users/{id}")]
+        public async Task<IActionResult> UpdateUser(string id, [FromBody] UpdateUserDto updateUserDto)
+        {
+            if (updateUserDto == null)
+            {
+                return BadRequest();
+            }
+
+            var updatedUser = await _userService.UpdateAsync(id, updateUserDto);
+
+            if (updatedUser == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(updatedUser);
+        }
+
         // BOOKING
         [HttpGet("bookings")]
         public async Task<IActionResult> GetAllBookings()

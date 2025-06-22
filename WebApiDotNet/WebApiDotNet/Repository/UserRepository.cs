@@ -23,5 +23,10 @@ namespace WebApiDotNet.Repository
         {
             return await _collection.Find(u => u.Id == id).FirstOrDefaultAsync();
         }
+
+        public async Task UpdateAsync(User user)
+        {
+            await _collection.ReplaceOneAsync(u => u.Id == user.Id, user);
+        }
     }
 }

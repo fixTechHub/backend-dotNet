@@ -2,6 +2,7 @@ using AutoMapper;
 using WebApiDotNet.DTOs;
 using WebApiDotNet.Models;
 using WebApiDotNet.Repository.IRepository;
+using BCrypt.Net;
 
 namespace WebApiDotNet.Services
 {
@@ -26,6 +27,25 @@ namespace WebApiDotNet.Services
         {
             var user = await _repository.GetByIdAsync(id);
             return user == null ? null : _mapper.Map<UserDto>(user);
+        }
+
+        public async Task<UserDto?> UpdateAsync(string id, UpdateUserDto updateUserDto)
+        {
+            var user = await _repository.GetByIdAsync(id);
+            if (user == null)
+            {
+                return null;
+            }
+
+            // Update user properties from DTO
+            if (updateUserDto.Role != null) user.Role = updateUserDto.Role;
+            if (updateUserDto.Status != null) user.Status = updateUserDto.Status;
+
+            user.UpdatedAt = DateTime.UtcNow;
+
+            await _repository.UpdateAsync(user);
+
+            return _mapper.Map<UserDto>(user);
         }
     }
 }
