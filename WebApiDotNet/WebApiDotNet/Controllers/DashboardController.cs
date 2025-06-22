@@ -47,8 +47,17 @@ namespace WebApiDotNet.Controllers
         [HttpGet("bookings")]
         public async Task<IActionResult> GetAllBookings()
         {
-            var result = await _bookingService.GetAllAsync();
-            return Ok(result);
+            try
+            {
+                var result = await _bookingService.GetAllAsync();
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("❌ Lỗi khi lấy danh sách booking: " + ex.Message);
+                Console.WriteLine("❌ Stack trace: " + ex.StackTrace);
+                return StatusCode(500, new { message = "Lỗi server", error = ex.Message, details = ex.StackTrace });
+            }
         }
 
         [HttpGet("bookings/{id}")]
