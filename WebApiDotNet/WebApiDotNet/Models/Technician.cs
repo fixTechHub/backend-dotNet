@@ -61,7 +61,7 @@ namespace WebApiDotNet.Models
         public DateTime UpdatedAt { get; set; }
 
         [BsonElement("status")]
-        public string Status { get; set; }
+        public string Status { get; set; } = "PENDING";
     }
 
     public class BankAccount
