@@ -3,7 +3,7 @@ using MongoDB.Bson.Serialization.Attributes;
 
 namespace WebApiDotNet.Models
 {
-    
+    [BsonIgnoreExtraElements]
     public class Booking
     {
         [BsonId]
@@ -62,6 +62,7 @@ namespace WebApiDotNet.Models
         public DateTime UpdatedAt { get; set; }
     }
 
+    [BsonIgnoreExtraElements]
     public class BookingLocation
     {
         [BsonElement("address")]
