@@ -110,6 +110,13 @@ namespace WebApiDotNet.Controllers
             return Ok(updated);
         }
 
+        // [HttpGet("technicians")]
+        // public async Task<IActionResult> GetTechnicians()
+        // {
+        //     var technicians = await _technicianService.GetAllAsync();
+        //     return Ok(technicians);
+        // }
+
         // COUPON USAGE
         [HttpGet("couponusages")]
         public async Task<IActionResult> GetAllCouponUsages() => Ok(await _couponUsageService.GetAllUsagesAsync());

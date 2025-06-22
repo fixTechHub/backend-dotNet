@@ -6,6 +6,12 @@ namespace WebApiDotNet.DTOs
     {
         public string Id { get; set; }
         public string UserId { get; set; }
+
+        // User Info
+        public string FullName { get; set; }
+        public string Email { get; set; }
+        public string Phone { get; set; }
+
         public GeoJsonDto CurrentLocation { get; set; }
         public string Identification { get; set; }
         public double RatingAverage { get; set; }

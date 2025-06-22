@@ -2,24 +2,42 @@ using AutoMapper;
 using WebApiDotNet.DTOs;
 using WebApiDotNet.Models;
 using WebApiDotNet.Repository.IRepository;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace WebApiDotNet.Services
 {
     public class TechnicianService : ITechnicianService
     {
         private readonly ITechnicianRepository _repository;
+        private readonly IUserRepository _userRepository;
         private readonly IMapper _mapper;
 
-        public TechnicianService(ITechnicianRepository repository, IMapper mapper)
+        public TechnicianService(ITechnicianRepository repository, IUserRepository userRepository, IMapper mapper)
         {
             _repository = repository;
+            _userRepository = userRepository;
             _mapper = mapper;
         }
 
         public async Task<List<TechnicianDto>> GetAllAsync()
         {
             var technicians = await _repository.GetAllAsync();
-            return _mapper.Map<List<TechnicianDto>>(technicians);
+            var technicianDtos = new List<TechnicianDto>();
+
+            foreach (var technician in technicians)
+            {
+                var user = await _userRepository.GetByIdAsync(technician.UserId);
+                var dto = _mapper.Map<TechnicianDto>(technician);
+                if (user != null)
+                {
+                    dto.FullName = user.FullName;
+                    dto.Email = user.Email;
+                    dto.Phone = user.Phone;
+                }
+                technicianDtos.Add(dto);
+            }
+            return technicianDtos;
         }
 
         public async Task<TechnicianDto?> GetByIdAsync(string id)
