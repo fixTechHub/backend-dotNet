@@ -113,6 +113,14 @@ namespace WebApiDotNet.Controllers
         [HttpGet("reports")]
         public async Task<IActionResult> GetAllReports() => Ok(await _reportService.GetAllAsync());
 
+        [HttpGet("reports/{id}")]
+        public async Task<IActionResult> GetReportById(string id)
+        {
+            var report = await _reportService.GetByIdAsync(id);
+            if (report == null) return NotFound();
+            return Ok(report);
+        }
+
         // SYSTEM REPORT
         [HttpGet("systemreports")]
         public async Task<IActionResult> GetAllSystemReports() => Ok(await _systemReportService.GetAllAsync());

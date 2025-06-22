@@ -16,5 +16,10 @@ namespace WebApiDotNet.Services
         {
             return await _repository.GetAllAsync();
         }
+
+        public async Task<Report> GetByIdAsync(string id)
+        {
+            return await _repository.GetByIdAsync(id);
+        }
     }
 }
