@@ -19,6 +19,18 @@ namespace WebApiDotNet.Services
         public async Task<List<CouponDto>> GetAllCouponsAsync()
         {
             var coupons = await _repository.GetAllAsync();
+            var now = DateTime.UtcNow;
+            var tasks = new List<Task>();
+            foreach (var coupon in coupons)
+            {
+                if (coupon.IsActive && coupon.EndDate < now)
+                {
+                    coupon.IsActive = false;
+                    tasks.Add(_repository.UpdateAsync(coupon.Id, coupon));
+                }
+            }
+            if (tasks.Count > 0)
+                await Task.WhenAll(tasks);
             return _mapper.Map<List<CouponDto>>(coupons);
         }
 
@@ -31,6 +43,12 @@ namespace WebApiDotNet.Services
         public async Task<CouponDto> GetCouponByIdAsync(string id)
         {
             var coupon = await _repository.GetByIdAsync(id);
+            var now = DateTime.UtcNow;
+            if (coupon != null && coupon.IsActive && coupon.EndDate < now)
+            {
+                coupon.IsActive = false;
+                await _repository.UpdateAsync(coupon.Id, coupon);
+            }
             return _mapper.Map<CouponDto>(coupon);
         }
 
