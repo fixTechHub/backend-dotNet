@@ -10,7 +10,7 @@ namespace WebApiDotNet.Data
         {
             // Entity -> DTO
             CreateMap<Coupon, CouponDto>();
-
+            CreateMap<Category, CategoryDto>().ReverseMap();
             // DTO -> Entity
             CreateMap<CreateCouponDto, Coupon>()
                 .ForMember(dest => dest.Id, opt => opt.Ignore())
@@ -34,8 +34,7 @@ namespace WebApiDotNet.Data
             CreateMap<BankAccount, BankAccountDto>().ReverseMap();
             CreateMap<UpdateUserDto, User>();
             CreateMap<Role, RoleDto>();
-            CreateMap<SystemReport, SystemReportDto>().ReverseMap();
-            CreateMap<Category, CategoryDto>().ReverseMap();
+            CreateMap<SystemReport, SystemReportDto>().ReverseMap();            
             CreateMap<CreateCategoryDto, Category>()
                 .ForMember(dest => dest.Id, opt => opt.Ignore())
                 .ForMember(dest => dest.CreatedAt, opt => opt.Ignore())
