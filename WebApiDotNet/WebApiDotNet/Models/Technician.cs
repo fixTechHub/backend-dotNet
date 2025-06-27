@@ -32,6 +32,7 @@ namespace WebApiDotNet.Models
         [BsonElement("specialtiesCategories")]
         [BsonRepresentation(BsonType.ObjectId)]
         public List<string> SpecialtiesCategories { get; set; }
+        
 
         [BsonElement("availability")]
         public string Availability { get; set; }
