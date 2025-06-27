@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using WebApiDotNet.Models;
 using WebApiDotNet.Repository.IRepository;
 using Microsoft.Extensions.Configuration;
+using WebApiDotNet.Data;
 
 namespace WebApiDotNet.Repository
 {
@@ -11,11 +12,9 @@ namespace WebApiDotNet.Repository
     {
         private readonly IMongoCollection<Category> _categories;
 
-        public CategoryRepository(IConfiguration configuration)
+        public CategoryRepository(MongoDbContext context)
         {
-            var client = new MongoClient(configuration.GetConnectionString("MongoDb"));
-            var database = client.GetDatabase(configuration["MongoDbSettings:DatabaseName"]);
-            _categories = database.GetCollection<Category>("Category");
+            _categories = context.Categories;
         }
 
         public async Task<IEnumerable<Category>> GetAllAsync()

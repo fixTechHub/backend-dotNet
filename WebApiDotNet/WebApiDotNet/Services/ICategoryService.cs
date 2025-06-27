@@ -6,7 +6,7 @@ namespace WebApiDotNet.Services
 {
     public interface ICategoryService
     {
-        Task<IEnumerable<CategoryDto>> GetAllAsync();
+        Task<List<CategoryDto>> GetAllAsync();
         Task<CategoryDto> GetByIdAsync(string id);
         Task<CategoryDto> CreateAsync(CreateCategoryDto dto);
         Task<bool> UpdateAsync(string id, UpdateCategoryDto dto);

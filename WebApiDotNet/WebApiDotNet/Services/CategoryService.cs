@@ -20,10 +20,10 @@ namespace WebApiDotNet.Services
             _mapper = mapper;
         }
 
-        public async Task<IEnumerable<CategoryDto>> GetAllAsync()
+        public async Task<List<CategoryDto>> GetAllAsync()
         {
             var categories = await _categoryRepository.GetAllAsync();
-            return _mapper.Map<List<CategoryDto>>(categories);
+            return _mapper.Map<List<CategoryDto>>(categories.ToList());
         }
 
         public async Task<CategoryDto> GetByIdAsync(string id)
