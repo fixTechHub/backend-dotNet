@@ -24,7 +24,7 @@ namespace WebApiDotNet.Models
         public string Description { get; set; }
 
         [BsonElement("status")]
-        public string Status { get; set; }
+        public string Status { get; set; } = "PENDING";
 
         [BsonElement("createdAt")]
         public DateTime CreatedAt { get; set; }
