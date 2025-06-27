@@ -34,6 +34,7 @@ namespace WebApiDotNet.Data
             CreateMap<BankAccount, BankAccountDto>().ReverseMap();
             CreateMap<UpdateUserDto, User>();
             CreateMap<Role, RoleDto>();
+            CreateMap<SystemReport, SystemReportDto>().ReverseMap();
         }
     }
 }
