@@ -154,9 +154,9 @@ namespace WebApiDotNet.Controllers
         public async Task<IActionResult> GetAllSystemReports() => Ok(await _systemReportService.GetAllAsync());
         
         [HttpPatch("systemreports/{id}/status")]
-        public async Task<IActionResult> UpdateStatus(string id, [FromBody] string status)
+        public async Task<IActionResult> UpdateStatus(string id, [FromBody] UpdateSystemReportStatusDto dto)
         {
-            var updated = await _systemReportService.UpdateStatusAsync(id, status);
+            var updated = await _systemReportService.UpdateStatusAsync(id, dto.Status);
             if (updated == null)
                 return NotFound(new { message = "Report not found" });
             return Ok(updated);
