@@ -1,5 +1,84 @@
 [
   {
+    "ContainingType": "WebApiDotNet.Controllers.CategoryController",
+    "Method": "GetAll",
+    "RelativePath": "api/Category",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "WebApiDotNet.Controllers.CategoryController",
+    "Method": "Create",
+    "RelativePath": "api/Category",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "dto",
+        "Type": "WebApiDotNet.DTOs.CreateCategoryDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "WebApiDotNet.Controllers.CategoryController",
+    "Method": "GetById",
+    "RelativePath": "api/Category/{id}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "WebApiDotNet.Controllers.CategoryController",
+    "Method": "Update",
+    "RelativePath": "api/Category/{id}",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.String",
+        "IsRequired": true
+      },
+      {
+        "Name": "dto",
+        "Type": "WebApiDotNet.DTOs.UpdateCategoryDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "WebApiDotNet.Controllers.CategoryController",
+    "Method": "Delete",
+    "RelativePath": "api/Category/{id}",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
     "ContainingType": "WebApiDotNet.Controllers.CouponController",
     "Method": "GetAll",
     "RelativePath": "api/Coupon",
@@ -79,9 +158,25 @@
     "ReturnTypes": []
   },
   {
-    "ContainingType": "WebApiDotNet.Controllers.CouponUsageController",
-    "Method": "GetAll",
-    "RelativePath": "api/CouponUsage",
+    "ContainingType": "WebApiDotNet.Controllers.CouponController",
+    "Method": "Restore",
+    "RelativePath": "api/Coupon/{id}/restore",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "WebApiDotNet.Controllers.CouponController",
+    "Method": "GetDeleted",
+    "RelativePath": "api/Coupon/deleted",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
@@ -89,9 +184,45 @@
     "ReturnTypes": []
   },
   {
-    "ContainingType": "WebApiDotNet.Controllers.CouponUsageController",
-    "Method": "GetByCouponId",
-    "RelativePath": "api/CouponUsage/{couponId}",
+    "ContainingType": "WebApiDotNet.Controllers.DashboardController",
+    "Method": "GetAllBookings",
+    "RelativePath": "api/Dashboard/bookings",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "WebApiDotNet.Controllers.DashboardController",
+    "Method": "GetBookingById",
+    "RelativePath": "api/Dashboard/bookings/{id}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "WebApiDotNet.Controllers.DashboardController",
+    "Method": "GetAllCouponUsages",
+    "RelativePath": "api/Dashboard/couponusages",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "WebApiDotNet.Controllers.DashboardController",
+    "Method": "GetCouponUsageByCouponId",
+    "RelativePath": "api/Dashboard/couponusages/{couponId}",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
@@ -105,15 +236,15 @@
     "ReturnTypes": []
   },
   {
-    "ContainingType": "WebApiDotNet.Controllers.BookingPaymentController",
-    "Method": "PayBooking",
-    "RelativePath": "api/payment/{bookingId}",
-    "HttpMethod": "POST",
+    "ContainingType": "WebApiDotNet.Controllers.DashboardController",
+    "Method": "GetCouponUsageById",
+    "RelativePath": "api/Dashboard/couponusages/id/{id}",
+    "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
     "Parameters": [
       {
-        "Name": "bookingId",
+        "Name": "id",
         "Type": "System.String",
         "IsRequired": true
       }
@@ -121,24 +252,206 @@
     "ReturnTypes": []
   },
   {
-    "ContainingType": "WebApiDotNet.Controllers.WeatherForecastController",
-    "Method": "Get",
-    "RelativePath": "WeatherForecast",
+    "ContainingType": "WebApiDotNet.Controllers.DashboardController",
+    "Method": "GetAllReports",
+    "RelativePath": "api/Dashboard/reports",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
     "Parameters": [],
-    "ReturnTypes": [
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "WebApiDotNet.Controllers.DashboardController",
+    "Method": "GetReportById",
+    "RelativePath": "api/Dashboard/reports/{id}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
       {
-        "Type": "System.Collections.Generic.IEnumerable\u00601[[WebApiDotNet.WeatherForecast, WebApiDotNet, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
-        "MediaTypes": [
-          "text/plain",
-          "application/json",
-          "text/json"
-        ],
-        "StatusCode": 200
+        "Name": "id",
+        "Type": "System.String",
+        "IsRequired": true
       }
     ],
-    "EndpointName": "GetWeatherForecast"
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "WebApiDotNet.Controllers.DashboardController",
+    "Method": "GetAllRoles",
+    "RelativePath": "api/Dashboard/roles",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "WebApiDotNet.Controllers.DashboardController",
+    "Method": "GetAllSystemReports",
+    "RelativePath": "api/Dashboard/systemreports",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "WebApiDotNet.Controllers.DashboardController",
+    "Method": "UpdateStatus",
+    "RelativePath": "api/Dashboard/systemreports/{id}/status",
+    "HttpMethod": "PATCH",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.String",
+        "IsRequired": true
+      },
+      {
+        "Name": "dto",
+        "Type": "WebApiDotNet.DTOs.UpdateSystemReportStatusDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "WebApiDotNet.Controllers.DashboardController",
+    "Method": "GetAllTechnicians",
+    "RelativePath": "api/Dashboard/technicians",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "WebApiDotNet.Controllers.DashboardController",
+    "Method": "GetTechnicianById",
+    "RelativePath": "api/Dashboard/technicians/{id}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "WebApiDotNet.Controllers.DashboardController",
+    "Method": "UpdateTechnicianStatus",
+    "RelativePath": "api/Dashboard/technicians/{id}/status",
+    "HttpMethod": "PATCH",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.String",
+        "IsRequired": true
+      },
+      {
+        "Name": "dto",
+        "Type": "WebApiDotNet.DTOs.UpdateTechnicianStatusDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "WebApiDotNet.Controllers.DashboardController",
+    "Method": "GetAllUsers",
+    "RelativePath": "api/Dashboard/users",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "WebApiDotNet.Controllers.DashboardController",
+    "Method": "GetUserById",
+    "RelativePath": "api/Dashboard/users/{id}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "WebApiDotNet.Controllers.DashboardController",
+    "Method": "UpdateUser",
+    "RelativePath": "api/Dashboard/users/{id}",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.String",
+        "IsRequired": true
+      },
+      {
+        "Name": "updateUserDto",
+        "Type": "WebApiDotNet.DTOs.UpdateUserDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "WebApiDotNet.Controllers.DashboardController",
+    "Method": "LockUser",
+    "RelativePath": "api/Dashboard/users/{id}/lock",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.String",
+        "IsRequired": true
+      },
+      {
+        "Name": "lockUserDto",
+        "Type": "WebApiDotNet.DTOs.LockUserDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "WebApiDotNet.Controllers.DashboardController",
+    "Method": "UnlockUser",
+    "RelativePath": "api/Dashboard/users/{id}/unlock",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.String",
+        "IsRequired": true
+      },
+      {
+        "Name": "unlockUserDto",
+        "Type": "WebApiDotNet.DTOs.UnlockUserDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
   }
 ]

@@ -64,6 +64,47 @@ namespace WebApiDotNet.Controllers
             return Ok(updatedUser);
         }
 
+        [HttpPost("users/{id}/lock")]
+        public async Task<IActionResult> LockUser(string id, [FromBody] LockUserDto lockUserDto)
+        {
+            try
+            {
+                if (lockUserDto == null || string.IsNullOrWhiteSpace(lockUserDto.Reason))
+                {
+                    return BadRequest(new { message = "Lock reason is required" });
+                }
+
+                var lockedUser = await _userService.LockUserAsync(id, lockUserDto);
+                if (lockedUser == null)
+                {
+                    return NotFound(new { message = "User not found" });
+                }
+                return Ok(lockedUser);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = "Internal server error", error = ex.Message });
+            }
+        }
+
+        [HttpPost("users/{id}/unlock")]
+        public async Task<IActionResult> UnlockUser(string id, [FromBody] UnlockUserDto unlockUserDto)
+        {
+            try
+            {
+                var unlockedUser = await _userService.UnlockUserAsync(id, unlockUserDto);
+                if (unlockedUser == null)
+                {
+                    return NotFound(new { message = "User not found" });
+                }
+                return Ok(unlockedUser);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = "Internal server error", error = ex.Message });
+            }
+        }
+
         // BOOKING
         [HttpGet("bookings")]
         public async Task<IActionResult> GetAllBookings()

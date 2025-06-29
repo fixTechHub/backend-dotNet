@@ -47,5 +47,41 @@ namespace WebApiDotNet.Services
 
             return _mapper.Map<UserDto>(user);
         }
+
+        public async Task<UserDto?> LockUserAsync(string id, LockUserDto lockUserDto)
+        {
+            var user = await _repository.GetByIdAsync(id);
+            if (user == null)
+            {
+                return null;
+            }
+
+            // Lock the user
+            user.Status = "INACTIVE";
+            user.LockedReason = lockUserDto.Reason;
+            user.UpdatedAt = DateTime.UtcNow;
+
+            await _repository.UpdateAsync(user);
+
+            return _mapper.Map<UserDto>(user);
+        }
+
+        public async Task<UserDto?> UnlockUserAsync(string id, UnlockUserDto unlockUserDto)
+        {
+            var user = await _repository.GetByIdAsync(id);
+            if (user == null)
+            {
+                return null;
+            }
+
+            // Unlock the user
+            user.Status = "ACTIVE";
+            user.LockedReason = null; // Clear the locked reason
+            user.UpdatedAt = DateTime.UtcNow;
+
+            await _repository.UpdateAsync(user);
+
+            return _mapper.Map<UserDto>(user);
+        }
     }
 }

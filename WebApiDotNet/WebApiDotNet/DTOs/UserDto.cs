@@ -11,6 +11,7 @@ namespace WebApiDotNet.DTOs
         public string Avatar { get; set; }
         public bool PhoneVerified { get; set; }
         public bool EmailVerified { get; set; }
+        public string? LockedReason { get; set; }
         public string Role { get; set; }
         public string Status { get; set; }
         public DateTime CreatedAt { get; set; }
