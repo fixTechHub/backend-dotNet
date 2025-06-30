@@ -63,6 +63,8 @@ namespace WebApiDotNet.Models
 
         [BsonElement("status")]
         public string Status { get; set; } = "PENDING";
+        
+        public string? Note { get; set; }
     }
 
     public class BankAccount
