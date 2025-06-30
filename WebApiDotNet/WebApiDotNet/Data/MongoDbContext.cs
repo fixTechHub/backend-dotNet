@@ -30,5 +30,6 @@ namespace WebApiDotNet.Data
         public IMongoCollection<Technician> Technicians => _database.GetCollection<Technician>("technicians");
         public IMongoCollection<Role> Roles => _database.GetCollection<Role>("roles");
         public IMongoCollection<Category> Categories => _database.GetCollection<Category>("categories");
+        public IMongoCollection<Warranty> Warranties => _database.GetCollection<Warranty>("bookingwarranties");
     }
 }

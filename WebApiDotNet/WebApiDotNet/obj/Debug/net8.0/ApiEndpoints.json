@@ -453,5 +453,52 @@
       }
     ],
     "ReturnTypes": []
+  },
+  {
+    "ContainingType": "WebApiDotNet.Controllers.WarrantyController",
+    "Method": "GetAll",
+    "RelativePath": "api/Warranty",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "WebApiDotNet.Controllers.WarrantyController",
+    "Method": "GetById",
+    "RelativePath": "api/Warranty/{id}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "WebApiDotNet.Controllers.WarrantyController",
+    "Method": "UpdateStatus",
+    "RelativePath": "api/Warranty/status/{id}",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.String",
+        "IsRequired": true
+      },
+      {
+        "Name": "dto",
+        "Type": "WebApiDotNet.DTOs.UpdateWarrantyStatusDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
   }
 ]
