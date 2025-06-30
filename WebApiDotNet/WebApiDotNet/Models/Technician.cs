@@ -64,6 +64,7 @@ namespace WebApiDotNet.Models
         [BsonElement("status")]
         public string Status { get; set; } = "PENDING";
         
+        [BsonElement("note")]
         public string? Note { get; set; }
     }
 
