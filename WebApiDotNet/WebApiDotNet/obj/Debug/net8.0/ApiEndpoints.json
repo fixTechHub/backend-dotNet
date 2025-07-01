@@ -289,6 +289,32 @@
   },
   {
     "ContainingType": "WebApiDotNet.Controllers.DashboardController",
+    "Method": "GetAll",
+    "RelativePath": "api/Dashboard/services",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "WebApiDotNet.Controllers.DashboardController",
+    "Method": "GetById",
+    "RelativePath": "api/Dashboard/services/{id}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "WebApiDotNet.Controllers.DashboardController",
     "Method": "GetAllSystemReports",
     "RelativePath": "api/Dashboard/systemreports",
     "HttpMethod": "GET",
@@ -452,6 +478,16 @@
         "IsRequired": true
       }
     ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "WebApiDotNet.Controllers.ServiceController",
+    "Method": "GetAll",
+    "RelativePath": "api/Service",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
     "ReturnTypes": []
   },
   {

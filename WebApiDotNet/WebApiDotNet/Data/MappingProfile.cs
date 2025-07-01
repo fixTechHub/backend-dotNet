@@ -44,6 +44,7 @@ namespace WebApiDotNet.Data
                 .ForMember(dest => dest.CreatedAt, opt => opt.Ignore())
                 .ForMember(dest => dest.UpdatedAt, opt => opt.Ignore());
             CreateMap<Warranty, WarrantyDto>().ReverseMap();
+            CreateMap<Service, ServiceDto>().ReverseMap();
         }
     }
 }
