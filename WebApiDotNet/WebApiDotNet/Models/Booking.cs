@@ -35,7 +35,7 @@ namespace WebApiDotNet.Models
         public List<string> Images { get; set; }
 
         [BsonElement("schedule")]
-        public DateTime Schedule { get; set; }
+        public Schedule Schedule { get; set; }
 
         [BsonElement("customerConfirmedDone")]
         public bool CustomerConfirmedDone { get; set; }
@@ -79,4 +79,12 @@ namespace WebApiDotNet.Models
         public List<double> Coordinates { get; set; }
     }
 
+    public class Schedule
+    {
+        [BsonElement("startTime")]
+        public DateTime StartTime { get; set; }
+
+        [BsonElement("endTime")]
+        public DateTime EndTime { get; set; }
+    }
 } 
