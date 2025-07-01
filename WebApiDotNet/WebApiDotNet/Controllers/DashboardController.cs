@@ -145,10 +145,17 @@ namespace WebApiDotNet.Controllers
         [HttpPatch("technicians/{id}/status")]
         public async Task<IActionResult> UpdateTechnicianStatus(string id, [FromBody] UpdateTechnicianStatusDto dto)
         {
-            var updated = await _technicianService.UpdateStatusAsync(id, dto.Status, dto.Note);
-            if (updated == null)
-                return NotFound(new { message = "Technician not found" });
-            return Ok(updated);
+            try
+            {
+                var updated = await _technicianService.UpdateStatusAsync(id, dto.Status, dto.Note);
+                if (updated == null)
+                    return NotFound(new { message = "Technician not found" });
+                return Ok(updated);
+            }
+            catch (InvalidOperationException ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
         }
 
         // [HttpGet("technicians")]
