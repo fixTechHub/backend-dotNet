@@ -8,5 +8,8 @@ namespace WebApiDotNet.Repository.IRepository
     {
         Task<IEnumerable<Service>> GetAllAsync();
         Task<Service> GetByIdAsync(string id);
+        Task<Service> CreateAsync(Service service);
+        Task<Service> UpdateAsync(string id, Service service);
+        Task<bool> DeleteAsync(string id);
     }
 } 

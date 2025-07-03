@@ -8,5 +8,8 @@ namespace WebApiDotNet.Services
     {
         Task<IEnumerable<ServiceDto>> GetAllAsync();
         Task<ServiceDto> GetByIdAsync(string id);
+        Task<ServiceDto> CreateAsync(CreateServiceDto dto);
+        Task<ServiceDto> UpdateAsync(string id, UpdateServiceDto dto);
+        Task<bool> DeleteAsync(string id);
     }
 } 

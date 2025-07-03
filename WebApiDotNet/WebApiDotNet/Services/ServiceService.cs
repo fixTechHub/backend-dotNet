@@ -26,5 +26,22 @@ namespace WebApiDotNet.Services
             var s = await _repo.GetByIdAsync(id);
             return s == null ? null : _mapper.Map<ServiceDto>(s);
         }
+        public async Task<ServiceDto> CreateAsync(CreateServiceDto dto)
+        {
+            var s = _mapper.Map<Service>(dto);
+            var created = await _repo.CreateAsync(s);
+            return _mapper.Map<ServiceDto>(created);
+        }
+        public async Task<ServiceDto> UpdateAsync(string id, UpdateServiceDto dto)
+        {
+            var s = _mapper.Map<Service>(dto);
+            s.Id = id;
+            var updated = await _repo.UpdateAsync(id, s);
+            return _mapper.Map<ServiceDto>(updated);
+        }
+        public async Task<bool> DeleteAsync(string id)
+        {
+            return await _repo.DeleteAsync(id);
+        }
     }
 } 
