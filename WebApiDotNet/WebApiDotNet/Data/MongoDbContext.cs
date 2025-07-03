@@ -32,5 +32,6 @@ namespace WebApiDotNet.Data
         public IMongoCollection<Category> Categories => _database.GetCollection<Category>("categories");
         public IMongoCollection<Warranty> Warranties => _database.GetCollection<Warranty>("bookingwarranties");
         public IMongoCollection<Service> Services => _database.GetCollection<Service>("services");
+        public IMongoCollection<BookingPrice> BookingPrices => _database.GetCollection<BookingPrice>("bookingprices");
     }
 }

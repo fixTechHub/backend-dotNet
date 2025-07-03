@@ -300,6 +300,27 @@
   },
   {
     "ContainingType": "WebApiDotNet.Controllers.DashboardController",
+    "Method": "GetMonthlyRevenue",
+    "RelativePath": "api/Dashboard/revenue",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "year",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "month",
+        "Type": "System.Int32",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "WebApiDotNet.Controllers.DashboardController",
     "Method": "GetAllRoles",
     "RelativePath": "api/Dashboard/roles",
     "HttpMethod": "GET",

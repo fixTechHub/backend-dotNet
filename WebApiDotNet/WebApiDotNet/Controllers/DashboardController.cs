@@ -16,6 +16,7 @@ namespace WebApiDotNet.Controllers
         private readonly ISystemReportService _systemReportService;
         private readonly IRoleService _roleService;
         private readonly IServiceService _serviceService;
+        private readonly IBookingPriceService _bookingPriceService;
 
         public DashboardController(
             IUserService userService,
@@ -25,7 +26,8 @@ namespace WebApiDotNet.Controllers
             IReportService reportService,
             ISystemReportService systemReportService,
             IRoleService roleService,
-            IServiceService serviceService)
+            IServiceService serviceService,
+            IBookingPriceService bookingPriceService)
         {
             _userService = userService;
             _bookingService = bookingService;
@@ -35,6 +37,7 @@ namespace WebApiDotNet.Controllers
             _systemReportService = systemReportService;
             _roleService = roleService;
             _serviceService = serviceService;
+            _bookingPriceService = bookingPriceService;
         }
 
         // USER
@@ -239,6 +242,13 @@ namespace WebApiDotNet.Controllers
         {
             var result = await _serviceService.GetByIdAsync(id);
             return Ok(result);
+        }
+
+        [HttpGet("revenue")]
+        public async Task<IActionResult> GetMonthlyRevenue([FromQuery] int year, [FromQuery] int month)
+        {
+            var revenue = await _bookingPriceService.GetMonthlyRevenueAsync(year, month);
+            return Ok(new { year, month, revenue });
         }
     }
 }

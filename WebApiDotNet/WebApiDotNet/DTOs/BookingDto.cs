@@ -12,7 +12,7 @@ namespace WebApiDotNet.DTOs
         public BookingLocationDto Location { get; set; }
         public string Description { get; set; }
         public List<string> Images { get; set; }
-        public DateTime Schedule { get; set; }
+        public ScheduleDto Schedule { get; set; }
         public bool CustomerConfirmedDone { get; set; }
         public bool TechnicianConfirmedDone { get; set; }
         public string Status { get; set; }
@@ -33,5 +33,11 @@ namespace WebApiDotNet.DTOs
     {
         public string Type { get; set; }
         public List<double> Coordinates { get; set; }
+    }
+
+    public class ScheduleDto
+    {
+        public DateTime StartTime { get; set; }
+        public DateTime EndTime { get; set; }
     }
 } 
