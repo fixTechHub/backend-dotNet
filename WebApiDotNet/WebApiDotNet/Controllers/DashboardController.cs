@@ -133,6 +133,13 @@ namespace WebApiDotNet.Controllers
             return Ok(booking);
         }
 
+        [HttpGet("booking-count")]
+        public async Task<IActionResult> GetBookingCountByMonth([FromQuery] int year, [FromQuery] int month)
+        {
+            var count = await _bookingService.CountByMonthAsync(year, month);
+            return Ok(new { year, month, count });
+        }
+
         // TECHNICIAN
         [HttpGet("technicians")]
         public async Task<IActionResult> GetAllTechnicians() => Ok(await _technicianService.GetAllAsync());
@@ -161,12 +168,12 @@ namespace WebApiDotNet.Controllers
             }
         }
 
-        // [HttpGet("technicians")]
-        // public async Task<IActionResult> GetTechnicians()
-        // {
-        //     var technicians = await _technicianService.GetAllAsync();
-        //     return Ok(technicians);
-        // }
+        [HttpGet("technician-count")]
+        public async Task<IActionResult> GetTechnicianCountByMonth([FromQuery] int year, [FromQuery] int month)
+        {
+            var count = await _technicianService.CountByMonthAsync(year, month);
+            return Ok(new { year, month, count });
+        }
 
         // COUPON USAGE
         [HttpGet("couponusages")]

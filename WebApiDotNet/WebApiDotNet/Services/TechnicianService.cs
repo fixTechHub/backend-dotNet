@@ -59,5 +59,10 @@ namespace WebApiDotNet.Services
             var updated = await _repository.UpdateStatusAsync(id, status, note);
             return updated == null ? null : _mapper.Map<TechnicianDto>(updated);
         }
+
+        public async Task<int> CountByMonthAsync(int year, int month)
+        {
+            return await _repository.CountByMonthAsync(year, month);
+        }
     }
 } 

@@ -7,5 +7,6 @@ namespace WebApiDotNet.Repository.IRepository
         Task<List<Technician>> GetAllAsync();
         Task<Technician?> GetByIdAsync(string id);
         Task<Technician?> UpdateStatusAsync(string id, string status, string? note = null);
+        Task<int> CountByMonthAsync(int year, int month);
     }
 } 

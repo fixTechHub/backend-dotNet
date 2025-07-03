@@ -27,5 +27,10 @@ namespace WebApiDotNet.Services
             var booking = await _repository.GetByIdAsync(id);
             return booking == null ? null : _mapper.Map<BookingDto>(booking);
         }
+
+        public async Task<int> CountByMonthAsync(int year, int month)
+        {
+            return await _repository.CountByMonthAsync(year, month);
+        }
     }
 } 

@@ -23,5 +23,14 @@ namespace WebApiDotNet.Repository
         {
             return await _collection.Find(b => b.Id == id).FirstOrDefaultAsync();
         }
+
+        public async Task<int> CountByMonthAsync(int year, int month)
+        {
+            var builder = Builders<Booking>.Filter;
+            var start = new DateTime(year, month, 1);
+            var end = start.AddMonths(1);
+            var filter = builder.Gte(b => b.CreatedAt, start) & builder.Lt(b => b.CreatedAt, end);
+            return (int)await _collection.CountDocumentsAsync(filter);
+        }
     }
 } 

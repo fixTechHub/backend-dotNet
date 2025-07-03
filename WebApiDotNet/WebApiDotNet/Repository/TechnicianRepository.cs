@@ -35,5 +35,14 @@ namespace WebApiDotNet.Repository
             var options = new FindOneAndUpdateOptions<Technician> { ReturnDocument = ReturnDocument.After };
             return await _collection.FindOneAndUpdateAsync(filter, update, options);
         }
+
+        public async Task<int> CountByMonthAsync(int year, int month)
+        {
+            var builder = Builders<Technician>.Filter;
+            var start = new DateTime(year, month, 1);
+            var end = start.AddMonths(1);
+            var filter = builder.Gte(t => t.CreatedAt, start) & builder.Lt(t => t.CreatedAt, end);
+            return (int)await _collection.CountDocumentsAsync(filter);
+        }
     }
 } 

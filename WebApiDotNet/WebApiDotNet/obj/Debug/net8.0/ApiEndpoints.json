@@ -185,6 +185,27 @@
   },
   {
     "ContainingType": "WebApiDotNet.Controllers.DashboardController",
+    "Method": "GetBookingCountByMonth",
+    "RelativePath": "api/Dashboard/booking-count",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "year",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "month",
+        "Type": "System.Int32",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "WebApiDotNet.Controllers.DashboardController",
     "Method": "GetAllBookings",
     "RelativePath": "api/Dashboard/bookings",
     "HttpMethod": "GET",
@@ -346,6 +367,27 @@
   },
   {
     "ContainingType": "WebApiDotNet.Controllers.DashboardController",
+    "Method": "GetTechnicianCountByMonth",
+    "RelativePath": "api/Dashboard/technician-count",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "year",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "month",
+        "Type": "System.Int32",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "WebApiDotNet.Controllers.DashboardController",
     "Method": "GetAllTechnicians",
     "RelativePath": "api/Dashboard/technicians",
     "HttpMethod": "GET",
@@ -478,16 +520,6 @@
         "IsRequired": true
       }
     ],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "WebApiDotNet.Controllers.ServiceController",
-    "Method": "GetAll",
-    "RelativePath": "api/Service",
-    "HttpMethod": "GET",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [],
     "ReturnTypes": []
   },
   {
