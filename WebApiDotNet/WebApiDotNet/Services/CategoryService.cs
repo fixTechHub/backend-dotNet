@@ -26,6 +26,12 @@ namespace WebApiDotNet.Services
             return _mapper.Map<List<CategoryDto>>(categories.ToList());
         }
 
+        public async Task<List<CategoryDto>> GetDeletedAsync()
+        {
+            var categories = await _categoryRepository.GetDeletedAsync();
+            return _mapper.Map<List<CategoryDto>>(categories.ToList());
+        }
+
         public async Task<CategoryDto> GetByIdAsync(string id)
         {
             var category = await _categoryRepository.GetByIdAsync(id);
@@ -34,33 +40,40 @@ namespace WebApiDotNet.Services
 
         public async Task<CategoryDto> CreateAsync(CreateCategoryDto dto)
         {
-            var now = DateTime.UtcNow;
-            var category = new Category
-            {
-                CategoryName = dto.CategoryName,
-                Icon = dto.Icon,
-                IsActive = dto.IsActive,
-                CreatedAt = now,
-                UpdatedAt = now
-            };
+            var category = _mapper.Map<Category>(dto);
+            category.CreatedAt = DateTime.UtcNow;
+            category.UpdatedAt = DateTime.UtcNow;
             var created = await _categoryRepository.CreateAsync(category);
             return _mapper.Map<CategoryDto>(created);
         }
 
-        public async Task<bool> UpdateAsync(string id, UpdateCategoryDto dto)
+        public async Task<CategoryDto> UpdateAsync(string id, UpdateCategoryDto dto)
         {
             var category = await _categoryRepository.GetByIdAsync(id);
-            if (category == null) return false;
-            category.CategoryName = dto.CategoryName;
-            category.Icon = dto.Icon;
-            category.IsActive = dto.IsActive;
+            if (category == null) throw new Exception("Không tìm thấy danh mục");
+            _mapper.Map(dto, category);
             category.UpdatedAt = DateTime.UtcNow;
-            return await _categoryRepository.UpdateAsync(id, category);
+            var updated = await _categoryRepository.UpdateAsync(id, category);
+            return _mapper.Map<CategoryDto>(updated);
         }
 
-        public async Task<bool> DeleteAsync(string id)
+        public async Task DeleteAsync(string id)
         {
-            return await _categoryRepository.DeleteAsync(id);
+            if (!await _categoryRepository.ExistsAsync(id))
+                throw new Exception("Không tìm thấy danh mục");
+            await _categoryRepository.DeleteAsync(id);
+        }
+
+        public async Task RestoreAsync(string id)
+        {
+            if (!await _categoryRepository.ExistsAsync(id))
+                throw new Exception("Không tìm thấy danh mục đã xóa");
+            await _categoryRepository.RestoreAsync(id);
+        }
+
+        public async Task<bool> ExistsAsync(string id)
+        {
+            return await _categoryRepository.ExistsAsync(id);
         }
     }
 }

@@ -16,6 +16,8 @@ namespace WebApiDotNet.DTOs
         public string Audience { get; set; }
         public List<string> UserIds { get; set; }
         public bool IsActive { get; set; }
+        public bool IsDeleted { get; set; }
+        public DateTime? DeletedAt { get; set; }
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
         public DateTime CreatedAt { get; set; }

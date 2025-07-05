@@ -47,6 +47,20 @@ namespace WebApiDotNet.Controllers
             }
         }
 
+        [HttpGet("deleted")]
+        public async Task<IActionResult> GetDeleted()
+        {
+            try
+            {
+                var result = await _categoryService.GetDeletedAsync();
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = "Lỗi server", error = ex.Message });
+            }
+        }
+
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] CreateCategoryDto dto)
         {
@@ -84,13 +98,26 @@ namespace WebApiDotNet.Controllers
         {
             try
             {
-                var success = await _categoryService.DeleteAsync(id);
-                if (!success) return NotFound(new { message = "Không tìm thấy danh mục" });
-                return Ok(new { message = "Xóa danh mục thành công" });
+                await _categoryService.DeleteAsync(id);
+                return Ok(new { message = "Đã ẩn danh mục thành công" });
             }
             catch (Exception ex)
             {
-                return StatusCode(500, new { message = "Lỗi server", error = ex.Message });
+                return NotFound(new { message = ex.Message });
+            }
+        }
+
+        [HttpPost("{id}/restore")]
+        public async Task<IActionResult> Restore(string id)
+        {
+            try
+            {
+                await _categoryService.RestoreAsync(id);
+                return Ok(new { message = "Khôi phục danh mục thành công" });
+            }
+            catch (Exception ex)
+            {
+                return NotFound(new { message = ex.Message });
             }
         }
     }

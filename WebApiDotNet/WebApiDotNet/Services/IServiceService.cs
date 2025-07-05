@@ -6,10 +6,13 @@ namespace WebApiDotNet.Services
 {
     public interface IServiceService
     {
-        Task<IEnumerable<ServiceDto>> GetAllAsync();
+        Task<List<ServiceDto>> GetAllAsync();
+        Task<List<ServiceDto>> GetDeletedAsync();
         Task<ServiceDto> GetByIdAsync(string id);
         Task<ServiceDto> CreateAsync(CreateServiceDto dto);
         Task<ServiceDto> UpdateAsync(string id, UpdateServiceDto dto);
-        Task<bool> DeleteAsync(string id);
+        Task DeleteAsync(string id);
+        Task RestoreAsync(string id);
+        Task<bool> ExistsAsync(string id);
     }
 } 

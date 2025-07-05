@@ -27,6 +27,12 @@ namespace WebApiDotNet.Controllers
             if (result == null) return NotFound();
             return Ok(result);
         }
+        [HttpGet("deleted")]
+        public async Task<IActionResult> GetDeleted()
+        {
+            var result = await _serviceService.GetDeletedAsync();
+            return Ok(result);
+        }
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] CreateServiceDto dto)
         {
@@ -42,9 +48,15 @@ namespace WebApiDotNet.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(string id)
         {
-            var deleted = await _serviceService.DeleteAsync(id);
-            if (!deleted) return NotFound();
-            return NoContent();
+            await _serviceService.DeleteAsync(id);
+            return Ok(new { message = "Đã ẩn dịch vụ thành công" });
+        }
+
+        [HttpPost("{id}/restore")]
+        public async Task<IActionResult> Restore(string id)
+        {
+            await _serviceService.RestoreAsync(id);
+            return Ok(new { message = "Khôi phục dịch vụ thành công" });
         }
     }
 } 

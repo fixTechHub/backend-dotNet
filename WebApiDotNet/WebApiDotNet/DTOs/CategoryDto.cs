@@ -8,6 +8,8 @@ namespace WebApiDotNet.DTOs
         public string CategoryName { get; set; }
         public string Icon { get; set; }
         public bool IsActive { get; set; }
+        public bool IsDeleted { get; set; }
+        public DateTime? DeletedAt { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime UpdatedAt { get; set; }
     }

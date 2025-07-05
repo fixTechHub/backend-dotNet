@@ -7,9 +7,12 @@ namespace WebApiDotNet.Services
     public interface ICategoryService
     {
         Task<List<CategoryDto>> GetAllAsync();
+        Task<List<CategoryDto>> GetDeletedAsync();
         Task<CategoryDto> GetByIdAsync(string id);
         Task<CategoryDto> CreateAsync(CreateCategoryDto dto);
-        Task<bool> UpdateAsync(string id, UpdateCategoryDto dto);
-        Task<bool> DeleteAsync(string id);
+        Task<CategoryDto> UpdateAsync(string id, UpdateCategoryDto dto);
+        Task DeleteAsync(string id);
+        Task RestoreAsync(string id);
+        Task<bool> ExistsAsync(string id);
     }
 } 

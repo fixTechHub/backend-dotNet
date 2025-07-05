@@ -16,10 +16,15 @@ namespace WebApiDotNet.Services
             _repo = repo;
             _mapper = mapper;
         }
-        public async Task<IEnumerable<ServiceDto>> GetAllAsync()
+        public async Task<List<ServiceDto>> GetAllAsync()
         {
             var list = await _repo.GetAllAsync();
-            return _mapper.Map<IEnumerable<ServiceDto>>(list);
+            return _mapper.Map<List<ServiceDto>>(list);
+        }
+        public async Task<List<ServiceDto>> GetDeletedAsync()
+        {
+            var list = await _repo.GetDeletedAsync();
+            return _mapper.Map<List<ServiceDto>>(list);
         }
         public async Task<ServiceDto> GetByIdAsync(string id)
         {
@@ -28,20 +33,33 @@ namespace WebApiDotNet.Services
         }
         public async Task<ServiceDto> CreateAsync(CreateServiceDto dto)
         {
-            var s = _mapper.Map<Service>(dto);
-            var created = await _repo.CreateAsync(s);
+            var service = _mapper.Map<Service>(dto);
+            var created = await _repo.CreateAsync(service);
             return _mapper.Map<ServiceDto>(created);
         }
         public async Task<ServiceDto> UpdateAsync(string id, UpdateServiceDto dto)
         {
-            var s = _mapper.Map<Service>(dto);
-            s.Id = id;
-            var updated = await _repo.UpdateAsync(id, s);
+            var service = await _repo.GetByIdAsync(id);
+            if (service == null) throw new Exception("Không tìm thấy dịch vụ");
+            _mapper.Map(dto, service);
+            var updated = await _repo.UpdateAsync(id, service);
             return _mapper.Map<ServiceDto>(updated);
         }
-        public async Task<bool> DeleteAsync(string id)
+        public async Task DeleteAsync(string id)
         {
-            return await _repo.DeleteAsync(id);
+            if (!await _repo.ExistsAsync(id))
+                throw new Exception("Không tìm thấy dịch vụ");
+            await _repo.DeleteAsync(id);
+        }
+        public async Task RestoreAsync(string id)
+        {
+            if (!await _repo.ExistsAsync(id))
+                throw new Exception("Không tìm thấy dịch vụ đã xóa");
+            await _repo.RestoreAsync(id);
+        }
+        public async Task<bool> ExistsAsync(string id)
+        {
+            return await _repo.ExistsAsync(id);
         }
     }
 } 

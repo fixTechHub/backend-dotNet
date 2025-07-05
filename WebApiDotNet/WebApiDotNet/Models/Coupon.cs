@@ -46,7 +46,7 @@ namespace WebApiDotNet.Models
         [BsonElement("isDeleted")]
         public bool IsDeleted { get; set; } = false;
 
-        [BsonElement("startDate")]
+        [BsonElement("startDate")] 
         public DateTime StartDate { get; set; }
 
         [BsonElement("endDate")]

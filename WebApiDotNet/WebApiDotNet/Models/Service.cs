@@ -16,6 +16,12 @@ namespace WebApiDotNet.Models
         [BsonElement("categoryId")]
         [BsonRepresentation(BsonType.ObjectId)]
         public string CategoryId { get; set; }
+        
+        [BsonElement("isDeleted")]
+        public bool IsDeleted { get; set; } = false;
+
+        [BsonElement("deletedAt")]
+        public DateTime? DeletedAt { get; set; }
 
         [BsonElement("icon")]
         public string Icon { get; set; }

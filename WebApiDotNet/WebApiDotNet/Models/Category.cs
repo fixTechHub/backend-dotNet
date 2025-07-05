@@ -19,6 +19,12 @@ namespace WebApiDotNet.Models
         [BsonElement("isActive")]
         public bool IsActive { get; set; }
 
+        [BsonElement("isDeleted")]
+        public bool IsDeleted { get; set; } = false;
+
+        [BsonElement("deletedAt")]
+        public DateTime? DeletedAt { get; set; }
+
         [BsonElement("createdAt")]
         [BsonDateTimeOptions(Kind = DateTimeKind.Utc)]
         public DateTime CreatedAt { get; set; }

@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using WebApiDotNet.Data;
 using WebApiDotNet.Models;
 using WebApiDotNet.Repository.IRepository;
+using System;
 
 namespace WebApiDotNet.Repository
 {
@@ -16,32 +17,57 @@ namespace WebApiDotNet.Repository
             _services = context.Services;
         }
 
-        public async Task<IEnumerable<Service>> GetAllAsync()
+        public async Task<List<Service>> GetAllAsync()
         {
-            return await _services.Find(_ => true).ToListAsync();
+            return await _services.Find(s => !s.IsDeleted).ToListAsync();
+        }
+
+        public async Task<List<Service>> GetDeletedAsync()
+        {
+            return await _services.Find(s => s.IsDeleted).ToListAsync();
         }
 
         public async Task<Service> GetByIdAsync(string id)
         {
-            return await _services.Find(s => s.Id == id).FirstOrDefaultAsync();
+            return await _services.Find(s => s.Id == id && !s.IsDeleted).FirstOrDefaultAsync();
         }
 
         public async Task<Service> CreateAsync(Service service)
         {
+            service.CreatedAt = DateTime.UtcNow;
+            service.UpdatedAt = DateTime.UtcNow;
             await _services.InsertOneAsync(service);
             return service;
         }
 
         public async Task<Service> UpdateAsync(string id, Service service)
         {
-            await _services.ReplaceOneAsync(s => s.Id == id, service);
+            service.UpdatedAt = DateTime.UtcNow;
+            await _services.ReplaceOneAsync(s => s.Id == id && !s.IsDeleted, service);
             return service;
         }
 
-        public async Task<bool> DeleteAsync(string id)
+        public async Task DeleteAsync(string id)
         {
-            var result = await _services.DeleteOneAsync(s => s.Id == id);
-            return result.DeletedCount > 0;
+            var update = Builders<Service>.Update
+                .Set(s => s.IsDeleted, true)
+                .Set(s => s.DeletedAt, DateTime.UtcNow)
+                .Set(s => s.UpdatedAt, DateTime.UtcNow);
+            await _services.UpdateOneAsync(s => s.Id == id && !s.IsDeleted, update);
+        }
+
+        public async Task RestoreAsync(string id)
+        {
+            var update = Builders<Service>.Update
+                .Set(s => s.IsDeleted, false)
+                .Set(s => s.DeletedAt, null)
+                .Set(s => s.UpdatedAt, DateTime.UtcNow);
+            await _services.UpdateOneAsync(s => s.Id == id && s.IsDeleted, update);
+        }
+
+        public async Task<bool> ExistsAsync(string id)
+        {
+            return await _services.Find(s => s.Id == id && !s.IsDeleted).AnyAsync();
         }
     }
 } 

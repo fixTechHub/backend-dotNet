@@ -9,7 +9,7 @@ namespace WebApiDotNet.Data
         public MappingProfile()
         {
             // Entity -> DTO
-            CreateMap<Coupon, CouponDto>();
+            CreateMap<Coupon, CouponDto>().ReverseMap();
             CreateMap<Category, CategoryDto>().ReverseMap();
             // DTO -> Entity
             CreateMap<CreateCouponDto, Coupon>()
@@ -32,8 +32,8 @@ namespace WebApiDotNet.Data
             CreateMap<GeoJson, GeoJsonDto>().ReverseMap();
             CreateMap<Technician, TechnicianDto>().ReverseMap();
             CreateMap<BankAccount, BankAccountDto>().ReverseMap();
-            CreateMap<UpdateUserDto, User>();
-            CreateMap<Role, RoleDto>();
+            CreateMap<UpdateUserDto, User>().ReverseMap();
+            CreateMap<Role, RoleDto>().ReverseMap();
             CreateMap<SystemReport, SystemReportDto>().ReverseMap();            
             CreateMap<CreateCategoryDto, Category>()
                 .ForMember(dest => dest.Id, opt => opt.Ignore())
@@ -44,8 +44,8 @@ namespace WebApiDotNet.Data
                 .ForMember(dest => dest.CreatedAt, opt => opt.Ignore())
                 .ForMember(dest => dest.UpdatedAt, opt => opt.Ignore());
             CreateMap<Warranty, WarrantyDto>().ReverseMap();
-            CreateMap<CreateServiceDto, Service>();
-            CreateMap<UpdateServiceDto, Service>();
+            CreateMap<CreateServiceDto, Service>().ReverseMap();
+            CreateMap<UpdateServiceDto, Service>().ReverseMap();
             CreateMap<Service, ServiceDto>().ReverseMap();
             CreateMap<Schedule, ScheduleDto>().ReverseMap();
         }
