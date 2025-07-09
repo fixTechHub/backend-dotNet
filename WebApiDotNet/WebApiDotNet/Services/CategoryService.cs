@@ -66,7 +66,7 @@ namespace WebApiDotNet.Services
 
         public async Task RestoreAsync(string id)
         {
-            if (!await _categoryRepository.ExistsAsync(id))
+            if (!await _categoryRepository.ExistsDeletedAsync(id))
                 throw new Exception("Không tìm thấy danh mục đã xóa");
             await _categoryRepository.RestoreAsync(id);
         }

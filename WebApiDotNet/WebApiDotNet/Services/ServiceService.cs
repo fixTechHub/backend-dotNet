@@ -53,7 +53,7 @@ namespace WebApiDotNet.Services
         }
         public async Task RestoreAsync(string id)
         {
-            if (!await _repo.ExistsAsync(id))
+            if (!await _repo.ExistsDeletedAsync(id))
                 throw new Exception("Không tìm thấy dịch vụ đã xóa");
             await _repo.RestoreAsync(id);
         }
