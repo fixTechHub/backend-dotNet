@@ -83,8 +83,8 @@ namespace WebApiDotNet.Controllers
         {
             try
             {
-                var success = await _categoryService.UpdateAsync(id, dto);
-                if (!success) return NotFound(new { message = "Không tìm thấy danh mục" });
+                var result = await _categoryService.UpdateAsync(id, dto);
+                if (result == null) return NotFound(new { message = "Không tìm thấy danh mục" });
                 return Ok(new { message = "Cập nhật danh mục thành công" });
             }
             catch (Exception ex)
