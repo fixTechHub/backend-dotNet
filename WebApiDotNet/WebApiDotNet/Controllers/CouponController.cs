@@ -56,6 +56,8 @@ namespace WebApiDotNet.Controllers
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] CreateCouponDto dto)
         {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
             if (dto == null)
                 return BadRequest(new { message = "Dữ liệu không hợp lệ" });
 
@@ -74,6 +76,8 @@ namespace WebApiDotNet.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> Update(string id, [FromBody] UpdateCouponDto dto)
         {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
             try
             {
                 await _service.UpdateCouponAsync(id, dto);
