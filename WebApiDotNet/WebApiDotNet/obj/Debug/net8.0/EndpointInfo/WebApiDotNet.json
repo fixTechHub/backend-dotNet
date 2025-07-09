@@ -1128,11 +1128,13 @@
           },
           "value": {
             "type": "number",
-            "format": "double"
+            "format": "double",
+            "nullable": true
           },
           "maxDiscount": {
             "type": "number",
-            "format": "double"
+            "format": "double",
+            "nullable": true
           },
           "minOrderValue": {
             "type": "number",
@@ -1250,11 +1252,13 @@
           },
           "value": {
             "type": "number",
-            "format": "double"
+            "format": "double",
+            "nullable": true
           },
           "maxDiscount": {
             "type": "number",
-            "format": "double"
+            "format": "double",
+            "nullable": true
           },
           "minOrderValue": {
             "type": "number",

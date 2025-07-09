@@ -2,6 +2,7 @@ using MongoDB.Driver;
 using WebApiDotNet.Models;
 using WebApiDotNet.Repository.IRepository;
 using WebApiDotNet.Data;
+using MongoDB.Bson;
 
 namespace WebApiDotNet.Repository
 {
@@ -16,7 +17,8 @@ namespace WebApiDotNet.Repository
 
         public async Task<List<Booking>> GetAllAsync()
         {
-            return await _collection.Find(_ => true).ToListAsync();
+            var filter = Builders<Booking>.Filter.Type("Schedule", BsonType.Document);
+            return await _collection.Find(filter).ToListAsync();
         }
 
         public async Task<Booking?> GetByIdAsync(string id)
