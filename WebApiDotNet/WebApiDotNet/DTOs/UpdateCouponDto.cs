@@ -21,20 +21,20 @@ namespace WebApiDotNet.DTOs
         {
             if (Type == "PERCENT")
             {
-                if (MaxDiscount == null)
+                if (Value == null || Value <= 0)
                 {
-                    yield return new ValidationResult("MaxDiscount is required when Type is PERCENT.", new[] { nameof(MaxDiscount) });
+                    yield return new ValidationResult("Value must be > 0 when Type is PERCENT.", new[] { nameof(Value) });
                 }
-                if (Value != null)
+                if (MaxDiscount == null || MaxDiscount <= 0)
                 {
-                    yield return new ValidationResult("Value should not be set when Type is PERCENT.", new[] { nameof(Value) });
+                    yield return new ValidationResult("MaxDiscount must be > 0 when Type is PERCENT.", new[] { nameof(MaxDiscount) });
                 }
             }
             else if (Type == "FIXED")
             {
-                if (Value == null)
+                if (Value == null || Value <= 0)
                 {
-                    yield return new ValidationResult("Value is required when Type is FIXED.", new[] { nameof(Value) });
+                    yield return new ValidationResult("Value must be > 0 when Type is FIXED.", new[] { nameof(Value) });
                 }
                 // MaxDiscount có thể không cần thiết
             }
