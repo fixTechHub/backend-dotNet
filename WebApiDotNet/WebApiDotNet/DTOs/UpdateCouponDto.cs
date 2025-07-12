@@ -43,6 +43,15 @@ namespace WebApiDotNet.DTOs
                 }
                 // MaxDiscount có thể không cần thiết
             }
+
+            // Validate UserIds chỉ khi Audience là SPECIFIC_USERS
+            if (Audience == "SPECIFIC_USERS")
+            {
+                if (UserIds == null || !UserIds.Any())
+                {
+                    yield return new ValidationResult("UserIds is required when Audience is SPECIFIC_USERS.", new[] { nameof(UserIds) });
+                }
+            }
         }
     }
 }
