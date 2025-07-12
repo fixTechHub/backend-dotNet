@@ -13,6 +13,7 @@ namespace WebApiDotNet.Models
         [BsonElement("bookingCode")]
         public string BookingCode { get; set; }
 
+
         [BsonElement("customerId")]
         [BsonRepresentation(BsonType.ObjectId)]
         public string CustomerId { get; set; }

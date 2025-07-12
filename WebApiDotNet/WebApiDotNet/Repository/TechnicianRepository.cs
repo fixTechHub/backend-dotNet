@@ -27,11 +27,12 @@ namespace WebApiDotNet.Repository
         public async Task<Technician?> UpdateStatusAsync(string id, string status, string? note = null)
         {
             var filter = Builders<Technician>.Filter.Eq(t => t.Id, id);
+            var statusEnum = (TechnicianStatus)Enum.Parse(typeof(TechnicianStatus), status);
             var update = Builders<Technician>.Update
-                .Set(t => t.Status, status)
+                .Set(t => t.Status, statusEnum)
                 .Set(t => t.UpdatedAt, DateTime.UtcNow);
             if (note != null)
-                update = update.Set("note", note);
+                update = update.Set(t => t.Note, note);
             var options = new FindOneAndUpdateOptions<Technician> { ReturnDocument = ReturnDocument.After };
             return await _collection.FindOneAndUpdateAsync(filter, update, options);
         }

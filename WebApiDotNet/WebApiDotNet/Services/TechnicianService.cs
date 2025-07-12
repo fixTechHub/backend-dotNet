@@ -53,7 +53,7 @@ namespace WebApiDotNet.Services
             if (technician == null)
                 return null;
 
-            if (technician.Status != "PENDING")
+            if (technician.Status != TechnicianStatus.PENDING)
                 throw new InvalidOperationException("Chỉ được duyệt kỹ thuật viên khi trạng thái là PENDING!");
 
             var updated = await _repository.UpdateStatusAsync(id, status, note);

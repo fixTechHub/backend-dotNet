@@ -31,7 +31,10 @@ namespace WebApiDotNet.Data
             CreateMap<BookingLocation, BookingLocationDto>().ReverseMap();
             CreateMap<GeoJson, GeoJsonDto>().ReverseMap();
             CreateMap<Technician, TechnicianDto>().ReverseMap();
+            CreateMap<GeoJsonPoint, GeoJsonPointDto>().ReverseMap();
             CreateMap<BankAccount, BankAccountDto>().ReverseMap();
+            CreateMap<TechnicianRates, TechnicianRatesDto>().ReverseMap();
+            CreateMap<LaborTiers, LaborTiersDto>().ReverseMap();
             CreateMap<UpdateUserDto, User>().ReverseMap();
             CreateMap<Role, RoleDto>().ReverseMap();
             CreateMap<SystemReport, SystemReportDto>().ReverseMap();            

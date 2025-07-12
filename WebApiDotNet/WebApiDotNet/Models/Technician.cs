@@ -15,45 +15,68 @@ namespace WebApiDotNet.Models
         public string UserId { get; set; }
 
         [BsonElement("currentLocation")]
-        public GeoJson CurrentLocation { get; set; }
+        public GeoJsonPoint CurrentLocation { get; set; }
 
         [BsonElement("identification")]
         public string Identification { get; set; }
 
+        [BsonElement("frontIdImage")]
+        public string FrontIdImage { get; set; }
+
+        [BsonElement("backIdImage")]
+        public string BackIdImage { get; set; }
+
+        [BsonElement("status")]
+        public TechnicianStatus Status { get; set; } = TechnicianStatus.PENDING;
+
+        [BsonElement("pendingDeletionAt")]
+        public DateTime? PendingDeletionAt { get; set; }
+
+        [BsonElement("deletedAt")]
+        public DateTime? DeletedAt { get; set; }
+
         [BsonElement("ratingAverage")]
-        public double RatingAverage { get; set; }
+        public double RatingAverage { get; set; } = 0;
 
         [BsonElement("jobCompleted")]
-        public int JobCompleted { get; set; }
+        public int JobCompleted { get; set; } = 0;
 
         [BsonElement("experienceYears")]
-        public int ExperienceYears { get; set; }
+        public int ExperienceYears { get; set; } = 0;
 
         [BsonElement("specialtiesCategories")]
         [BsonRepresentation(BsonType.ObjectId)]
-        public List<string> SpecialtiesCategories { get; set; }
-        
+        public List<string> SpecialtiesCategories { get; set; } = new();
 
         [BsonElement("availability")]
-        public string Availability { get; set; }
+        public TechnicianAvailability Availability { get; set; } = TechnicianAvailability.FREE;
 
         [BsonElement("balance")]
-        public int Balance { get; set; }
+        public double Balance { get; set; } = 0;
+
+        [BsonElement("certificate")]
+        public List<string> Certificate { get; set; } = new();
 
         [BsonElement("bankAccount")]
         public BankAccount BankAccount { get; set; }
 
         [BsonElement("totalEarning")]
-        public int TotalEarning { get; set; }
+        public double TotalEarning { get; set; } = 0;
 
         [BsonElement("totalCommissionPaid")]
-        public int TotalCommissionPaid { get; set; }
+        public double TotalCommissionPaid { get; set; } = 0;
 
         [BsonElement("totalHoldingAmount")]
-        public int TotalHoldingAmount { get; set; }
+        public double TotalHoldingAmount { get; set; } = 0;
 
         [BsonElement("totalWithdrawn")]
-        public int TotalWithdrawn { get; set; }
+        public double TotalWithdrawn { get; set; } = 0;
+
+        [BsonElement("rates")]
+        public TechnicianRates Rates { get; set; }
+
+        [BsonElement("pricesLastUpdatedAt")]
+        public DateTime? PricesLastUpdatedAt { get; set; }
 
         [BsonElement("createdAt")]
         public DateTime CreatedAt { get; set; }
@@ -61,11 +84,17 @@ namespace WebApiDotNet.Models
         [BsonElement("updatedAt")]
         public DateTime UpdatedAt { get; set; }
 
-        [BsonElement("status")]
-        public string Status { get; set; } = "PENDING";
-        
         [BsonElement("note")]
         public string? Note { get; set; }
+    }
+
+    public class GeoJsonPoint
+    {
+        [BsonElement("type")]
+        public string Type { get; set; } = "Point";
+
+        [BsonElement("coordinates")]
+        public List<double> Coordinates { get; set; }
     }
 
     public class BankAccount
@@ -78,5 +107,41 @@ namespace WebApiDotNet.Models
         public string AccountHolder { get; set; }
         [BsonElement("branch")]
         public string Branch { get; set; }
+    }
+
+    public class TechnicianRates
+    {
+        [BsonElement("inspectionFee")]
+        public double InspectionFee { get; set; }
+
+        [BsonElement("laborTiers")]
+        public LaborTiers LaborTiers { get; set; }
+    }
+
+    public class LaborTiers
+    {
+        [BsonElement("tier1")]
+        public double? Tier1 { get; set; }
+        [BsonElement("tier2")]
+        public double? Tier2 { get; set; }
+        [BsonElement("tier3")]
+        public double? Tier3 { get; set; }
+    }
+
+    public enum TechnicianStatus
+    {
+        PENDING,
+        APPROVED,
+        REJECTED,
+        INACTIVE,
+        PENDING_DELETION,
+        DELETED
+    }
+
+    public enum TechnicianAvailability
+    {
+        ONJOB,
+        FREE,
+        BUSY
     }
 } 
