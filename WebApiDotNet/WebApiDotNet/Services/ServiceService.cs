@@ -33,12 +33,58 @@ namespace WebApiDotNet.Services
         }
         public async Task<ServiceDto> CreateAsync(CreateServiceDto dto)
         {
+            // Logic nghiệp vụ: FIXED thì không nhập giá, COMPLEX thì bắt buộc nhập giá min/max
+            if (dto.ServiceType == ServiceTypeDto.FIXED)
+            {
+                if (dto.EstimatedMarketPrice != null && (dto.EstimatedMarketPrice.Min != null || dto.EstimatedMarketPrice.Max != null))
+                {
+                    throw new Exception("Dịch vụ loại FIXED không được nhập giá thị trường!");
+                }
+            }
+            else if (dto.ServiceType == ServiceTypeDto.COMPLEX)
+            {
+                if (dto.EstimatedMarketPrice == null || dto.EstimatedMarketPrice.Min == null || dto.EstimatedMarketPrice.Max == null)
+                {
+                    throw new Exception("Dịch vụ loại COMPLEX phải nhập đủ giá min và max!");
+                }
+                if (dto.EstimatedMarketPrice.Min <= 0 || dto.EstimatedMarketPrice.Max <= 0)
+                {
+                    throw new Exception("Giá min và max phải lớn hơn 0!");
+                }
+                if (dto.EstimatedMarketPrice.Min > dto.EstimatedMarketPrice.Max)
+                {
+                    throw new Exception("Giá min không được lớn hơn giá max!");
+                }
+            }
             var service = _mapper.Map<Service>(dto);
             var created = await _repo.CreateAsync(service);
             return _mapper.Map<ServiceDto>(created);
         }
         public async Task<ServiceDto> UpdateAsync(string id, UpdateServiceDto dto)
         {
+            // Logic nghiệp vụ: FIXED thì không nhập giá, COMPLEX thì bắt buộc nhập giá min/max
+            if (dto.ServiceType == ServiceTypeDto.FIXED)
+            {
+                if (dto.EstimatedMarketPrice != null && (dto.EstimatedMarketPrice.Min != null || dto.EstimatedMarketPrice.Max != null))
+                {
+                    throw new Exception("Dịch vụ loại FIXED không được nhập giá thị trường!");
+                }
+            }
+            else if (dto.ServiceType == ServiceTypeDto.COMPLEX)
+            {
+                if (dto.EstimatedMarketPrice == null || dto.EstimatedMarketPrice.Min == null || dto.EstimatedMarketPrice.Max == null)
+                {
+                    throw new Exception("Dịch vụ loại COMPLEX phải nhập đủ giá min và max!");
+                }
+                if (dto.EstimatedMarketPrice.Min <= 0 || dto.EstimatedMarketPrice.Max <= 0)
+                {
+                    throw new Exception("Giá min và max phải lớn hơn 0!");
+                }
+                if (dto.EstimatedMarketPrice.Min > dto.EstimatedMarketPrice.Max)
+                {
+                    throw new Exception("Giá min không được lớn hơn giá max!");
+                }
+            }
             var service = await _repo.GetByIdAsync(id);
             if (service == null) throw new Exception("Không tìm thấy dịch vụ");
             _mapper.Map(dto, service);

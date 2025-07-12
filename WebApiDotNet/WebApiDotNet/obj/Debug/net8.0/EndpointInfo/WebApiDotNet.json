@@ -1220,20 +1220,38 @@
             "type": "string",
             "nullable": true
           },
+          "serviceType": {
+            "$ref": "#/components/schemas/ServiceTypeDto"
+          },
+          "estimatedMarketPrice": {
+            "$ref": "#/components/schemas/EstimatedMarketPriceDto"
+          },
           "icon": {
+            "type": "string",
+            "nullable": true
+          },
+          "description": {
             "type": "string",
             "nullable": true
           },
           "isActive": {
             "type": "boolean"
+          }
+        },
+        "additionalProperties": false
+      },
+      "EstimatedMarketPriceDto": {
+        "type": "object",
+        "properties": {
+          "min": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
           },
-          "createdAt": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "updatedAt": {
-            "type": "string",
-            "format": "date-time"
+          "max": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
           }
         },
         "additionalProperties": false
@@ -1247,6 +1265,14 @@
           }
         },
         "additionalProperties": false
+      },
+      "ServiceTypeDto": {
+        "enum": [
+          0,
+          1
+        ],
+        "type": "integer",
+        "format": "int32"
       },
       "UnlockUserDto": {
         "type": "object",
@@ -1343,20 +1369,22 @@
             "type": "string",
             "nullable": true
           },
+          "serviceType": {
+            "$ref": "#/components/schemas/ServiceTypeDto"
+          },
+          "estimatedMarketPrice": {
+            "$ref": "#/components/schemas/EstimatedMarketPriceDto"
+          },
           "icon": {
+            "type": "string",
+            "nullable": true
+          },
+          "description": {
             "type": "string",
             "nullable": true
           },
           "isActive": {
             "type": "boolean"
-          },
-          "createdAt": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "updatedAt": {
-            "type": "string",
-            "format": "date-time"
           }
         },
         "additionalProperties": false
