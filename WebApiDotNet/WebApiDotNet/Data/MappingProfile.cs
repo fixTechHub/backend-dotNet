@@ -47,9 +47,12 @@ namespace WebApiDotNet.Data
                 .ForMember(dest => dest.CreatedAt, opt => opt.Ignore())
                 .ForMember(dest => dest.UpdatedAt, opt => opt.Ignore());
             CreateMap<Warranty, WarrantyDto>().ReverseMap();
+            CreateMap<Service, ServiceDto>()
+                .ForMember(dest => dest.ServiceType, opt => opt.MapFrom(src => src.ServiceType.ToString()))
+                .ReverseMap()
+                .ForMember(dest => dest.ServiceType, opt => opt.MapFrom(src => Enum.Parse<ServiceType>(src.ServiceType)));
             CreateMap<CreateServiceDto, Service>().ReverseMap();
             CreateMap<UpdateServiceDto, Service>().ReverseMap();
-            CreateMap<Service, ServiceDto>().ReverseMap();
             CreateMap<Schedule, ScheduleDto>().ReverseMap();
             CreateMap<EstimatedMarketPrice, EstimatedMarketPriceDto>().ReverseMap();
         }

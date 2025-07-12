@@ -4,7 +4,7 @@ namespace WebApiDotNet.DTOs
     {
         public string ServiceName { get; set; }
         public string CategoryId { get; set; }
-        public ServiceTypeDto ServiceType { get; set; }
+        public string ServiceType { get; set; }
         public EstimatedMarketPriceDto EstimatedMarketPrice { get; set; }
         public string Icon { get; set; }
         public string Description { get; set; }
