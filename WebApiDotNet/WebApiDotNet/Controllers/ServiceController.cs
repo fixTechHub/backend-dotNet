@@ -37,17 +37,6 @@ namespace WebApiDotNet.Controllers
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] CreateServiceDto dto)
         {
-            // SỬA TẠI ĐÂY
-            if (dto.ServiceType == "FIXED" && ModelState.ContainsKey("EstimatedMarketPrice"))
-            {
-                ModelState.Remove("EstimatedMarketPrice");
-            }
-
-            if (!ModelState.IsValid)
-            {
-                return ValidationProblem(ModelState);
-            }
-
             try
             {
                 var created = await _serviceService.CreateAsync(dto);
@@ -61,17 +50,6 @@ namespace WebApiDotNet.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> Update(string id, [FromBody] UpdateServiceDto dto)
         {
-            // SỬA TẠI ĐÂY
-            if (dto.ServiceType == "FIXED" && ModelState.ContainsKey("EstimatedMarketPrice"))
-            {
-                ModelState.Remove("EstimatedMarketPrice");
-            }
-
-            if (!ModelState.IsValid)
-            {
-                return ValidationProblem(ModelState);
-            }
-
             try
             {
                 var updated = await _serviceService.UpdateAsync(id, dto);

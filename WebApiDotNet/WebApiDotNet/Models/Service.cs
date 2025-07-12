@@ -21,7 +21,7 @@ namespace WebApiDotNet.Models
         public ServiceType ServiceType { get; set; }
 
         [BsonElement("estimatedMarketPrice")]
-        public EstimatedMarketPrice EstimatedMarketPrice { get; set; }
+        public EstimatedMarketPrice? EstimatedMarketPrice { get; set; }
 
         [BsonElement("icon")]
         public string Icon { get; set; }

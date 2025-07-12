@@ -1221,7 +1221,8 @@
             "nullable": true
           },
           "serviceType": {
-            "$ref": "#/components/schemas/ServiceTypeDto"
+            "type": "string",
+            "nullable": true
           },
           "estimatedMarketPrice": {
             "$ref": "#/components/schemas/EstimatedMarketPriceDto"
@@ -1265,14 +1266,6 @@
           }
         },
         "additionalProperties": false
-      },
-      "ServiceTypeDto": {
-        "enum": [
-          0,
-          1
-        ],
-        "type": "integer",
-        "format": "int32"
       },
       "UnlockUserDto": {
         "type": "object",
@@ -1370,7 +1363,8 @@
             "nullable": true
           },
           "serviceType": {
-            "$ref": "#/components/schemas/ServiceTypeDto"
+            "type": "string",
+            "nullable": true
           },
           "estimatedMarketPrice": {
             "$ref": "#/components/schemas/EstimatedMarketPriceDto"
