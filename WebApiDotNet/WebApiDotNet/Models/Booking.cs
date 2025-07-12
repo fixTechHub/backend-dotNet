@@ -85,6 +85,9 @@ namespace WebApiDotNet.Models
         public DateTime StartTime { get; set; }
 
         [BsonElement("endTime")]
-        public DateTime EndTime { get; set; }
+        public DateTime? EndTime { get; set; }
+
+        [BsonElement("expectedEndTime")]
+        public DateTime? ExpectedEndTime { get; set; }
     }
 } 

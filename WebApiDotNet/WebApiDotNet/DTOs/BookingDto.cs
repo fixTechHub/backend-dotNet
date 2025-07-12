@@ -38,6 +38,7 @@ namespace WebApiDotNet.DTOs
     public class ScheduleDto
     {
         public DateTime StartTime { get; set; }
-        public DateTime EndTime { get; set; }
+        public DateTime? EndTime { get; set; }
+        public DateTime? ExpectedEndTime { get; set; }
     }
 } 

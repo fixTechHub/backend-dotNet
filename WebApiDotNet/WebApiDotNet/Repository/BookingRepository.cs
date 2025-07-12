@@ -31,13 +31,14 @@ namespace WebApiDotNet.Repository
             var builder = Builders<Booking>.Filter;
             var start = new DateTime(year, month, 1);
             var end = start.AddMonths(1);
-            var filter = builder.Gte(b => b.CreatedAt, start) & builder.Lt(b => b.CreatedAt, end);
+            var filter = builder.Gte(b => b.CreatedAt, start) & builder.Lt(b => b.CreatedAt, end) & Builders<Booking>.Filter.Type("Schedule", BsonType.Document);
             return (int)await _collection.CountDocumentsAsync(filter);
         }
 
         public async Task<List<Booking>> GetByUserIdAsync(string userId)
         {
-            return await _collection.Find(b => b.CustomerId == userId).ToListAsync();
+            var filter = Builders<Booking>.Filter.Eq(b => b.CustomerId, userId) & Builders<Booking>.Filter.Type("Schedule", BsonType.Document);
+            return await _collection.Find(filter).ToListAsync();
         }
     }
 } 
