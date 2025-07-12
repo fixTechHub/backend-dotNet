@@ -27,6 +27,7 @@ namespace WebApiDotNet.Controllers
             if (result == null) return NotFound();
             return Ok(result);
         }
+
         [HttpGet("deleted")]
         public async Task<IActionResult> GetDeleted()
         {
@@ -36,14 +37,50 @@ namespace WebApiDotNet.Controllers
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] CreateServiceDto dto)
         {
-            var created = await _serviceService.CreateAsync(dto);
-            return CreatedAtAction(nameof(GetById), new { id = created.Id }, created);
+            // SỬA TẠI ĐÂY
+            if (dto.ServiceType == "FIXED" && ModelState.ContainsKey("EstimatedMarketPrice"))
+            {
+                ModelState.Remove("EstimatedMarketPrice");
+            }
+
+            if (!ModelState.IsValid)
+            {
+                return ValidationProblem(ModelState);
+            }
+
+            try
+            {
+                var created = await _serviceService.CreateAsync(dto);
+                return Ok(created);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { title = ex.Message });
+            }
         }
         [HttpPut("{id}")]
         public async Task<IActionResult> Update(string id, [FromBody] UpdateServiceDto dto)
         {
-            var updated = await _serviceService.UpdateAsync(id, dto);
-            return Ok(updated);
+            // SỬA TẠI ĐÂY
+            if (dto.ServiceType == "FIXED" && ModelState.ContainsKey("EstimatedMarketPrice"))
+            {
+                ModelState.Remove("EstimatedMarketPrice");
+            }
+
+            if (!ModelState.IsValid)
+            {
+                return ValidationProblem(ModelState);
+            }
+
+            try
+            {
+                var updated = await _serviceService.UpdateAsync(id, dto);
+                return Ok(updated);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { title = ex.Message });
+            }
         }
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(string id)
