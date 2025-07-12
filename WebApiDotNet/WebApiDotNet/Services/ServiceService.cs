@@ -34,14 +34,14 @@ namespace WebApiDotNet.Services
         public async Task<ServiceDto> CreateAsync(CreateServiceDto dto)
         {
             // Logic nghiệp vụ: FIXED thì không nhập giá, COMPLEX thì bắt buộc nhập giá min/max
-            if (dto.ServiceType == ServiceTypeDto.FIXED)
+            if (dto.ServiceType == "FIXED")
             {
                 if (dto.EstimatedMarketPrice != null && (dto.EstimatedMarketPrice.Min != null || dto.EstimatedMarketPrice.Max != null))
                 {
                     throw new Exception("Dịch vụ loại FIXED không được nhập giá thị trường!");
                 }
             }
-            else if (dto.ServiceType == ServiceTypeDto.COMPLEX)
+            else if (dto.ServiceType == "COMPLEX")
             {
                 if (dto.EstimatedMarketPrice == null || dto.EstimatedMarketPrice.Min == null || dto.EstimatedMarketPrice.Max == null)
                 {
@@ -63,14 +63,14 @@ namespace WebApiDotNet.Services
         public async Task<ServiceDto> UpdateAsync(string id, UpdateServiceDto dto)
         {
             // Logic nghiệp vụ: FIXED thì không nhập giá, COMPLEX thì bắt buộc nhập giá min/max
-            if (dto.ServiceType == ServiceTypeDto.FIXED)
+            if (dto.ServiceType == "FIXED")
             {
                 if (dto.EstimatedMarketPrice != null && (dto.EstimatedMarketPrice.Min != null || dto.EstimatedMarketPrice.Max != null))
                 {
                     throw new Exception("Dịch vụ loại FIXED không được nhập giá thị trường!");
                 }
             }
-            else if (dto.ServiceType == ServiceTypeDto.COMPLEX)
+            else if (dto.ServiceType == "COMPLEX")
             {
                 if (dto.EstimatedMarketPrice == null || dto.EstimatedMarketPrice.Min == null || dto.EstimatedMarketPrice.Max == null)
                 {
