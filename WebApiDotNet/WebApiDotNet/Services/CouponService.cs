@@ -9,11 +9,15 @@ namespace WebApiDotNet.Services
     {
         private readonly ICouponRepository _repository;
         private readonly IMapper _mapper;
+        private readonly IBookingService _bookingService;
+        private readonly IUserService _userService;
 
-        public CouponService(ICouponRepository repository, IMapper mapper)
+        public CouponService(ICouponRepository repository, IMapper mapper, IBookingService bookingService, IUserService userService)
         {
             _repository = repository;
             _mapper = mapper;
+            _bookingService = bookingService;
+            _userService = userService;
         }
 
         public async Task<List<CouponDto>> GetAllCouponsAsync()
@@ -88,6 +92,28 @@ namespace WebApiDotNet.Services
             catch (Exception ex)
             {
                 throw new Exception("Không tìm thấy coupon đã xóa");
+            }
+        }
+
+        public async Task<bool> CanUserUseCouponAsync(string couponId, string userId)
+        {
+            var coupon = await _repository.GetByIdAsync(couponId);
+            if (coupon == null || !coupon.IsActive) return false;
+
+            switch (coupon.Audience)
+            {
+                case CouponAudience.NEW_USER:
+                    var hasBookings = await _bookingService.HasUserBookingsAsync(userId);
+                    return !hasBookings;
+                case CouponAudience.EXISTING_USER:
+                    var user = await _userService.GetByIdAsync(userId);
+                    return user != null && user.Status == "Active";
+                case CouponAudience.ALL:
+                    return true;
+                case CouponAudience.SPECIFIC_USERS:
+                    return coupon.UserIds?.Contains(userId) == true;
+                default:
+                    return false;
             }
         }
     }

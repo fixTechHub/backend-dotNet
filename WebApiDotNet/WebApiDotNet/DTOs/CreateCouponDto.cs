@@ -19,6 +19,11 @@ namespace WebApiDotNet.DTOs
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
+            var validAudiences = new[] { "ALL", "NEW_USER", "EXISTING_USER", "SPECIFIC_USERS" };
+            if (!string.IsNullOrEmpty(Audience) && !validAudiences.Contains(Audience))
+            {
+                yield return new ValidationResult($"Audience must be one of: {string.Join(", ", validAudiences)}.", new[] { nameof(Audience) });
+            }
             if (Type == "PERCENT")
             {
                 if (Value == null || Value <= 0)

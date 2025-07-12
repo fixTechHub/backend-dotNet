@@ -317,6 +317,47 @@
         }
       }
     },
+    "/api/Coupon/{couponId}/validate": {
+      "post": {
+        "tags": [
+          "Coupon"
+        ],
+        "parameters": [
+          {
+            "name": "couponId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ValidateCouponDto"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ValidateCouponDto"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/ValidateCouponDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
     "/api/Dashboard/users": {
       "get": {
         "tags": [
@@ -1128,8 +1169,7 @@
           },
           "value": {
             "type": "number",
-            "format": "double",
-            "nullable": true
+            "format": "double"
           },
           "maxDiscount": {
             "type": "number",
@@ -1252,8 +1292,7 @@
           },
           "value": {
             "type": "number",
-            "format": "double",
-            "nullable": true
+            "format": "double"
           },
           "maxDiscount": {
             "type": "number",
@@ -1369,6 +1408,16 @@
           },
           "isReviewedByAdmin": {
             "type": "boolean"
+          }
+        },
+        "additionalProperties": false
+      },
+      "ValidateCouponDto": {
+        "type": "object",
+        "properties": {
+          "userId": {
+            "type": "string",
+            "nullable": true
           }
         },
         "additionalProperties": false

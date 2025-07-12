@@ -132,6 +132,27 @@
   },
   {
     "ContainingType": "WebApiDotNet.Controllers.CouponController",
+    "Method": "ValidateCouponUsage",
+    "RelativePath": "api/Coupon/{couponId}/validate",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "couponId",
+        "Type": "System.String",
+        "IsRequired": true
+      },
+      {
+        "Name": "dto",
+        "Type": "WebApiDotNet.DTOs.ValidateCouponDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "WebApiDotNet.Controllers.CouponController",
     "Method": "GetById",
     "RelativePath": "api/Coupon/{id}",
     "HttpMethod": "GET",

@@ -116,5 +116,22 @@ namespace WebApiDotNet.Controllers
                 return NotFound(new { message = ex.Message });
             }
         }
+
+        [HttpPost("{couponId}/validate")]
+        public async Task<IActionResult> ValidateCouponUsage(string couponId, [FromBody] ValidateCouponDto dto)
+        {
+            try
+            {
+                var canUse = await _service.CanUserUseCouponAsync(couponId, dto.UserId);
+                return Ok(new { 
+                    canUse, 
+                    message = canUse ? "Valid coupon for this user" : "Invalid coupon for this user" 
+                });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = "Lỗi server", error = ex.Message });
+            }
+        }
     }
 }

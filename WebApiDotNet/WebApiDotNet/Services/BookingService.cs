@@ -32,5 +32,11 @@ namespace WebApiDotNet.Services
         {
             return await _repository.CountByMonthAsync(year, month);
         }
+
+        public async Task<bool> HasUserBookingsAsync(string userId)
+        {
+            var bookings = await _repository.GetByUserIdAsync(userId);
+            return bookings.Any();
+        }
     }
 } 

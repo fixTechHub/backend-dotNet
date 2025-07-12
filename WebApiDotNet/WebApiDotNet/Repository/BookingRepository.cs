@@ -34,5 +34,10 @@ namespace WebApiDotNet.Repository
             var filter = builder.Gte(b => b.CreatedAt, start) & builder.Lt(b => b.CreatedAt, end);
             return (int)await _collection.CountDocumentsAsync(filter);
         }
+
+        public async Task<List<Booking>> GetByUserIdAsync(string userId)
+        {
+            return await _collection.Find(b => b.CustomerId == userId).ToListAsync();
+        }
     }
 } 
