@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using WebApiDotNet.DTOs;
 using WebApiDotNet.Models;
+using System;
 
 namespace WebApiDotNet.Data
 {
@@ -30,7 +31,12 @@ namespace WebApiDotNet.Data
             CreateMap<Booking, BookingDto>().ReverseMap();
             CreateMap<BookingLocation, BookingLocationDto>().ReverseMap();
             CreateMap<GeoJson, GeoJsonDto>().ReverseMap();
-            CreateMap<Technician, TechnicianDto>().ReverseMap();
+            CreateMap<Technician, TechnicianDto>()
+                .ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.Status.ToString()))
+                .ForMember(dest => dest.Availability, opt => opt.MapFrom(src => src.Availability.ToString()))
+                .ReverseMap()
+                .ForMember(dest => dest.Status, opt => opt.MapFrom(src => Enum.Parse<TechnicianStatus>(src.Status.ToString())))
+                .ForMember(dest => dest.Availability, opt => opt.MapFrom(src => Enum.Parse<TechnicianAvailability>(src.Availability.ToString())));
             CreateMap<GeoJsonPoint, GeoJsonPointDto>().ReverseMap();
             CreateMap<BankAccount, BankAccountDto>().ReverseMap();
             CreateMap<TechnicianRates, TechnicianRatesDto>().ReverseMap();
