@@ -18,12 +18,26 @@ namespace WebApiDotNet.Repository
 
         public async Task<List<Warranty>> GetAllAsync()
         {
-            return await _collection.Find(_ => true).ToListAsync();
+            var warranties = await _collection.Find(_ => true).ToListAsync();
+            foreach (var w in warranties)
+            {
+                if (w.ExpireAt == null) w.ExpireAt = null;
+                if (w.ResolutionNote == null) w.ResolutionNote = null;
+                if (w.RejectionReason == null) w.RejectionReason = null;
+            }
+            return warranties;
         }
 
         public async Task<Warranty?> GetByIdAsync(string id)
         {
-            return await _collection.Find(w => w.Id == id).FirstOrDefaultAsync();
+            var w = await _collection.Find(w => w.Id == id).FirstOrDefaultAsync();
+            if (w != null)
+            {
+                if (w.ExpireAt == null) w.ExpireAt = null;
+                if (w.ResolutionNote == null) w.ResolutionNote = null;
+                if (w.RejectionReason == null) w.RejectionReason = null;
+            }
+            return w;
         }
 
         public async Task<Warranty?> UpdateStatusAsync(string id, string status, bool isReviewedByAdmin)

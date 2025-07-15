@@ -18,13 +18,23 @@ namespace WebApiDotNet.Models
         public string Title { get; set; }
 
         [BsonElement("tag")]
-        public string Tag { get; set; }
+        public string Tag { get; set; } // SYSTEM, PAYMENT, UI, OTHER
 
         [BsonElement("description")]
         public string Description { get; set; }
 
         [BsonElement("status")]
-        public string Status { get; set; } = "PENDING";
+        public string Status { get; set; } = "PENDING"; // PENDING, IN_PROGRESS, RESOLVED, REJECTED
+
+        [BsonElement("resolvedBy")]
+        [BsonRepresentation(BsonType.ObjectId)]
+        public string? ResolvedBy { get; set; }
+
+        [BsonElement("resolutionNote")]
+        public string? ResolutionNote { get; set; }
+
+        [BsonElement("resolvedAt")]
+        public DateTime? ResolvedAt { get; set; }
 
         [BsonElement("createdAt")]
         public DateTime CreatedAt { get; set; }

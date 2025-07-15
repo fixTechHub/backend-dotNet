@@ -21,6 +21,18 @@ namespace WebApiDotNet.DTOs
         public string PaymentStatus { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime UpdatedAt { get; set; }
+        public bool IsUrgent { get; set; }
+        public QuoteDto Quote { get; set; }
+        public string DiscountCode { get; set; }
+        public double DiscountValue { get; set; }
+        public double? TechnicianEarning { get; set; }
+        public double? CommissionAmount { get; set; }
+        public double? HoldingAmount { get; set; }
+        public double? FinalPrice { get; set; }
+        public DateTime? WarrantyExpiresAt { get; set; }
+        public DateTime? CompletedAt { get; set; }
+        public string CancelledBy { get; set; }
+        public string CancellationReason { get; set; }
     }
 
     public class BookingLocationDto
@@ -40,5 +52,25 @@ namespace WebApiDotNet.DTOs
         public DateTime StartTime { get; set; }
         public DateTime? EndTime { get; set; }
         public DateTime? ExpectedEndTime { get; set; }
+    }
+
+    public class QuoteDto
+    {
+        public string Status { get; set; }
+        public string CommissionConfigId { get; set; }
+        public double LaborPrice { get; set; }
+        public List<QuoteItemDto> Items { get; set; }
+        public double? TotalAmount { get; set; }
+        public int WarrantiesDuration { get; set; }
+        public string Justification { get; set; }
+        public DateTime? QuotedAt { get; set; }
+    }
+    public class QuoteItemDto
+    {
+        public string Id { get; set; }
+        public string Name { get; set; }
+        public double Price { get; set; }
+        public int Quantity { get; set; }
+        public string Note { get; set; }
     }
 } 

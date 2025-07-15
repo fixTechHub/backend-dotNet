@@ -30,13 +30,19 @@ namespace WebApiDotNet.Models
         public string ReportedIssue { get; set; }
 
         [BsonElement("isUnderWarranty")]
-        public bool IsUnderWarranty { get; set; }
+        public bool IsUnderWarranty { get; set; } = true;
 
         [BsonElement("expireAt")]
-        public DateTime ExpireAt { get; set; }
+        public DateTime? ExpireAt { get; set; }
 
         [BsonElement("status")]
-        public string Status { get; set; } = "PENDING";
+        public string Status { get; set; } = "PENDING"; // PENDING, CONFIRMED, RESOLVED, DENIED, EXPIRED
+
+        [BsonElement("resolutionNote")]
+        public string? ResolutionNote { get; set; }
+
+        [BsonElement("rejectionReason")]
+        public string? RejectionReason { get; set; }
 
         [BsonElement("isReviewedByAdmin")]
         public bool IsReviewedByAdmin { get; set; } = false;

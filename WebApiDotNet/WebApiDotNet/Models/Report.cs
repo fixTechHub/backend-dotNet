@@ -11,7 +11,7 @@ namespace WebApiDotNet.Models
         public string Id { get; set; }
 
         [BsonElement("type")]
-        public string Type { get; set; } // REPORT
+        public string Type { get; set; } = "REPORT"; // REPORT, VIOLATION
 
         [BsonElement("reportedUserId")]
         [BsonRepresentation(BsonType.ObjectId)]
@@ -25,7 +25,10 @@ namespace WebApiDotNet.Models
         public string Description { get; set; }
 
         [BsonElement("status")]
-        public string Status { get; set; } // pending, resolved, rejected,...
+        public string Status { get; set; } = "PENDING"; // PENDING, CONFIRMED, REJECTED, RESOLVED, CLOSED
+
+        [BsonElement("penalty")]
+        public string? Penalty { get; set; } = null;
 
         [BsonElement("createdAt")]
         public DateTime CreatedAt { get; set; }

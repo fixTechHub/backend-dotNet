@@ -51,7 +51,7 @@ namespace WebApiDotNet.Models
         public string Role { get; set; }
 
         [BsonElement("status")]
-        public string Status { get; set; }
+        public string Status { get; set; } 
 
         [BsonElement("deletedAt")]
         public DateTime? DeletedAt { get; set; }
@@ -61,6 +61,24 @@ namespace WebApiDotNet.Models
 
         [BsonElement("updatedAt")]
         public DateTime UpdatedAt { get; set; }
+
+        [BsonElement("verificationOTP")]
+        public string? VerificationOTP { get; set; }
+
+        [BsonElement("otpExpires")]
+        public DateTime? OtpExpires { get; set; }
+
+        [BsonElement("verificationCode")]
+        public string? VerificationCode { get; set; }
+
+        [BsonElement("verificationCodeExpires")]
+        public DateTime? VerificationCodeExpires { get; set; }
+
+        [BsonElement("pendingDeletionAt")]
+        public DateTime? PendingDeletionAt { get; set; }
+
+        [BsonElement("lastDeletionReminderSent")]
+        public DateTime? LastDeletionReminderSent { get; set; }
     }
 
     public class Address

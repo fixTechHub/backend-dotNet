@@ -61,6 +61,8 @@ namespace WebApiDotNet.Data
             CreateMap<UpdateServiceDto, Service>().ReverseMap();
             CreateMap<Schedule, ScheduleDto>().ReverseMap();
             CreateMap<EstimatedMarketPrice, EstimatedMarketPriceDto>().ReverseMap();
+            CreateMap<Quote, QuoteDto>().ReverseMap();
+            CreateMap<QuoteItem, QuoteItemDto>().ReverseMap();
         }
     }
 }

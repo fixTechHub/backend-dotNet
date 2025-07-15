@@ -16,6 +16,12 @@ namespace WebApiDotNet.DTOs
         public string Status { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime UpdatedAt { get; set; }
+        public string? VerificationOTP { get; set; }
+        public DateTime? OtpExpires { get; set; }
+        public string? VerificationCode { get; set; }
+        public DateTime? VerificationCodeExpires { get; set; }
+        public DateTime? PendingDeletionAt { get; set; }
+        public DateTime? LastDeletionReminderSent { get; set; }
     }
     public class AddressDto
     {
