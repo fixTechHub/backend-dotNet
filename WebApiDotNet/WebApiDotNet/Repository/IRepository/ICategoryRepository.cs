@@ -15,5 +15,7 @@ namespace WebApiDotNet.Repository.IRepository
         Task RestoreAsync(string id);
         Task<bool> ExistsAsync(string id);
         Task<bool> ExistsDeletedAsync(string id);
+        Task<bool> ExistsByNameAsync(string name);
+        Task<bool> ExistsByIconAsync(string icon);
     }
 } 

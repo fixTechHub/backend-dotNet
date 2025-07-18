@@ -562,7 +562,7 @@
         "IsRequired": true
       },
       {
-        "Name": "lockUserDto",
+        "Name": "dto",
         "Type": "WebApiDotNet.DTOs.LockUserDto",
         "IsRequired": true
       }
@@ -580,11 +580,6 @@
       {
         "Name": "id",
         "Type": "System.String",
-        "IsRequired": true
-      },
-      {
-        "Name": "unlockUserDto",
-        "Type": "WebApiDotNet.DTOs.UnlockUserDto",
         "IsRequired": true
       }
     ],

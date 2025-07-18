@@ -15,12 +15,10 @@ namespace WebApiDotNet.DTOs
         public ScheduleDto Schedule { get; set; }
         public bool CustomerConfirmedDone { get; set; }
         public bool TechnicianConfirmedDone { get; set; }
-        public string Status { get; set; }
+        public string Status { get; set; } // BookingStatus: PENDING, CONFIRMED, IN_PROGRESS, AWAITING_DONE, DONE, CANCELLED
         public bool IsChatAllowed { get; set; }
         public bool IsVideoCallAllowed { get; set; }
-        public string PaymentStatus { get; set; }
-        public DateTime CreatedAt { get; set; }
-        public DateTime UpdatedAt { get; set; }
+        public string PaymentStatus { get; set; } // PaymentStatus: PENDING, PAID, FAILED, CANCELLED, REFUNDED
         public bool IsUrgent { get; set; }
         public QuoteDto Quote { get; set; }
         public string DiscountCode { get; set; }
@@ -44,7 +42,7 @@ namespace WebApiDotNet.DTOs
     public class GeoJsonDto
     {
         public string Type { get; set; }
-        public List<double> Coordinates { get; set; }
+        public double[] Coordinates { get; set; }
     }
 
     public class ScheduleDto
@@ -56,7 +54,7 @@ namespace WebApiDotNet.DTOs
 
     public class QuoteDto
     {
-        public string Status { get; set; }
+        public string Status { get; set; } // QuoteStatus: PENDING, ACCEPTED, REJECTED
         public string CommissionConfigId { get; set; }
         public double LaborPrice { get; set; }
         public List<QuoteItemDto> Items { get; set; }

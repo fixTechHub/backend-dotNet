@@ -40,6 +40,10 @@ namespace WebApiDotNet.Services
 
         public async Task<CategoryDto> CreateAsync(CreateCategoryDto dto)
         {
+            if (await _categoryRepository.ExistsByNameAsync(dto.CategoryName))
+                throw new Exception("Tên danh mục đã tồn tại");
+            if (await _categoryRepository.ExistsByIconAsync(dto.Icon))
+                throw new Exception("Icon đã tồn tại");
             var category = _mapper.Map<Category>(dto);
             category.CreatedAt = DateTime.UtcNow;
             category.UpdatedAt = DateTime.UtcNow;
@@ -51,6 +55,11 @@ namespace WebApiDotNet.Services
         {
             var category = await _categoryRepository.GetByIdAsync(id);
             if (category == null) throw new Exception("Không tìm thấy danh mục");
+            // Kiểm tra trùng tên (trừ chính bản ghi đang sửa)
+            if (category.CategoryName != dto.CategoryName && await _categoryRepository.ExistsByNameAsync(dto.CategoryName))
+                throw new Exception("Tên danh mục đã tồn tại");
+            if (category.Icon != dto.Icon && await _categoryRepository.ExistsByIconAsync(dto.Icon))
+                throw new Exception("Icon đã tồn tại");
             _mapper.Map(dto, category);
             category.UpdatedAt = DateTime.UtcNow;
             var updated = await _categoryRepository.UpdateAsync(id, category);

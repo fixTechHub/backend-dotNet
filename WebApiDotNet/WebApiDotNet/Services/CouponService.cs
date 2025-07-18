@@ -58,10 +58,53 @@ namespace WebApiDotNet.Services
 
         public async Task CreateCouponAsync(CreateCouponDto dto)
         {
+            // 1. Kiểm tra code đã tồn tại
             if (await _repository.ExistsByCodeAsync(dto.Code))
                 throw new Exception("Mã coupon đã tồn tại");
 
+            // 1.1. Validate Audience
+            var validAudiences = new[] { "ALL", "NEW_USER", "EXISTING_USER", "SPECIFIC_USERS" };
+            if (!string.IsNullOrEmpty(dto.Audience) && !validAudiences.Contains(dto.Audience))
+                throw new Exception($"Audience phải là một trong: {string.Join(", ", validAudiences)}");
+            if (dto.Audience == "SPECIFIC_USERS")
+            {
+                if (dto.UserIds == null || !dto.UserIds.Any())
+                    throw new Exception("Nhập các user là bắt buộc khi Audience là SPECIFIC USERS");
+            }
+
+            // 2. Validate Type, Value, MaxDiscount
+            if (dto.Type == "PERCENT")
+            {
+                if (dto.Value < 0)
+                    throw new Exception("Value phải lớn hơn 0 với loại PERCENT");
+                if (!dto.MaxDiscount.HasValue || dto.MaxDiscount.Value < 1000)
+                    throw new Exception("Max Discount phải lớn hơn 1,000 VND với loại PERCENT");
+            }
+            else if (dto.Type == "FIXED")
+            {
+                if (dto.Value < 1000)
+                    throw new Exception("Value phải lớn hơn hoặc bằng 1000 VND với loại FIXED");
+            }
+            else
+            {
+                throw new Exception("Type không hợp lệ");
+            }
+
+            // 3. Validate MinOrderValue
+            if (dto.MinOrderValue < 1000)
+                throw new Exception("Min Order Value phải lớn hơn hoặc bằng 1000 VND");
+
+            // 4. Validate ngày/thời gian
+            if (dto.StartDate >= dto.EndDate)
+                throw new Exception("Start Date phải nhỏ hơn End Date");
+
+            // 5. Nếu EndDate < ngày hiện tại thì set IsActive = false
+            bool isActive = dto.EndDate >= DateTime.UtcNow;
+
+            // 6. Map và tạo coupon
             var coupon = _mapper.Map<Coupon>(dto);
+            coupon.IsActive = isActive;
+
             await _repository.CreateAsync(coupon);
         }
 
@@ -70,9 +113,55 @@ namespace WebApiDotNet.Services
             if (!await _repository.ExistsAsync(id))
                 throw new Exception("Không tìm thấy coupon");
 
-            var coupon = await _repository.GetByIdAsync(id);
-            _mapper.Map(dto, coupon);
-            await _repository.UpdateAsync(id, coupon);
+            // 1. Kiểm tra code trùng (nếu đổi code)
+            var existingCoupon = await _repository.GetByIdAsync(id);
+            if (existingCoupon.Code != dto.Code && await _repository.ExistsByCodeAsync(dto.Code))
+                throw new Exception("Mã coupon đã tồn tại");
+
+            // 1.1. Validate Audience
+            var validAudiences = new[] { "ALL", "NEW_USER", "EXISTING_USER", "SPECIFIC_USERS" };
+            if (!string.IsNullOrEmpty(dto.Audience) && !validAudiences.Contains(dto.Audience))
+                throw new Exception($"Audience phải là một trong: {string.Join(", ", validAudiences)}");
+            if (dto.Audience == "SPECIFIC_USERS")
+            {
+                if (dto.UserIds == null || !dto.UserIds.Any())
+                    throw new Exception("Nhập các user là bắt buộc khi Audience là SPECIFIC USERS");
+            }
+
+            // 2. Validate Type, Value, MaxDiscount (giống như Create)
+            if (dto.Type == "PERCENT")
+            {
+                if (dto.Value < 0)
+                    throw new Exception("Value phải lớn hơn 0 với loại PERCENT");
+                if (!dto.MaxDiscount.HasValue || dto.MaxDiscount.Value < 1000)
+                    throw new Exception("Max Discount phải lớn hơn 1000 VND với loại PERCENT");
+            }
+            else if (dto.Type == "FIXED")
+            {
+                if (dto.Value < 1000)
+                    throw new Exception("Value phải lớn hơn hoặc bằng 1000 VND với loại FIXED");
+            }
+            else
+            {
+                throw new Exception("Type không hợp lệ");
+            }
+
+            // 3. Validate MinOrderValue
+            if (dto.MinOrderValue < 1000)
+                throw new Exception("Min Order Value phải lớn hơn hoặc bằng 1000 VND");
+
+            // 4. Validate ngày/thời gian
+            if (dto.StartDate >= dto.EndDate)
+                throw new Exception("Start Date phải nhỏ hơn End Date");
+
+            // 5. Nếu EndDate < ngày hiện tại thì set IsActive = false
+            bool isActive = dto.EndDate >= DateTime.UtcNow;
+
+            // 6. Map và update coupon
+            _mapper.Map(dto, existingCoupon);
+            existingCoupon.IsActive = isActive;
+
+            await _repository.UpdateAsync(id, existingCoupon);
         }
 
         public async Task DeleteCouponAsync(string id)

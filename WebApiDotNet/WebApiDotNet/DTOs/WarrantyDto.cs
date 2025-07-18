@@ -14,7 +14,5 @@ namespace WebApiDotNet.DTOs
         public DateTime ExpireAt { get; set; }
         public string Status { get; set; }
         public bool IsReviewedByAdmin { get; set; }
-        public DateTime CreatedAt { get; set; }
-        public DateTime UpdatedAt { get; set; }
     }
 } 

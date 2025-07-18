@@ -68,8 +68,7 @@ namespace WebApiDotNet.Controllers
             }
             catch (Exception ex)
             {
-                Console.WriteLine("❌ Lỗi khi tạo coupon: " + ex.Message);
-                return StatusCode(500, new { message = "Lỗi server", error = ex.Message });
+                return BadRequest(new { message = ex.Message });
             }
         }
 
@@ -85,7 +84,7 @@ namespace WebApiDotNet.Controllers
             }
             catch (Exception ex)
             {
-                return NotFound(new { message = ex.Message });
+                return BadRequest(new { message = ex.Message });
             }
         }
 

@@ -487,25 +487,6 @@
             }
           }
         ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/UnlockUserDto"
-              }
-            },
-            "text/json": {
-              "schema": {
-                "$ref": "#/components/schemas/UnlockUserDto"
-              }
-            },
-            "application/*+json": {
-              "schema": {
-                "$ref": "#/components/schemas/UnlockUserDto"
-              }
-            }
-          }
-        },
         "responses": {
           "200": {
             "description": "OK"
@@ -1136,15 +1117,19 @@
   "components": {
     "schemas": {
       "CreateCategoryDto": {
+        "required": [
+          "categoryName",
+          "icon"
+        ],
         "type": "object",
         "properties": {
           "categoryName": {
-            "type": "string",
-            "nullable": true
+            "minLength": 1,
+            "type": "string"
           },
           "icon": {
-            "type": "string",
-            "nullable": true
+            "minLength": 1,
+            "type": "string"
           },
           "isActive": {
             "type": "boolean"
@@ -1153,21 +1138,34 @@
         "additionalProperties": false
       },
       "CreateCouponDto": {
+        "required": [
+          "code",
+          "description",
+          "endDate",
+          "minOrderValue",
+          "startDate",
+          "type",
+          "value"
+        ],
         "type": "object",
         "properties": {
           "code": {
-            "type": "string",
-            "nullable": true
+            "maxLength": 100,
+            "minLength": 0,
+            "type": "string"
           },
           "description": {
-            "type": "string",
-            "nullable": true
+            "maxLength": 5000,
+            "minLength": 0,
+            "type": "string"
           },
           "type": {
-            "type": "string",
-            "nullable": true
+            "minLength": 1,
+            "type": "string"
           },
           "value": {
+            "maximum": 2147483647,
+            "minimum": 1000,
             "type": "number",
             "format": "double"
           },
@@ -1177,6 +1175,8 @@
             "nullable": true
           },
           "minOrderValue": {
+            "maximum": 2147483647,
+            "minimum": 1000,
             "type": "number",
             "format": "double"
           },
@@ -1210,30 +1210,38 @@
         "additionalProperties": false
       },
       "CreateServiceDto": {
+        "required": [
+          "categoryId",
+          "description",
+          "icon",
+          "serviceName",
+          "serviceType"
+        ],
         "type": "object",
         "properties": {
           "serviceName": {
-            "type": "string",
-            "nullable": true
+            "minLength": 1,
+            "type": "string"
           },
           "categoryId": {
-            "type": "string",
-            "nullable": true
+            "minLength": 1,
+            "type": "string"
           },
           "serviceType": {
-            "type": "string",
-            "nullable": true
+            "minLength": 1,
+            "type": "string"
           },
           "estimatedMarketPrice": {
             "$ref": "#/components/schemas/EstimatedMarketPriceDto"
           },
           "icon": {
-            "type": "string",
-            "nullable": true
+            "minLength": 1,
+            "type": "string"
           },
           "description": {
-            "type": "string",
-            "nullable": true
+            "maxLength": 5000,
+            "minLength": 0,
+            "type": "string"
           },
           "isActive": {
             "type": "boolean"
@@ -1245,11 +1253,15 @@
         "type": "object",
         "properties": {
           "min": {
+            "maximum": 2147483647,
+            "minimum": 1000,
             "type": "number",
             "format": "double",
             "nullable": true
           },
           "max": {
+            "maximum": 2147483647,
+            "minimum": 1000,
             "type": "number",
             "format": "double",
             "nullable": true
@@ -1260,17 +1272,7 @@
       "LockUserDto": {
         "type": "object",
         "properties": {
-          "reason": {
-            "type": "string",
-            "nullable": true
-          }
-        },
-        "additionalProperties": false
-      },
-      "UnlockUserDto": {
-        "type": "object",
-        "properties": {
-          "note": {
+          "lockedReason": {
             "type": "string",
             "nullable": true
           }
@@ -1278,15 +1280,19 @@
         "additionalProperties": false
       },
       "UpdateCategoryDto": {
+        "required": [
+          "categoryName",
+          "icon"
+        ],
         "type": "object",
         "properties": {
           "categoryName": {
-            "type": "string",
-            "nullable": true
+            "minLength": 1,
+            "type": "string"
           },
           "icon": {
-            "type": "string",
-            "nullable": true
+            "minLength": 1,
+            "type": "string"
           },
           "isActive": {
             "type": "boolean"
@@ -1295,21 +1301,34 @@
         "additionalProperties": false
       },
       "UpdateCouponDto": {
+        "required": [
+          "code",
+          "description",
+          "endDate",
+          "minOrderValue",
+          "startDate",
+          "type",
+          "value"
+        ],
         "type": "object",
         "properties": {
           "code": {
-            "type": "string",
-            "nullable": true
+            "maxLength": 100,
+            "minLength": 0,
+            "type": "string"
           },
           "description": {
-            "type": "string",
-            "nullable": true
+            "maxLength": 5000,
+            "minLength": 0,
+            "type": "string"
           },
           "type": {
-            "type": "string",
-            "nullable": true
+            "minLength": 1,
+            "type": "string"
           },
           "value": {
+            "maximum": 2147483647,
+            "minimum": 1000,
             "type": "number",
             "format": "double"
           },
@@ -1319,6 +1338,8 @@
             "nullable": true
           },
           "minOrderValue": {
+            "maximum": 2147483647,
+            "minimum": 1000,
             "type": "number",
             "format": "double"
           },
@@ -1352,30 +1373,38 @@
         "additionalProperties": false
       },
       "UpdateServiceDto": {
+        "required": [
+          "categoryId",
+          "description",
+          "icon",
+          "serviceName",
+          "serviceType"
+        ],
         "type": "object",
         "properties": {
           "serviceName": {
-            "type": "string",
-            "nullable": true
+            "minLength": 1,
+            "type": "string"
           },
           "categoryId": {
-            "type": "string",
-            "nullable": true
+            "minLength": 1,
+            "type": "string"
           },
           "serviceType": {
-            "type": "string",
-            "nullable": true
+            "minLength": 1,
+            "type": "string"
           },
           "estimatedMarketPrice": {
             "$ref": "#/components/schemas/EstimatedMarketPriceDto"
           },
           "icon": {
-            "type": "string",
-            "nullable": true
+            "minLength": 1,
+            "type": "string"
           },
           "description": {
-            "type": "string",
-            "nullable": true
+            "maxLength": 5000,
+            "minLength": 0,
+            "type": "string"
           },
           "isActive": {
             "type": "boolean"
@@ -1387,6 +1416,14 @@
         "type": "object",
         "properties": {
           "status": {
+            "type": "string",
+            "nullable": true
+          },
+          "resolutionNote": {
+            "type": "string",
+            "nullable": true
+          },
+          "resolvedBy": {
             "type": "string",
             "nullable": true
           }
@@ -1415,6 +1452,10 @@
             "nullable": true
           },
           "status": {
+            "type": "string",
+            "nullable": true
+          },
+          "lockedReason": {
             "type": "string",
             "nullable": true
           }

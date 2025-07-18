@@ -1,5 +1,5 @@
 using System;
-
+using System.ComponentModel.DataAnnotations;
 namespace WebApiDotNet.DTOs
 {
     public class ServiceDto
@@ -13,20 +13,13 @@ namespace WebApiDotNet.DTOs
         public string Description { get; set; }
         public bool IsActive { get; set; }
         public bool IsDeleted { get; set; }
-        public DateTime CreatedAt { get; set; }
-        public DateTime UpdatedAt { get; set; }
-        public DateTime? DeletedAt { get; set; }
     }
 
     public class EstimatedMarketPriceDto
     {
+        [Range(1000, int.MaxValue, ErrorMessage = "Value must be at least 1,000 VND")]
         public double? Min { get; set; }
+        [Range(1000, int.MaxValue, ErrorMessage = "Value must be at least 1,000 VND")]
         public double? Max { get; set; }
-    }
-
-    public enum ServiceTypeDto
-    {
-        FIXED,
-        COMPLEX
     }
 } 

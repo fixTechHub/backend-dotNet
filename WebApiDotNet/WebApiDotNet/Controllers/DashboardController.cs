@@ -71,34 +71,22 @@ namespace WebApiDotNet.Controllers
         }
 
         [HttpPost("users/{id}/lock")]
-        public async Task<IActionResult> LockUser(string id, [FromBody] LockUserDto lockUserDto)
+        public async Task<IActionResult> LockUser(string id, [FromBody] LockUserDto dto)
         {
-            try
-            {
-                if (lockUserDto == null || string.IsNullOrWhiteSpace(lockUserDto.Reason))
-                {
-                    return BadRequest(new { message = "Lock reason is required" });
-                }
-
-                var lockedUser = await _userService.LockUserAsync(id, lockUserDto);
-                if (lockedUser == null)
-                {
-                    return NotFound(new { message = "User not found" });
-                }
-                return Ok(lockedUser);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, new { message = "Internal server error", error = ex.Message });
-            }
+            if (dto == null || string.IsNullOrWhiteSpace(dto.LockedReason))
+                return BadRequest(new { message = "Lock reason is required" });
+            var lockedUser = await _userService.LockUserAsync(id, dto);
+            if (lockedUser == null)
+                return NotFound(new { message = "User not found" });
+            return Ok(lockedUser);
         }
 
         [HttpPost("users/{id}/unlock")]
-        public async Task<IActionResult> UnlockUser(string id, [FromBody] UnlockUserDto unlockUserDto)
+        public async Task<IActionResult> UnlockUser(string id)
         {
             try
             {
-                var unlockedUser = await _userService.UnlockUserAsync(id, unlockUserDto);
+                var unlockedUser = await _userService.UnlockUserAsync(id);
                 if (unlockedUser == null)
                 {
                     return NotFound(new { message = "User not found" });
@@ -217,7 +205,7 @@ namespace WebApiDotNet.Controllers
         [HttpPatch("systemreports/{id}/status")]
         public async Task<IActionResult> UpdateStatus(string id, [FromBody] UpdateSystemReportStatusDto dto)
         {
-            var updated = await _systemReportService.UpdateStatusAsync(id, dto.Status);
+            var updated = await _systemReportService.UpdateStatusAsync(id, dto.Status, dto.ResolutionNote, dto.ResolvedBy);
             if (updated == null)
                 return NotFound(new { message = "Report not found" });
             return Ok(updated);

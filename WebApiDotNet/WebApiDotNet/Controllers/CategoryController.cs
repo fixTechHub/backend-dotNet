@@ -64,6 +64,8 @@ namespace WebApiDotNet.Controllers
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] CreateCategoryDto dto)
         {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
             if (dto == null)
                 return BadRequest(new { message = "Dữ liệu không hợp lệ" });
             try
@@ -73,23 +75,23 @@ namespace WebApiDotNet.Controllers
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"❌ Lỗi khi tạo category: {ex.Message}");
-                return StatusCode(500, new { message = "Lỗi server", error = ex.Message });
+                return BadRequest(new { message = ex.Message });
             }
         }
 
         [HttpPut("{id}")]
         public async Task<IActionResult> Update(string id, [FromBody] UpdateCategoryDto dto)
         {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
             try
             {
-                var result = await _categoryService.UpdateAsync(id, dto);
-                if (result == null) return NotFound(new { message = "Không tìm thấy danh mục" });
-                return Ok(new { message = "Cập nhật danh mục thành công" });
+                var updated = await _categoryService.UpdateAsync(id, dto);
+                return Ok(new { message = "Cập nhật danh mục thành công", data = updated });
             }
             catch (Exception ex)
             {
-                return StatusCode(500, new { message = "Lỗi server", error = ex.Message });
+                return BadRequest(new { message = ex.Message });
             }
         }
 

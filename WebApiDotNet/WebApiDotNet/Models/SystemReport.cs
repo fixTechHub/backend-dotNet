@@ -18,13 +18,15 @@ namespace WebApiDotNet.Models
         public string Title { get; set; }
 
         [BsonElement("tag")]
-        public string Tag { get; set; } // SYSTEM, PAYMENT, UI, OTHER
+        [BsonRepresentation(BsonType.String)]
+        public SystemReportTag Tag { get; set; }
 
         [BsonElement("description")]
         public string Description { get; set; }
 
         [BsonElement("status")]
-        public string Status { get; set; } = "PENDING"; // PENDING, IN_PROGRESS, RESOLVED, REJECTED
+        [BsonRepresentation(BsonType.String)]
+        public SystemReportStatus Status { get; set; } = SystemReportStatus.PENDING;
 
         [BsonElement("resolvedBy")]
         [BsonRepresentation(BsonType.ObjectId)]
@@ -37,9 +39,25 @@ namespace WebApiDotNet.Models
         public DateTime? ResolvedAt { get; set; }
 
         [BsonElement("createdAt")]
-        public DateTime CreatedAt { get; set; }
+        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
         [BsonElement("updatedAt")]
-        public DateTime UpdatedAt { get; set; }
+        public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
     }
+    public enum SystemReportTag
+    {
+        SYSTEM,
+        PAYMENT,
+        UI,
+        OTHER
+    }
+
+    public enum SystemReportStatus
+    {
+        PENDING,
+        IN_PROGRESS,
+        RESOLVED,
+        REJECTED
+    }
+
 }

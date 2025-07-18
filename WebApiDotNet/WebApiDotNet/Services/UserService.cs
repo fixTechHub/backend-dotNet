@@ -39,7 +39,13 @@ namespace WebApiDotNet.Services
 
             // Update user properties from DTO
             if (updateUserDto.Role != null) user.Role = updateUserDto.Role;
-            if (updateUserDto.Status != null) user.Status = updateUserDto.Status;
+            if (updateUserDto.Status != null)
+            {
+                if (Enum.TryParse<UserStatus>(updateUserDto.Status, out var status))
+                {
+                    user.Status = status;
+                }
+            }
 
             user.UpdatedAt = DateTime.UtcNow;
 
@@ -50,15 +56,15 @@ namespace WebApiDotNet.Services
 
         public async Task<UserDto?> LockUserAsync(string id, LockUserDto lockUserDto)
         {
-            var user = await _repository.GetByIdAsync(id);
+             var user = await _repository.GetByIdAsync(id);
             if (user == null)
             {
                 return null;
             }
 
             // Lock the user
-            user.Status = "INACTIVE";
-            user.LockedReason = lockUserDto.Reason;
+            user.Status = UserStatus.INACTIVE;
+            user.LockedReason = lockUserDto.LockedReason;
             user.UpdatedAt = DateTime.UtcNow;
 
             await _repository.UpdateAsync(user);
@@ -66,7 +72,7 @@ namespace WebApiDotNet.Services
             return _mapper.Map<UserDto>(user);
         }
 
-        public async Task<UserDto?> UnlockUserAsync(string id, UnlockUserDto unlockUserDto)
+        public async Task<UserDto?> UnlockUserAsync(string id)
         {
             var user = await _repository.GetByIdAsync(id);
             if (user == null)
@@ -75,7 +81,7 @@ namespace WebApiDotNet.Services
             }
 
             // Unlock the user
-            user.Status = "ACTIVE";
+            user.Status = UserStatus.ACTIVE;
             user.LockedReason = null; // Clear the locked reason
             user.UpdatedAt = DateTime.UtcNow;
 

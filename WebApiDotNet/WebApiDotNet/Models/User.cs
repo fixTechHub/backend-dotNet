@@ -51,13 +51,14 @@ namespace WebApiDotNet.Models
         public string Role { get; set; }
 
         [BsonElement("status")]
-        public string Status { get; set; } 
+        [BsonRepresentation(BsonType.String)]
+        public UserStatus Status { get; set; } = UserStatus.PENDING;
 
         [BsonElement("deletedAt")]
         public DateTime? DeletedAt { get; set; }
 
-        [BsonElement("createdAt")]
-        public DateTime CreatedAt { get; set; }
+        [BsonElement("createdAt")] 
+        public DateTime CreatedAt { get; set; } 
 
         [BsonElement("updatedAt")]
         public DateTime UpdatedAt { get; set; }
@@ -79,6 +80,18 @@ namespace WebApiDotNet.Models
 
         [BsonElement("lastDeletionReminderSent")]
         public DateTime? LastDeletionReminderSent { get; set; }
+    }
+
+    public enum UserStatus
+    {
+        PENDING,
+        ACTIVE,
+        INACTIVE,
+        INACTIVE_USER,
+        INACTIVE_ADMIN,
+        BLOCKED,
+        DELETED,
+        PENDING_DELETION
     }
 
     public class Address

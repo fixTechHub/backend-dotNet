@@ -33,6 +33,11 @@ namespace WebApiDotNet.Services
         }
         public async Task<ServiceDto> CreateAsync(CreateServiceDto dto)
         {
+            // Kiểm tra trùng tên, icon
+            if (await _repo.ExistsByNameAsync(dto.ServiceName))
+                throw new Exception("Tên dịch vụ đã tồn tại");
+            if (await _repo.ExistsByIconAsync(dto.Icon))
+                throw new Exception("Icon đã tồn tại");
             // Logic nghiệp vụ: FIXED thì không nhập giá, COMPLEX thì bắt buộc nhập giá min/max
             if (dto.ServiceType == "FIXED")
             {
@@ -47,9 +52,9 @@ namespace WebApiDotNet.Services
                 {
                     throw new Exception("Dịch vụ loại COMPLEX phải nhập đủ giá min và max!");
                 }
-                if (dto.EstimatedMarketPrice.Min <= 0 || dto.EstimatedMarketPrice.Max <= 0)
+                if (dto.EstimatedMarketPrice.Min < 1000 || dto.EstimatedMarketPrice.Max < 1000)
                 {
-                    throw new Exception("Giá min và max phải lớn hơn 0!");
+                    throw new Exception("Giá min và max phải lớn hơn hoặc bằng 1,000 VND!");
                 }
                 if (dto.EstimatedMarketPrice.Min > dto.EstimatedMarketPrice.Max)
                 {
@@ -62,6 +67,13 @@ namespace WebApiDotNet.Services
         }
         public async Task<ServiceDto> UpdateAsync(string id, UpdateServiceDto dto)
         {
+            var service = await _repo.GetByIdAsync(id);
+            if (service == null) throw new Exception("Không tìm thấy dịch vụ");
+            // Kiểm tra trùng tên, icon (trừ chính bản ghi đang sửa)
+            if (service.ServiceName != dto.ServiceName && await _repo.ExistsByNameAsync(dto.ServiceName))
+                throw new Exception("Tên dịch vụ đã tồn tại");
+            if (service.Icon != dto.Icon && await _repo.ExistsByIconAsync(dto.Icon))
+                throw new Exception("Icon đã tồn tại");
             // Logic nghiệp vụ: FIXED thì không nhập giá, COMPLEX thì bắt buộc nhập giá min/max
             if (dto.ServiceType == "FIXED")
             {
@@ -76,17 +88,15 @@ namespace WebApiDotNet.Services
                 {
                     throw new Exception("Dịch vụ loại COMPLEX phải nhập đủ giá min và max!");
                 }
-                if (dto.EstimatedMarketPrice.Min <= 0 || dto.EstimatedMarketPrice.Max <= 0)
+                if (dto.EstimatedMarketPrice.Min < 1000 || dto.EstimatedMarketPrice.Max < 1000)
                 {
-                    throw new Exception("Giá min và max phải lớn hơn 0!");
+                    throw new Exception("Giá min và max phải lớn hơn hoặc bằng 1,000 VND!");
                 }
                 if (dto.EstimatedMarketPrice.Min > dto.EstimatedMarketPrice.Max)
                 {
                     throw new Exception("Giá min không được lớn hơn giá max!");
                 }
             }
-            var service = await _repo.GetByIdAsync(id);
-            if (service == null) throw new Exception("Không tìm thấy dịch vụ");
             _mapper.Map(dto, service);
             var updated = await _repo.UpdateAsync(id, service);
             return _mapper.Map<ServiceDto>(updated);

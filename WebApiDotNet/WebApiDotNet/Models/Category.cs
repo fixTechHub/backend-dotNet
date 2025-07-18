@@ -26,11 +26,9 @@ namespace WebApiDotNet.Models
         public DateTime? DeletedAt { get; set; }
 
         [BsonElement("createdAt")]
-        [BsonDateTimeOptions(Kind = DateTimeKind.Utc)]
-        public DateTime CreatedAt { get; set; }
+        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
         [BsonElement("updatedAt")]
-        [BsonDateTimeOptions(Kind = DateTimeKind.Utc)]
-        public DateTime UpdatedAt { get; set; }
+        public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
     }
 } 

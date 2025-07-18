@@ -24,6 +24,7 @@ namespace WebApiDotNet.Models
         public string TechnicianId { get; set; }
 
         [BsonElement("requestDate")]
+        [BsonDateTimeOptions(Kind = DateTimeKind.Utc)]
         public DateTime RequestDate { get; set; }
 
         [BsonElement("reportedIssue")]
@@ -33,10 +34,12 @@ namespace WebApiDotNet.Models
         public bool IsUnderWarranty { get; set; } = true;
 
         [BsonElement("expireAt")]
+        [BsonDateTimeOptions(Kind = DateTimeKind.Utc)]
         public DateTime? ExpireAt { get; set; }
 
         [BsonElement("status")]
-        public string Status { get; set; } = "PENDING"; // PENDING, CONFIRMED, RESOLVED, DENIED, EXPIRED
+        [BsonRepresentation(BsonType.String)]
+        public WarrantyStatus Status { get; set; } = WarrantyStatus.PENDING;
 
         [BsonElement("resolutionNote")]
         public string? ResolutionNote { get; set; }
@@ -48,9 +51,18 @@ namespace WebApiDotNet.Models
         public bool IsReviewedByAdmin { get; set; } = false;
 
         [BsonElement("createdAt")]
-        public DateTime CreatedAt { get; set; }
+        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
         [BsonElement("updatedAt")]
-        public DateTime UpdatedAt { get; set; }
+        public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
+    }
+
+    public enum WarrantyStatus
+    {
+        PENDING,
+        CONFIRMED,
+        RESOLVED,
+        DENIED,
+        EXPIRED
     }
 } 

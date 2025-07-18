@@ -16,14 +16,14 @@ namespace WebApiDotNet.DTOs
         public string Identification { get; set; }
         public string FrontIdImage { get; set; }
         public string BackIdImage { get; set; }
-        public TechnicianStatusDto Status { get; set; }
+        public string Status { get; set; }
         public DateTime? PendingDeletionAt { get; set; }
         public DateTime? DeletedAt { get; set; }
         public double RatingAverage { get; set; }
         public int JobCompleted { get; set; }
         public int ExperienceYears { get; set; }
         public List<string> SpecialtiesCategories { get; set; }
-        public TechnicianAvailabilityDto Availability { get; set; }
+        public string Availability { get; set; }
         public double Balance { get; set; }
         public List<string> Certificate { get; set; }
         public BankAccountDto BankAccount { get; set; }
@@ -33,8 +33,6 @@ namespace WebApiDotNet.DTOs
         public double TotalWithdrawn { get; set; }
         public TechnicianRatesDto Rates { get; set; }
         public DateTime? PricesLastUpdatedAt { get; set; }
-        public DateTime CreatedAt { get; set; }
-        public DateTime UpdatedAt { get; set; }
         public string? Note { get; set; }
     }
 
@@ -65,20 +63,5 @@ namespace WebApiDotNet.DTOs
         public double? Tier3 { get; set; }
     }
 
-    public enum TechnicianStatusDto
-    {
-        PENDING,
-        APPROVED,
-        REJECTED,
-        INACTIVE,
-        PENDING_DELETION,
-        DELETED
-    }
-
-    public enum TechnicianAvailabilityDto
-    {
-        ONJOB,
-        FREE,
-        BUSY
-    }
+    
 } 

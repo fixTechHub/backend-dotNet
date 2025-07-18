@@ -43,8 +43,9 @@ namespace WebApiDotNet.Repository
         public async Task<Warranty?> UpdateStatusAsync(string id, string status, bool isReviewedByAdmin)
         {
             var filter = Builders<Warranty>.Filter.Eq(w => w.Id, id);
+            var statusEnum = (WarrantyStatus)Enum.Parse(typeof(WarrantyStatus), status, true);
             var update = Builders<Warranty>.Update
-                .Set(w => w.Status, status)
+                .Set(w => w.Status, statusEnum)
                 .Set(w => w.IsReviewedByAdmin, isReviewedByAdmin)
                 .Set(w => w.UpdatedAt, DateTime.UtcNow);
             var options = new FindOneAndUpdateOptions<Warranty> { ReturnDocument = ReturnDocument.After };

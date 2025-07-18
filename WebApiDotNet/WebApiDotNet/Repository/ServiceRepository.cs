@@ -74,5 +74,15 @@ namespace WebApiDotNet.Repository
         {
             return await _services.Find(s => s.Id == id && s.IsDeleted).AnyAsync();
         }
+
+        public async Task<bool> ExistsByNameAsync(string name)
+        {
+            return await _services.Find(s => s.ServiceName == name && !s.IsDeleted).AnyAsync();
+        }
+
+        public async Task<bool> ExistsByIconAsync(string icon)
+        {
+            return await _services.Find(s => s.Icon == icon && !s.IsDeleted).AnyAsync();
+        }
     }
 } 

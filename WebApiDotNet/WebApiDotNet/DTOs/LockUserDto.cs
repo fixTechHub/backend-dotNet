@@ -2,6 +2,6 @@ namespace WebApiDotNet.DTOs
 {
     public class LockUserDto
     {
-        public string Reason { get; set; }
+        public string LockedReason { get; set; }
     }
 } 

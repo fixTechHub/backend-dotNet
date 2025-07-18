@@ -36,10 +36,10 @@ namespace WebApiDotNet.Models
         public bool IsDeleted { get; set; } = false;
 
         [BsonElement("createdAt")]
-        public DateTime CreatedAt { get; set; }
+        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
         [BsonElement("updatedAt")]
-        public DateTime UpdatedAt { get; set; }
+        public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
         [BsonElement("deletedAt")]
         public DateTime? DeletedAt { get; set; }
     }

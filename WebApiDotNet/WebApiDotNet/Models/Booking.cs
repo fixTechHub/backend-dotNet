@@ -73,7 +73,8 @@ namespace WebApiDotNet.Models
         public bool TechnicianConfirmedDone { get; set; } = false;
 
         [BsonElement("status")]
-        public string Status { get; set; } = "PENDING";
+        [BsonRepresentation(BsonType.String)]
+        public BookingStatus Status { get; set; } = BookingStatus.PENDING;
 
         [BsonElement("isChatAllowed")]
         public bool IsChatAllowed { get; set; } = false;
@@ -95,13 +96,41 @@ namespace WebApiDotNet.Models
         public string CancellationReason { get; set; }
 
         [BsonElement("paymentStatus")]
-        public string PaymentStatus { get; set; } = "PENDING";
+        [BsonRepresentation(BsonType.String)]
+        public PaymentStatus PaymentStatus { get; set; } = PaymentStatus.PENDING;
 
         [BsonElement("createdAt")]
         public DateTime CreatedAt { get; set; }
 
         [BsonElement("updatedAt")]
         public DateTime UpdatedAt { get; set; }
+    }
+
+    public enum BookingStatus
+    {
+        PENDING,
+        CONFIRMED,
+        IN_PROGRESS,
+        AWAITING_DONE,
+        DONE,
+        CANCELLED
+    }
+
+    public enum PaymentStatus
+    {
+        PENDING,
+        PAID,
+        FAILED,
+        CANCELLED,
+        REFUNDED
+        
+    }
+
+    public enum QuoteStatus
+    {
+        PENDING,
+        ACCEPTED,
+        REJECTED
     }
 
     [BsonIgnoreExtraElements]
@@ -142,7 +171,8 @@ namespace WebApiDotNet.Models
     public class Quote
     {
         [BsonElement("status")]
-        public string Status { get; set; } // "PENDING", "ACCEPTED", "REJECTED"
+        [BsonRepresentation(BsonType.String)]
+        public QuoteStatus Status { get; set; } = QuoteStatus.PENDING;
 
         [BsonElement("commissionConfigId")]
         [BsonRepresentation(BsonType.ObjectId)]

@@ -14,8 +14,6 @@ namespace WebApiDotNet.DTOs
         public string? LockedReason { get; set; }
         public string Role { get; set; }
         public string Status { get; set; }
-        public DateTime CreatedAt { get; set; }
-        public DateTime UpdatedAt { get; set; }
         public string? VerificationOTP { get; set; }
         public DateTime? OtpExpires { get; set; }
         public string? VerificationCode { get; set; }

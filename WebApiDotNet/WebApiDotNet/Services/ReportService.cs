@@ -1,39 +1,31 @@
 using WebApiDotNet.Models;
 using WebApiDotNet.Repository.IRepository;
+using AutoMapper;
+using WebApiDotNet.DTOs;
 
 namespace WebApiDotNet.Services
 {
     public class ReportService : IReportService
     {
         private readonly IReportRepository _repository;
+        private readonly IMapper _mapper;
 
-        public ReportService(IReportRepository repository)
+        public ReportService(IReportRepository repository, IMapper mapper)
         {
             _repository = repository;
+            _mapper = mapper;
         }
 
-        public async Task<List<Report>> GetAllAsync()
+        public async Task<List<ReportDto>> GetAllAsync()
         {
             var reports = await _repository.GetAllAsync();
-            foreach (var r in reports)
-            {
-                if (string.IsNullOrEmpty(r.Type)) r.Type = "REPORT";
-                if (string.IsNullOrEmpty(r.Status)) r.Status = "PENDING";
-                if (r.Penalty == null) r.Penalty = null;
-            }
-            return reports;
+            return _mapper.Map<List<ReportDto>>(reports);
         }
 
-        public async Task<Report> GetByIdAsync(string id)
+        public async Task<ReportDto> GetByIdAsync(string id)
         {
             var r = await _repository.GetByIdAsync(id);
-            if (r != null)
-            {
-                if (string.IsNullOrEmpty(r.Type)) r.Type = "REPORT";
-                if (string.IsNullOrEmpty(r.Status)) r.Status = "PENDING";
-                if (r.Penalty == null) r.Penalty = null;
-            }
-            return r;
+            return r == null ? null : _mapper.Map<ReportDto>(r);
         }
     }
 }

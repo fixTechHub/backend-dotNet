@@ -15,29 +15,15 @@ namespace WebApiDotNet.Services
             _mapper = mapper;
         }
 
-        public async Task<List<SystemReport>> GetAllAsync()
+        public async Task<List<SystemReportDto>> GetAllAsync()
         {
             var reports = await _repository.GetAllAsync();
-            foreach (var r in reports)
-            {
-                if (string.IsNullOrEmpty(r.Status)) r.Status = "PENDING";
-                if (r.ResolvedBy == null) r.ResolvedBy = null;
-                if (r.ResolutionNote == null) r.ResolutionNote = null;
-                if (r.ResolvedAt == null) r.ResolvedAt = null;
-            }
-            return reports;
+            return _mapper.Map<List<SystemReportDto>>(reports);
         }
 
-        public async Task<SystemReportDto?> UpdateStatusAsync(string id, string status)
+        public async Task<SystemReportDto?> UpdateStatusAsync(string id, string status, string? resolutionNote = null, string? resolvedBy = null)
         {
-            var updated = await _repository.UpdateStatusAsync(id, status);
-            if (updated != null)
-            {
-                if (string.IsNullOrEmpty(updated.Status)) updated.Status = "PENDING";
-                if (updated.ResolvedBy == null) updated.ResolvedBy = null;
-                if (updated.ResolutionNote == null) updated.ResolutionNote = null;
-                if (updated.ResolvedAt == null) updated.ResolvedAt = null;
-            }
+            var updated = await _repository.UpdateStatusAsync(id, status, resolutionNote, resolvedBy);
             return updated == null ? null : _mapper.Map<SystemReportDto>(updated);
         }
     }
