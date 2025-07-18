@@ -112,6 +112,7 @@ namespace WebApiDotNet.Models
         CONFIRMED,
         IN_PROGRESS,
         AWAITING_DONE,
+        WAITING_CONFIRM,
         DONE,
         CANCELLED
     }
