@@ -75,15 +75,15 @@ namespace WebApiDotNet.Services
             // 2. Validate Type, Value, MaxDiscount
             if (dto.Type == "PERCENT")
             {
-                if (dto.Value < 0)
-                    throw new Exception("Value phải lớn hơn 0 với loại PERCENT");
+                if (dto.Value <= 0 || dto.Value > 100)
+                    throw new Exception("Value phải lớn hơn 0 và nhỏ hơn hoặc bằng 100 với loại PERCENT");
                 if (!dto.MaxDiscount.HasValue || dto.MaxDiscount.Value < 1000)
                     throw new Exception("Max Discount phải lớn hơn 1,000 VND với loại PERCENT");
             }
             else if (dto.Type == "FIXED")
             {
-                if (dto.Value < 1000)
-                    throw new Exception("Value phải lớn hơn hoặc bằng 1000 VND với loại FIXED");
+                if (dto.Value <= 1000)
+                    throw new Exception("Value phải lớn hơn 1000 VND với loại FIXED");
             }
             else
             {
@@ -131,15 +131,15 @@ namespace WebApiDotNet.Services
             // 2. Validate Type, Value, MaxDiscount (giống như Create)
             if (dto.Type == "PERCENT")
             {
-                if (dto.Value < 0)
-                    throw new Exception("Value phải lớn hơn 0 với loại PERCENT");
+                if (dto.Value <= 0 || dto.Value > 100)
+                    throw new Exception("Value phải lớn hơn 0 và nhỏ hơn hoặc bằng 100 với loại PERCENT");
                 if (!dto.MaxDiscount.HasValue || dto.MaxDiscount.Value < 1000)
                     throw new Exception("Max Discount phải lớn hơn 1000 VND với loại PERCENT");
             }
             else if (dto.Type == "FIXED")
             {
-                if (dto.Value < 1000)
-                    throw new Exception("Value phải lớn hơn hoặc bằng 1000 VND với loại FIXED");
+                if (dto.Value <= 1000)
+                    throw new Exception("Value phải lớn hơn 1000 VND với loại FIXED");
             }
             else
             {

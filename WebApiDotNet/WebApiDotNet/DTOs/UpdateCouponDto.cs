@@ -13,11 +13,9 @@ namespace WebApiDotNet.DTOs
         [Required(ErrorMessage = "Type is required")]
         public string Type { get; set; } // PERCENT, FIXED
         [Required(ErrorMessage = "Value is required")]
-        [Range(1000, int.MaxValue, ErrorMessage = "Value must be at least 1,000 VND")]
         public double Value { get; set; }
         public double? MaxDiscount { get; set; }
         [Required(ErrorMessage = "MinOrderValue is required")]
-        [Range(1000, int.MaxValue, ErrorMessage = "Min Order Value must be at least 1,000 VND")]
         public double MinOrderValue { get; set; }
         public int TotalUsageLimit { get; set; }
         public string Audience { get; set; }
