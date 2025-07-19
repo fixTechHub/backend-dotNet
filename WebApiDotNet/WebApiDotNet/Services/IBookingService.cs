@@ -8,5 +8,6 @@ namespace WebApiDotNet.Services
         Task<BookingDto?> GetByIdAsync(string id);
         Task<int> CountByMonthAsync(int year, int month);
         Task<bool> HasUserBookingsAsync(string userId);
+        Task<decimal> GetMonthlyRevenueAsync(int year, int month);
     }
 } 

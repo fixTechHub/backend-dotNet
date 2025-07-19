@@ -16,7 +16,6 @@ namespace WebApiDotNet.Controllers
         private readonly ISystemReportService _systemReportService;
         private readonly IRoleService _roleService;
         private readonly IServiceService _serviceService;
-        private readonly IBookingPriceService _bookingPriceService;
 
         public DashboardController(
             IUserService userService,
@@ -26,8 +25,7 @@ namespace WebApiDotNet.Controllers
             IReportService reportService,
             ISystemReportService systemReportService,
             IRoleService roleService,
-            IServiceService serviceService,
-            IBookingPriceService bookingPriceService)
+            IServiceService serviceService)
         {
             _userService = userService;
             _bookingService = bookingService;
@@ -37,7 +35,6 @@ namespace WebApiDotNet.Controllers
             _systemReportService = systemReportService;
             _roleService = roleService;
             _serviceService = serviceService;
-            _bookingPriceService = bookingPriceService;
         }
 
         // USER
@@ -232,11 +229,15 @@ namespace WebApiDotNet.Controllers
             return Ok(result);
         }
 
+        /// <summary>
+        /// Lấy doanh thu tháng, chỉ tính các booking có status là DONE và có FinalPrice.
+        /// </summary>
         [HttpGet("revenue")]
         public async Task<IActionResult> GetMonthlyRevenue([FromQuery] int year, [FromQuery] int month)
         {
-            var revenue = await _bookingPriceService.GetMonthlyRevenueAsync(year, month);
-            return Ok(new { year, month, revenue });
+            var revenue = await _bookingService.GetMonthlyRevenueAsync(year, month);
+            // Có thể trả về thêm thông tin filter nếu muốn
+            return Ok(new { year, month, revenue});
         }
     }
 }

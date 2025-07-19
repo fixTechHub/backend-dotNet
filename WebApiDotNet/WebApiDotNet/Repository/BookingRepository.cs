@@ -40,5 +40,18 @@ namespace WebApiDotNet.Repository
             var filter = Builders<Booking>.Filter.Eq(b => b.CustomerId, userId) & Builders<Booking>.Filter.Type("Schedule", BsonType.Document);
             return await _collection.Find(filter).ToListAsync();
         }
+
+        public async Task<decimal> GetMonthlyRevenueAsync(int year, int month)
+        {
+            var start = new DateTime(year, month, 1);
+            var end = start.AddMonths(1);
+            var filter = Builders<Booking>.Filter.Gte(b => b.CreatedAt, start) &
+                         Builders<Booking>.Filter.Lt(b => b.CreatedAt, end) &
+                         Builders<Booking>.Filter.Ne(b => b.FinalPrice, null) &
+                         Builders<Booking>.Filter.Eq(b => b.Status, BookingStatus.DONE);
+            var bookings = await _collection.Find(filter).ToListAsync();
+            decimal revenue = bookings.Sum(b => b.FinalPrice.HasValue ? (decimal)b.FinalPrice.Value * 0.2m : 0);
+            return revenue;
+        }
     }
 } 
