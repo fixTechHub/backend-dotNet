@@ -36,7 +36,6 @@ namespace WebApiDotNet.Services
             {
                 return null;
             }
-
             // Update user properties from DTO
             if (updateUserDto.Role != null) user.Role = updateUserDto.Role;
             if (updateUserDto.Status != null)
@@ -46,11 +45,8 @@ namespace WebApiDotNet.Services
                     user.Status = status;
                 }
             }
-
             user.UpdatedAt = DateTime.UtcNow;
-
             await _repository.UpdateAsync(user);
-
             return _mapper.Map<UserDto>(user);
         }
 
@@ -61,14 +57,11 @@ namespace WebApiDotNet.Services
             {
                 return null;
             }
-
             // Lock the user
             user.Status = UserStatus.INACTIVE;
             user.LockedReason = lockUserDto.LockedReason;
             user.UpdatedAt = DateTime.UtcNow;
-
             await _repository.UpdateAsync(user);
-
             return _mapper.Map<UserDto>(user);
         }
 
@@ -79,14 +72,11 @@ namespace WebApiDotNet.Services
             {
                 return null;
             }
-
             // Unlock the user
             user.Status = UserStatus.ACTIVE;
             user.LockedReason = null; // Clear the locked reason
             user.UpdatedAt = DateTime.UtcNow;
-
             await _repository.UpdateAsync(user);
-
             return _mapper.Map<UserDto>(user);
         }
     }

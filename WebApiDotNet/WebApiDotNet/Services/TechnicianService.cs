@@ -25,7 +25,6 @@ namespace WebApiDotNet.Services
         {
             var technicians = await _repository.GetAllAsync();
             var technicianDtos = new List<TechnicianDto>();
-
             foreach (var technician in technicians)
             {
                 var user = await _userRepository.GetByIdAsync(technician.UserId);
@@ -52,10 +51,8 @@ namespace WebApiDotNet.Services
             var technician = await _repository.GetByIdAsync(id);
             if (technician == null)
                 return null;
-
             if (technician.Status != TechnicianStatus.PENDING)
                 throw new InvalidOperationException("Chỉ được duyệt kỹ thuật viên khi trạng thái là PENDING!");
-
             var updated = await _repository.UpdateStatusAsync(id, status, note);
             return updated == null ? null : _mapper.Map<TechnicianDto>(updated);
         }
