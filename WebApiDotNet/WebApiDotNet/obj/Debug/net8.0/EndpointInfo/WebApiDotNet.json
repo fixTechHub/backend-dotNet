@@ -1164,8 +1164,6 @@
             "type": "string"
           },
           "value": {
-            "maximum": 2147483647,
-            "minimum": 1000,
             "type": "number",
             "format": "double"
           },
@@ -1175,8 +1173,6 @@
             "nullable": true
           },
           "minOrderValue": {
-            "maximum": 2147483647,
-            "minimum": 1000,
             "type": "number",
             "format": "double"
           },
@@ -1327,8 +1323,6 @@
             "type": "string"
           },
           "value": {
-            "maximum": 2147483647,
-            "minimum": 1000,
             "type": "number",
             "format": "double"
           },
@@ -1338,8 +1332,6 @@
             "nullable": true
           },
           "minOrderValue": {
-            "maximum": 2147483647,
-            "minimum": 1000,
             "type": "number",
             "format": "double"
           },

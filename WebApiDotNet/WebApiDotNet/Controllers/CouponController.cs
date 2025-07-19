@@ -59,7 +59,7 @@ namespace WebApiDotNet.Controllers
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
             if (dto == null)
-                return BadRequest(new { message = "Dữ liệu không hợp lệ" });
+                return BadRequest(new { errors = new { general = new[] { "Dữ liệu không hợp lệ" } } });
 
             try
             {
@@ -68,7 +68,22 @@ namespace WebApiDotNet.Controllers
             }
             catch (Exception ex)
             {
-                return BadRequest(new { message = ex.Message });
+                var msg = ex.Message;
+                if (msg.Contains("code", StringComparison.OrdinalIgnoreCase) || msg.Contains("Mã coupon"))
+                    return BadRequest(new { errors = new { Code = new[] { msg } } });
+                if (msg.Contains("Value phải lớn hơn 0") || msg.Contains("Value phải lớn hơn 1000") || msg.Contains("Value phải lớn hơn 0 và nhỏ hơn hoặc bằng 100"))
+                    return BadRequest(new { errors = new { Value = new[] { msg } } });
+                if (msg.Contains("Max Discount"))
+                    return BadRequest(new { errors = new { MaxDiscount = new[] { msg } } });
+                if (msg.Contains("Min Order Value"))
+                    return BadRequest(new { errors = new { MinOrderValue = new[] { msg } } });
+                if (msg.Contains("Audience"))
+                    return BadRequest(new { errors = new { Audience = new[] { msg } } });
+                if (msg.Contains("user") && msg.Contains("Audience"))
+                    return BadRequest(new { errors = new { UserIds = new[] { msg } } });
+                if (msg.Contains("Start Date"))
+                    return BadRequest(new { errors = new { StartDate = new[] { msg } } });
+                return BadRequest(new { errors = new { general = new[] { msg } } });
             }
         }
 
@@ -84,7 +99,22 @@ namespace WebApiDotNet.Controllers
             }
             catch (Exception ex)
             {
-                return BadRequest(new { message = ex.Message });
+                var msg = ex.Message;
+                if (msg.Contains("code", StringComparison.OrdinalIgnoreCase) || msg.Contains("Mã coupon"))
+                    return BadRequest(new { errors = new { Code = new[] { msg } } });
+                if (msg.Contains("Value phải lớn hơn 0") || msg.Contains("Value phải lớn hơn 1000") || msg.Contains("Value phải lớn hơn 0 và nhỏ hơn hoặc bằng 100"))
+                    return BadRequest(new { errors = new { Value = new[] { msg } } });
+                if (msg.Contains("Max Discount"))
+                    return BadRequest(new { errors = new { MaxDiscount = new[] { msg } } });
+                if (msg.Contains("Min Order Value"))
+                    return BadRequest(new { errors = new { MinOrderValue = new[] { msg } } });
+                if (msg.Contains("Audience"))
+                    return BadRequest(new { errors = new { Audience = new[] { msg } } });
+                if (msg.Contains("user") && msg.Contains("Audience"))
+                    return BadRequest(new { errors = new { UserIds = new[] { msg } } });
+                if (msg.Contains("Start Date"))
+                    return BadRequest(new { errors = new { StartDate = new[] { msg } } });
+                return BadRequest(new { errors = new { general = new[] { msg } } });
             }
         }
 
