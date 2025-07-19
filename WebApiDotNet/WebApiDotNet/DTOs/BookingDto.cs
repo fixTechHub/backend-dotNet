@@ -31,6 +31,7 @@ namespace WebApiDotNet.DTOs
         public DateTime? CompletedAt { get; set; }
         public string CancelledBy { get; set; }
         public string CancellationReason { get; set; }
+        public DateTime CreatedAt { get; set; }
     }
 
     public class BookingLocationDto

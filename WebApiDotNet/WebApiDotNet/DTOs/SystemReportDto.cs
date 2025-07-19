@@ -13,5 +13,6 @@ namespace WebApiDotNet.DTOs
         public string? ResolvedBy { get; set; }
         public string? ResolutionNote { get; set; }
         public DateTime? ResolvedAt { get; set; }
+        public DateTime CreatedAt { get; set; }
     }
 }

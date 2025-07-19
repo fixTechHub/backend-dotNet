@@ -34,6 +34,7 @@ namespace WebApiDotNet.DTOs
         public TechnicianRatesDto Rates { get; set; }
         public DateTime? PricesLastUpdatedAt { get; set; }
         public string? Note { get; set; }
+        public DateTime CreatedAt { get; set; }
     }
 
     public class GeoJsonPointDto

@@ -20,6 +20,7 @@ namespace WebApiDotNet.DTOs
         public DateTime? VerificationCodeExpires { get; set; }
         public DateTime? PendingDeletionAt { get; set; }
         public DateTime? LastDeletionReminderSent { get; set; }
+        public DateTime CreatedAt { get; set; }
     }
     public class AddressDto
     {

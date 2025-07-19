@@ -11,5 +11,6 @@ namespace WebApiDotNet.DTOs
         public string Description { get; set; }
         public string Status { get; set; } // PENDING, CONFIRMED, REJECTED, RESOLVED, CLOSED
         public string? Penalty { get; set; }
+        public DateTime CreatedAt { get; set; }
     }
 } 
