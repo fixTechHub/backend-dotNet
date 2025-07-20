@@ -114,6 +114,7 @@ namespace WebApiDotNet.Models
         AWAITING_DONE,
         WAITING_CONFIRM,
         AWAITING_CONFIRM,
+        CONFIRM_ADDITIONAL,
         DONE,
         CANCELLED
     }
