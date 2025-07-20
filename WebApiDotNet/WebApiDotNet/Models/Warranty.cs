@@ -63,6 +63,7 @@ namespace WebApiDotNet.Models
         CONFIRMED,
         RESOLVED,
         DENIED,
-        EXPIRED
+        EXPIRED,
+        DONE
     }
 } 
