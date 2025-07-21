@@ -67,7 +67,7 @@ namespace WebApiDotNet.Controllers
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
             if (dto == null)
-                return BadRequest(new { message = "Dữ liệu không hợp lệ" });
+                return BadRequest(new { errors = new { general = new[] { "Dữ liệu không hợp lệ" } } });
             try
             {
                 var created = await _categoryService.CreateAsync(dto);
@@ -75,7 +75,12 @@ namespace WebApiDotNet.Controllers
             }
             catch (Exception ex)
             {
-                return BadRequest(new { message = ex.Message });
+                var msg = ex.Message;
+                if (msg.Contains("Danh mục đã tồn tại") && msg.Contains("Tên"))
+                    return BadRequest(new { errors = new { CategoryName = new[] { msg } } });
+                if (msg.Contains("Icon đã tồn tại"))
+                    return BadRequest(new { errors = new { Icon = new[] { msg } } });
+                return BadRequest(new { errors = new { general = new[] { msg } } });
             }
         }
 
@@ -91,7 +96,12 @@ namespace WebApiDotNet.Controllers
             }
             catch (Exception ex)
             {
-                return BadRequest(new { message = ex.Message });
+                var msg = ex.Message;
+                if (msg.Contains("Danh mục đã tồn tại") && msg.Contains("Tên"))
+                    return BadRequest(new { errors = new { CategoryName = new[] { msg } } });
+                if (msg.Contains("Icon đã tồn tại"))
+                    return BadRequest(new { errors = new { Icon = new[] { msg } } });
+                return BadRequest(new { errors = new { general = new[] { msg } } });
             }
         }
 
