@@ -96,6 +96,13 @@ namespace WebApiDotNet.Controllers
             }
         }
 
+        [HttpPost("users/filter")]
+        public async Task<IActionResult> FilterUsers([FromBody] UserFilterCriteria criteria)
+        {
+            var users = await _userService.FilterUsersAsync(criteria);
+            return Ok(users);
+        }
+
         // BOOKING
         [HttpGet("bookings")]
         public async Task<IActionResult> GetAllBookings()

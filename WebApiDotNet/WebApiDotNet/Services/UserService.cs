@@ -9,11 +9,13 @@ namespace WebApiDotNet.Services
     public class UserService : IUserService
     {
         private readonly IUserRepository _repository;
+        private readonly IBookingRepository _bookingRepository;
         private readonly IMapper _mapper;
 
-        public UserService(IUserRepository repository, IMapper mapper)
+        public UserService(IUserRepository repository, IBookingRepository bookingRepository, IMapper mapper)
         {
             _repository = repository;
+            _bookingRepository = bookingRepository;
             _mapper = mapper;
         }
 
@@ -78,6 +80,108 @@ namespace WebApiDotNet.Services
             user.UpdatedAt = DateTime.UtcNow;
             await _repository.UpdateAsync(user);
             return _mapper.Map<UserDto>(user);
+        }
+
+        public async Task<List<UserDto>> FilterUsersAsync(UserFilterCriteria criteria)
+        {
+            var users = await _repository.GetAllAsync();
+            var bookings = await _bookingRepository.GetAllAsync();
+            var now = DateTime.UtcNow;
+            var filtered = users.AsQueryable();
+
+            // New User
+            if (criteria.IsNewUser == true)
+            {
+                var userIdsWithBooking = bookings.Select(b => b.CustomerId).Distinct().ToHashSet();
+                filtered = filtered.Where(u => !userIdsWithBooking.Contains(u.Id));
+            }
+
+            // Intermission User (no booking in last 3 months)
+            if (criteria.IsIntermissionUser == true)
+            {
+                var threeMonthsAgo = now.AddMonths(-3);
+                var activeUserIds = bookings.Where(b => b.CreatedAt >= threeMonthsAgo).Select(b => b.CustomerId).Distinct().ToHashSet();
+                filtered = filtered.Where(u => !activeUserIds.Contains(u.Id));
+            }
+
+            // Booking Value Base
+            if (criteria.MinTotalBookingValue.HasValue)
+            {
+                var userBookingValue = bookings
+                    .GroupBy(b => b.CustomerId)
+                    .ToDictionary(g => g.Key, g => g.Sum(b => b.FinalPrice ?? 0));
+                filtered = filtered.Where(u =>
+                    userBookingValue.ContainsKey(u.Id) &&
+                    userBookingValue[u.Id] >= criteria.MinTotalBookingValue.Value);
+            }
+
+            // Time Base
+            if (!string.IsNullOrEmpty(criteria.BookingTimeFrom) && !string.IsNullOrEmpty(criteria.BookingTimeTo))
+            {
+                if (TimeSpan.TryParse(criteria.BookingTimeFrom, out var from) && TimeSpan.TryParse(criteria.BookingTimeTo, out var to))
+                {
+                    Console.WriteLine($"[DEBUG] Filter by booking time: from={from}, to={to}");
+                    foreach (var b in bookings)
+                    {
+                        if (b.Schedule != null)
+                        {
+                            Console.WriteLine($"[DEBUG] BookingId={b.Id}, CustomerId={b.CustomerId}, StartTime={b.Schedule.StartTime}, TimeOfDay={b.Schedule.StartTime.TimeOfDay}");
+                        }
+                    }
+                    var userIds = bookings
+                        .Where(b =>
+                            b.Schedule != null &&
+                            b.Schedule.StartTime.TimeOfDay >= from &&
+                            b.Schedule.StartTime.TimeOfDay <= to)
+                        .Select(b => b.CustomerId)
+                        .Distinct()
+                        .ToHashSet();
+                    Console.WriteLine($"[DEBUG] Matched userIds: {string.Join(",", userIds)}");
+                    filtered = filtered.Where(u => userIds.Contains(u.Id));
+                }
+            }
+
+            // Quantity Base (booking count in current month)
+            if (criteria.MinBookingCountInMonth.HasValue)
+            {
+                var userBookingCount = bookings
+                    .Where(b => b.CreatedAt.Month == now.Month && b.CreatedAt.Year == now.Year)
+                    .GroupBy(b => b.CustomerId)
+                    .ToDictionary(g => g.Key, g => g.Count());
+                filtered = filtered.Where(u =>
+                    userBookingCount.ContainsKey(u.Id) &&
+                    userBookingCount[u.Id] >= criteria.MinBookingCountInMonth.Value);
+            }
+
+            // Rank
+            if (!string.IsNullOrEmpty(criteria.Rank))
+            {
+                var userBookingCount = bookings
+                    .GroupBy(b => b.CustomerId)
+                    .ToDictionary(g => g.Key, g => g.Count());
+                switch (criteria.Rank)
+                {
+                    case "Silver":
+                        filtered = filtered.Where(u => userBookingCount.ContainsKey(u.Id) && userBookingCount[u.Id] >= 5 && userBookingCount[u.Id] < 20);
+                        break;
+                    case "Gold":
+                        filtered = filtered.Where(u => userBookingCount.ContainsKey(u.Id) && userBookingCount[u.Id] >= 20 && userBookingCount[u.Id] < 50);
+                        break;
+                    case "Diamond":
+                        filtered = filtered.Where(u => userBookingCount.ContainsKey(u.Id) && userBookingCount[u.Id] >= 50 && userBookingCount[u.Id] < 100);
+                        break;
+                    case "VIP":
+                        var userBookingValue = bookings
+                            .GroupBy(b => b.CustomerId)
+                            .ToDictionary(g => g.Key, g => g.Sum(b => b.FinalPrice ?? 0));
+                        filtered = filtered.Where(u =>
+                            (userBookingCount.ContainsKey(u.Id) && userBookingCount[u.Id] > 100) ||
+                            (userBookingValue.ContainsKey(u.Id) && userBookingValue[u.Id] > 50000000));
+                        break;
+                }
+            }
+
+            return filtered.Select(u => _mapper.Map<UserDto>(u)).ToList();
         }
     }
 }

@@ -62,6 +62,8 @@ namespace WebApiDotNet.Services
                 }
             }
             var service = _mapper.Map<Service>(dto);
+            service.CreatedAt = DateTime.UtcNow;
+            service.UpdatedAt = DateTime.UtcNow;
             var created = await _repo.CreateAsync(service);
             return _mapper.Map<ServiceDto>(created);
         }
