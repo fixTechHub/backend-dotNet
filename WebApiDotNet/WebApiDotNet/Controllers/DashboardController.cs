@@ -16,6 +16,7 @@ namespace WebApiDotNet.Controllers
         private readonly ISystemReportService _systemReportService;
         private readonly IRoleService _roleService;
         private readonly IServiceService _serviceService;
+        private readonly ICommissionConfigService _commissionConfigService;
 
         public DashboardController(
             IUserService userService,
@@ -25,7 +26,8 @@ namespace WebApiDotNet.Controllers
             IReportService reportService,
             ISystemReportService systemReportService,
             IRoleService roleService,
-            IServiceService serviceService)
+            IServiceService serviceService,
+            ICommissionConfigService commissionConfigService)
         {
             _userService = userService;
             _bookingService = bookingService;
@@ -35,6 +37,7 @@ namespace WebApiDotNet.Controllers
             _systemReportService = systemReportService;
             _roleService = roleService;
             _serviceService = serviceService;
+            _commissionConfigService = commissionConfigService;
         }
 
         // USER
@@ -200,6 +203,18 @@ namespace WebApiDotNet.Controllers
             var report = await _reportService.GetByIdAsync(id);
             if (report == null) return NotFound();
             return Ok(report);
+        }
+
+        //COMMISSION CONFIG
+        [HttpGet("commissionconfigs")]
+        public async Task<IActionResult> GetCommissionConfigs() => Ok(await _commissionConfigService.GetAllAsync());
+
+        [HttpGet("commissionconfigs/{id}")]
+        public async Task<IActionResult> GetCommissionConfigById(string id)
+        {
+            var cf = await _commissionConfigService.GetByIdAsync(id);
+            if (cf == null) return NotFound();
+            return Ok(cf);
         }
 
         // SYSTEM REPORT

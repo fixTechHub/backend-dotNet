@@ -4,7 +4,7 @@ using System;
 
 namespace WebApiDotNet.Models
 {
-    [BsonIgnoreExtraElements]
+    
     public class BookingPrice
     {
         [BsonId]

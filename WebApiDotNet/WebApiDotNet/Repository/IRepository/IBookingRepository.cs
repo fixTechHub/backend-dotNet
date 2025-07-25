@@ -8,6 +8,7 @@ namespace WebApiDotNet.Repository.IRepository
         Task<Booking?> GetByIdAsync(string id);
         Task<int> CountByMonthAsync(int year, int month);
         Task<List<Booking>> GetByUserIdAsync(string userId);
-        Task<decimal> GetMonthlyRevenueAsync(int year, int month);
+        Task<List<Booking>> GetBookingsByMonthAsync(int year, int month);
     }
+
 } 

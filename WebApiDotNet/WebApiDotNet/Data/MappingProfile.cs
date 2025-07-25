@@ -34,6 +34,7 @@ namespace WebApiDotNet.Data
                 .ForMember(dest => dest.Tag, opt => opt.MapFrom(src => src.Tag.ToString()))
                 .ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.Status.ToString()));            
             CreateMap<Role, RoleDto>().ReverseMap();
+            CreateMap<CommissionConfig, CommissionConfigDto>().ReverseMap();
             CreateMap<Warranty, WarrantyDto>().ReverseMap();
             CreateMap<Service, ServiceDto>()
                 .ForMember(dest => dest.ServiceType, opt => opt.MapFrom(src => src.ServiceType.ToString()))
@@ -49,6 +50,14 @@ namespace WebApiDotNet.Data
                 .ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.Status.ToString()));
             
             // DTO -> Entity
+            CreateMap<CreateCommissionConfigDto, CommissionConfig>()
+                .ForMember(dest => dest.Id, opt => opt.Ignore())
+                .ForMember(dest => dest.CreatedAt, opt => opt.Ignore())
+                .ForMember(dest => dest.UpdatedAt, opt => opt.Ignore());
+            CreateMap<UpdateCommissionConfigDto, CommissionConfig>()
+                .ForMember(dest => dest.Id, opt => opt.Ignore())
+                .ForMember(dest => dest.CreatedAt, opt => opt.Ignore())
+                .ForMember(dest => dest.UpdatedAt, opt => opt.Ignore());
             CreateMap<CreateCouponDto, Coupon>()
                 .ForMember(dest => dest.Id, opt => opt.Ignore())
                 .ForMember(dest => dest.CreatedAt, opt => opt.Ignore())
