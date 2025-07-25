@@ -157,6 +157,7 @@ namespace WebApiDotNet.Services
             if (!string.IsNullOrEmpty(criteria.Rank))
             {
                 var userBookingCount = bookings
+                    .Where(b => b.CreatedAt.Year == now.Year)
                     .GroupBy(b => b.CustomerId)
                     .ToDictionary(g => g.Key, g => g.Count());
                 switch (criteria.Rank)

@@ -4,6 +4,7 @@ using System;
 
 namespace WebApiDotNet.Models
 {
+    [BsonIgnoreExtraElements]
     public class Service
     {
         [BsonId]
