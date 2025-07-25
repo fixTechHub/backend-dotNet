@@ -116,7 +116,18 @@ obj/
 *.user
 *.userosscache
 *.sln.docstates
-
+## Ignore build output and temporary files
+bin/
+obj/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+*.vs/
+# ASP.NET specific
+project.lock.json
+project.fragment.lock.json
+artifacts/
 # User-specific files
 *.rsuser
 *.suo
