@@ -238,18 +238,18 @@ namespace WebApiDotNet.Controllers
             return Ok(roles);
         }
         //SERVICE
-        [HttpGet("services")]
-        public async Task<IActionResult> GetAll()
-        {
-            var result = await _serviceService.GetAllAsync();
-            return Ok(result);
-        }
-        [HttpGet("services/{id}")]
-        public async Task<IActionResult> GetById(string id)
-        {
-            var result = await _serviceService.GetByIdAsync(id);
-            return Ok(result);
-        }
+        // [HttpGet("services")]
+        // public async Task<IActionResult> GetAll()
+        // {
+        //     var result = await _serviceService.GetAllAsync();
+        //     return Ok(result);
+        // }
+        // [HttpGet("services/{id}")]
+        // public async Task<IActionResult> GetById(string id)
+        // {
+        //     var result = await _serviceService.GetByIdAsync(id);
+        //     return Ok(result);
+        // }
 
         /// <summary>
         /// Lấy doanh thu tháng, chỉ tính các booking có status là DONE và có FinalPrice.

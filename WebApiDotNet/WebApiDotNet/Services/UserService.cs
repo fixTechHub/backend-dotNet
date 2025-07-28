@@ -104,7 +104,7 @@ namespace WebApiDotNet.Services
                 filtered = filtered.Where(u => !activeUserIds.Contains(u.Id));
             }
 
-            // Booking Value Base
+            // Min Total Booking Value
             if (criteria.MinTotalBookingValue.HasValue)
             {
                 var userBookingValue = bookings
@@ -113,6 +113,17 @@ namespace WebApiDotNet.Services
                 filtered = filtered.Where(u =>
                     userBookingValue.ContainsKey(u.Id) &&
                     userBookingValue[u.Id] >= criteria.MinTotalBookingValue.Value);
+            }
+
+            // Max Total Booking Value
+            if (criteria.MaxTotalBookingValue.HasValue)
+            {
+                var userBookingValue = bookings
+                    .GroupBy(b => b.CustomerId)
+                    .ToDictionary(g => g.Key, g => g.Sum(b => b.FinalPrice ?? 0));
+                filtered = filtered.Where(u =>
+                    !userBookingValue.ContainsKey(u.Id) ||
+                    userBookingValue[u.Id] <= criteria.MaxTotalBookingValue.Value);
             }
 
             // Time Base
@@ -141,7 +152,7 @@ namespace WebApiDotNet.Services
                 }
             }
 
-            // Quantity Base (booking count in current month)
+            // Min Booking Count in current month
             if (criteria.MinBookingCountInMonth.HasValue)
             {
                 var userBookingCount = bookings
@@ -151,6 +162,18 @@ namespace WebApiDotNet.Services
                 filtered = filtered.Where(u =>
                     userBookingCount.ContainsKey(u.Id) &&
                     userBookingCount[u.Id] >= criteria.MinBookingCountInMonth.Value);
+            }
+
+            // Max Booking Count in current month
+            if (criteria.MaxBookingCountInMonth.HasValue)
+            {
+                var userBookingCount = bookings
+                    .Where(b => b.CreatedAt.Month == now.Month && b.CreatedAt.Year == now.Year)
+                    .GroupBy(b => b.CustomerId)
+                    .ToDictionary(g => g.Key, g => g.Count());
+                filtered = filtered.Where(u =>
+                    !userBookingCount.ContainsKey(u.Id) ||
+                    userBookingCount[u.Id] <= criteria.MaxBookingCountInMonth.Value);
             }
 
             // Rank
