@@ -84,8 +84,16 @@ namespace WebApiDotNet.Services
 
         public async Task DeleteAsync(string id)
         {
-            if (!await _repository.ExistsAsync(id))
+            var config = await _repository.GetByIdAsync(id);
+            if (config == null)
                 throw new Exception("Không tìm thấy cấu hình hoa hồng");
+
+            // Kiểm tra logic nghiệp vụ: Không cho phép xóa khi IsApplied = true
+            if (config.IsApplied)
+            {
+                throw new Exception("Không thể xóa cấu hình hoa hồng đang được áp dụng. Vui lòng bỏ áp dụng trước khi xóa.");
+            }
+
             await _repository.DeleteAsync(id);
         }
 

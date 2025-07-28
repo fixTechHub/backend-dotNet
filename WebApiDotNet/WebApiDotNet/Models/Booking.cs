@@ -116,7 +116,9 @@ namespace WebApiDotNet.Models
         AWAITING_CONFIRM,
         CONFIRM_ADDITIONAL,
         DONE,
-        CANCELLED
+        CANCELLED,
+        WAITING_CUSTOMER_CONFIRM_ADDITIONAL,
+        WAITING_TECHNICIAN_CONFIRM_ADDITIONAL
     }
 
     public enum PaymentStatus
