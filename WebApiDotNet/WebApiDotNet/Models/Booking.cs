@@ -148,6 +148,7 @@ namespace WebApiDotNet.Models
         public GeoJson GeoJson { get; set; }
     }
 
+    [BsonIgnoreExtraElements]
     public class GeoJson
     {
         [BsonElement("type")]
@@ -173,6 +174,7 @@ namespace WebApiDotNet.Models
         public string Note { get; set; }
     }
 
+    [BsonIgnoreExtraElements]
     public class Quote
     {
         [BsonElement("status")]

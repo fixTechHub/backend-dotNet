@@ -4,6 +4,7 @@ using WebApiDotNet.Data;
 using WebApiDotNet.Repository.IRepository;
 using WebApiDotNet.Repository;
 using WebApiDotNet.Services;
+using WebApiDotNet.Middleware;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -28,6 +29,8 @@ builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
 builder.Services.AddScoped<IWarrantyRepository, WarrantyRepository>();
 builder.Services.AddScoped<IServiceRepository, ServiceRepository>();
 builder.Services.AddScoped<ICommissionConfigRepository, CommissionConfigRepository>();
+builder.Services.AddScoped<IActionLogRepository, ActionLogRepository>();
+builder.Services.AddScoped<IFinancialReportRepository, FinancialReportRepository>();
 
 builder.Services.AddScoped<ICouponService, CouponService>();
 builder.Services.AddScoped<ICouponUsageService, CouponUsageService>();
@@ -41,6 +44,8 @@ builder.Services.AddScoped<ICategoryService, CategoryService>();
 builder.Services.AddScoped<IWarrantyService, WarrantyService>();
 builder.Services.AddScoped<IServiceService, ServiceService>();  
 builder.Services.AddScoped<ICommissionConfigService, CommissionConfigService>();
+builder.Services.AddScoped<IFinancialReportService, FinancialReportService>();
+builder.Services.AddScoped<ActionLogService>();
 
 builder.Services.AddCors(options =>
 {
@@ -75,6 +80,7 @@ else
 
 app.UseCors("AllowFrontend");
 // app.UseHttpsRedirection(); // This is not needed behind Render's proxy
+app.UseActionLogging(); // Add action logging middleware
 app.UseAuthorization();
 app.MapControllers();
 app.Run();

@@ -100,6 +100,13 @@ namespace WebApiDotNet.Data
             CreateMap<SystemReportDto, SystemReport>()
                 .ForMember(dest => dest.Tag, opt => opt.MapFrom(src => Enum.Parse<SystemReportTag>(src.Tag, true)))
                 .ForMember(dest => dest.Status, opt => opt.MapFrom(src => Enum.Parse<SystemReportStatus>(src.Status, true)));
+            
+            // Financial Report mappings
+            CreateMap<Booking, BookingFinancialDto>()
+                .ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.Status.ToString()))
+                .ForMember(dest => dest.PaymentStatus, opt => opt.MapFrom(src => src.PaymentStatus.ToString()));
+            CreateMap<Technician, TechnicianFinancialDto>();
+            CreateMap<Technician, TechnicianFinancialSummaryDto>();
         }
     }
 }
