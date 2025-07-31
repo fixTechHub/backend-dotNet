@@ -27,9 +27,9 @@ namespace WebApiDotNet.Middleware
                 var requestBody = await GetRequestBodyAsync(context.Request);
                 var requestQuery = context.Request.QueryString.ToString();
                 var method = context.Request.Method;
-                var route = context.Request.Path;
+                var route = context.Request.Path.ToString();
                 var ip = context.Connection.RemoteIpAddress?.ToString();
-                var userAgent = context.Request.Headers["User-Agent"].ToString();
+                var userAgent = context.Request.Headers["User-Agent"].ToString() ?? "";
 
                 // Create a new response body stream to capture the response
                 using var responseBodyStream = new MemoryStream();
