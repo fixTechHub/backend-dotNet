@@ -12,7 +12,6 @@ namespace WebApiDotNet.Models
         public string Id { get; set; }
 
         [BsonElement("userId")]
-        [BsonRepresentation(BsonType.ObjectId)]
         public string UserId { get; set; }
 
         [BsonElement("actionType")]

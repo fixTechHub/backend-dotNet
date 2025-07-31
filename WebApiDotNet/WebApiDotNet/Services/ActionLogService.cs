@@ -69,7 +69,8 @@ namespace WebApiDotNet.Services
                     CreatedAt = DateTime.UtcNow
                 };
 
-                return await _actionLogRepository.CreateAsync(actionLog);
+                var result = await _actionLogRepository.CreateAsync(actionLog);
+                return result;
             }
             catch (Exception ex)
             {

@@ -46,37 +46,54 @@ namespace WebApiDotNet.Middleware
                 responseBodyStream.Position = 0;
                 await responseBodyStream.CopyToAsync(originalBodyStream);
 
+                // Capture all needed data before context is disposed
+                var userId = context.User?.Identity?.IsAuthenticated == true 
+                    ? context.User.FindFirst("sub")?.Value ?? "anonymous"
+                    : "anonymous";
+
+                var actionType = DetermineActionType(method, route);
+                var description = GenerateDescription(method, route, statusCode);
+
+                // Validate and sanitize data
+                var sanitizedData = new
+                {
+                    UserId = string.IsNullOrEmpty(userId) ? "anonymous" : userId,
+                    ActionType = string.IsNullOrEmpty(actionType) ? "UNKNOWN" : actionType,
+                    Method = string.IsNullOrEmpty(method) ? "UNKNOWN" : method,
+                    Route = string.IsNullOrEmpty(route) ? "/" : route,
+                    Parameters = (string)null, // You can extract route parameters if needed
+                    Query = string.IsNullOrEmpty(requestQuery) ? "" : requestQuery,
+                    Body = string.IsNullOrEmpty(requestBody) ? "" : requestBody,
+                    StatusCode = statusCode,
+                    Ip = string.IsNullOrEmpty(ip) ? "unknown" : ip,
+                    UserAgent = string.IsNullOrEmpty(userAgent) ? "unknown" : userAgent,
+                    Description = string.IsNullOrEmpty(description) ? $"{method} {route}" : description
+                };
+
+                // Get scope factory before context is disposed
+                IServiceScopeFactory scopeFactory = null;
+                try
+                {
+                    scopeFactory = context.RequestServices.GetRequiredService<IServiceScopeFactory>();
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Error getting scope factory: {ex.Message}");
+                    return; // Exit early if we can't get the scope factory
+                }
+
                 // Log the action (async without awaiting to avoid blocking)
                 _ = Task.Run(async () =>
                 {
                     try
                     {
-                        // Extract user ID from context if available (you might need to adjust this based on your authentication setup)
-                        var userId = context.User?.Identity?.IsAuthenticated == true 
-                            ? context.User.FindFirst("sub")?.Value ?? "anonymous"
-                            : "anonymous";
-
-                        var actionType = DetermineActionType(method, route);
-                        var description = GenerateDescription(method, route, statusCode);
-
-                        // Validate and sanitize data
-                        var sanitizedData = new
+                        if (scopeFactory == null)
                         {
-                            UserId = string.IsNullOrEmpty(userId) ? "anonymous" : userId,
-                            ActionType = string.IsNullOrEmpty(actionType) ? "UNKNOWN" : actionType,
-                            Method = string.IsNullOrEmpty(method) ? "UNKNOWN" : method,
-                            Route = string.IsNullOrEmpty(route) ? "/" : route,
-                            Parameters = (string)null, // You can extract route parameters if needed
-                            Query = string.IsNullOrEmpty(requestQuery) ? "" : requestQuery,
-                            Body = string.IsNullOrEmpty(requestBody) ? "" : requestBody,
-                            StatusCode = statusCode,
-                            Ip = string.IsNullOrEmpty(ip) ? "unknown" : ip,
-                            UserAgent = string.IsNullOrEmpty(userAgent) ? "unknown" : userAgent,
-                            Description = string.IsNullOrEmpty(description) ? $"{method} {route}" : description
-                        };
+                            Console.WriteLine("Warning: ScopeFactory is null, skipping action logging");
+                            return;
+                        }
 
                         // Create a new scope to avoid IFeatureCollection disposed error
-                        var scopeFactory = context.RequestServices.GetRequiredService<IServiceScopeFactory>();
                         using var scope = scopeFactory.CreateScope();
                         var actionLogService = scope.ServiceProvider.GetService<ActionLogService>();
                         
@@ -107,7 +124,7 @@ namespace WebApiDotNet.Middleware
                         Console.WriteLine($"Error logging action: {ex.Message}");
                         Console.WriteLine($"Stack trace: {ex.StackTrace}");
                     }
-                });
+                }).ConfigureAwait(false);
             }
             catch (Exception ex)
             {

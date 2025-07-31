@@ -90,8 +90,16 @@ namespace WebApiDotNet.Repository
 
         public async Task<ActionLog> CreateAsync(ActionLog actionLog)
         {
-            await _actionLogs.InsertOneAsync(actionLog);
-            return actionLog;
+            try
+            {
+                await _actionLogs.InsertOneAsync(actionLog);
+                return actionLog;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Repository Error: {ex.Message}");
+                throw;
+            }
         }
 
         public async Task<bool> DeleteAsync(string id)
