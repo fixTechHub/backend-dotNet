@@ -38,23 +38,45 @@ namespace WebApiDotNet.Services
 
         public async Task<ActionLog> CreateAsync(CreateActionLogDto createDto)
         {
-            var actionLog = new ActionLog
+            try
             {
-                UserId = createDto.UserId,
-                ActionType = createDto.ActionType,
-                Method = createDto.Method,
-                Route = createDto.Route,
-                Params = createDto.Params,
-                Query = createDto.Query,
-                Body = createDto.Body,
-                StatusCode = createDto.StatusCode,
-                Ip = createDto.Ip,
-                UserAgent = createDto.UserAgent,
-                Description = createDto.Description,
-                CreatedAt = DateTime.UtcNow
-            };
+                // Validate required fields
+                if (string.IsNullOrEmpty(createDto.UserId))
+                    createDto.UserId = "anonymous";
+                
+                if (string.IsNullOrEmpty(createDto.ActionType))
+                    createDto.ActionType = "UNKNOWN";
+                
+                if (string.IsNullOrEmpty(createDto.Method))
+                    createDto.Method = "UNKNOWN";
+                
+                if (string.IsNullOrEmpty(createDto.Route))
+                    createDto.Route = "/";
 
-            return await _actionLogRepository.CreateAsync(actionLog);
+                var actionLog = new ActionLog
+                {
+                    UserId = createDto.UserId,
+                    ActionType = createDto.ActionType,
+                    Method = createDto.Method,
+                    Route = createDto.Route,
+                    Params = createDto.Params,
+                    Query = createDto.Query,
+                    Body = createDto.Body,
+                    StatusCode = createDto.StatusCode,
+                    Ip = createDto.Ip ?? "unknown",
+                    UserAgent = createDto.UserAgent ?? "unknown",
+                    Description = createDto.Description ?? $"{createDto.Method} {createDto.Route}",
+                    CreatedAt = DateTime.UtcNow
+                };
+
+                return await _actionLogRepository.CreateAsync(actionLog);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error in CreateAsync: {ex.Message}");
+                Console.WriteLine($"Stack trace: {ex.StackTrace}");
+                throw;
+            }
         }
 
         public async Task<bool> DeleteAsync(string id)
@@ -87,22 +109,44 @@ namespace WebApiDotNet.Services
             object parameters = null, object query = null, object body = null, 
             int statusCode = 200, string ip = null, string userAgent = null, string description = null)
         {
-            var createDto = new CreateActionLogDto
+            try
             {
-                UserId = userId,
-                ActionType = actionType,
-                Method = method,
-                Route = route,
-                Params = parameters,
-                Query = query,
-                Body = body,
-                StatusCode = statusCode,
-                Ip = ip,
-                UserAgent = userAgent,
-                Description = description
-            };
+                // Validate required fields
+                if (string.IsNullOrEmpty(userId))
+                    userId = "anonymous";
+                
+                if (string.IsNullOrEmpty(actionType))
+                    actionType = "UNKNOWN";
+                
+                if (string.IsNullOrEmpty(method))
+                    method = "UNKNOWN";
+                
+                if (string.IsNullOrEmpty(route))
+                    route = "/";
 
-            await CreateAsync(createDto);
+                var createDto = new CreateActionLogDto
+                {
+                    UserId = userId,
+                    ActionType = actionType,
+                    Method = method,
+                    Route = route,
+                    Params = parameters,
+                    Query = query,
+                    Body = body,
+                    StatusCode = statusCode,
+                    Ip = ip ?? "unknown",
+                    UserAgent = userAgent ?? "unknown",
+                    Description = description ?? $"{method} {route}"
+                };
+
+                await CreateAsync(createDto);
+            }
+            catch (Exception ex)
+            {
+                // Log the error but don't throw to avoid breaking the main functionality
+                Console.WriteLine($"Error in LogActionAsync: {ex.Message}");
+                Console.WriteLine($"Stack trace: {ex.StackTrace}");
+            }
         }
     }
 } 

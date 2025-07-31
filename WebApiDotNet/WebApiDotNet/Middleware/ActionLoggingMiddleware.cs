@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.IO;
 using System.Text;
@@ -58,29 +59,53 @@ namespace WebApiDotNet.Middleware
                         var actionType = DetermineActionType(method, route);
                         var description = GenerateDescription(method, route, statusCode);
 
-                        // Get ActionLogService from service provider
-                        var actionLogService = context.RequestServices.GetService<ActionLogService>();
+                        // Validate and sanitize data
+                        var sanitizedData = new
+                        {
+                            UserId = string.IsNullOrEmpty(userId) ? "anonymous" : userId,
+                            ActionType = string.IsNullOrEmpty(actionType) ? "UNKNOWN" : actionType,
+                            Method = string.IsNullOrEmpty(method) ? "UNKNOWN" : method,
+                            Route = string.IsNullOrEmpty(route) ? "/" : route,
+                            Parameters = (string)null, // You can extract route parameters if needed
+                            Query = string.IsNullOrEmpty(requestQuery) ? "" : requestQuery,
+                            Body = string.IsNullOrEmpty(requestBody) ? "" : requestBody,
+                            StatusCode = statusCode,
+                            Ip = string.IsNullOrEmpty(ip) ? "unknown" : ip,
+                            UserAgent = string.IsNullOrEmpty(userAgent) ? "unknown" : userAgent,
+                            Description = string.IsNullOrEmpty(description) ? $"{method} {route}" : description
+                        };
+
+                        // Create a new scope to avoid IFeatureCollection disposed error
+                        var scopeFactory = context.RequestServices.GetRequiredService<IServiceScopeFactory>();
+                        using var scope = scopeFactory.CreateScope();
+                        var actionLogService = scope.ServiceProvider.GetService<ActionLogService>();
+                        
                         if (actionLogService != null)
                         {
                             await actionLogService.LogActionAsync(
-                                userId: userId,
-                                actionType: actionType,
-                                method: method,
-                                route: route,
-                                parameters: null, // You can extract route parameters if needed
-                                query: requestQuery,
-                                body: requestBody,
-                                statusCode: statusCode,
-                                ip: ip,
-                                userAgent: userAgent,
-                                description: description
+                                userId: sanitizedData.UserId,
+                                actionType: sanitizedData.ActionType,
+                                method: sanitizedData.Method,
+                                route: sanitizedData.Route,
+                                parameters: sanitizedData.Parameters,
+                                query: sanitizedData.Query,
+                                body: sanitizedData.Body,
+                                statusCode: sanitizedData.StatusCode,
+                                ip: sanitizedData.Ip,
+                                userAgent: sanitizedData.UserAgent,
+                                description: sanitizedData.Description
                             );
+                        }
+                        else
+                        {
+                            Console.WriteLine("Warning: ActionLogService is null, skipping action logging");
                         }
                     }
                     catch (Exception ex)
                     {
                         // Log the error but don't throw to avoid breaking the request
                         Console.WriteLine($"Error logging action: {ex.Message}");
+                        Console.WriteLine($"Stack trace: {ex.StackTrace}");
                     }
                 });
             }
