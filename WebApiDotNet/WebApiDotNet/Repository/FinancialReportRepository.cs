@@ -48,13 +48,79 @@ namespace WebApiDotNet.Repository
             var bookingFinancials = new List<BookingFinancialDto>();
             foreach (var booking in bookings)
             {
+                // Get customer name
+                string customerName = "Unknown";
+                if (!string.IsNullOrEmpty(booking.CustomerId))
+                {
+                    try
+                    {
+                        var customerFilter = Builders<User>.Filter.Eq(u => u.Id, booking.CustomerId);
+                        var customer = await _userCollection.Find(customerFilter).FirstOrDefaultAsync();
+                        customerName = customer?.FullName ?? customer?.Email ?? booking.CustomerId;
+                        Console.WriteLine($"Customer {booking.CustomerId}: {customerName}");
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine($"Error fetching customer {booking.CustomerId}: {ex.Message}");
+                        customerName = booking.CustomerId;
+                    }
+                }
+
+                // Get technician name
+                string technicianName = "Unknown";
+                if (!string.IsNullOrEmpty(booking.TechnicianId))
+                {
+                    try
+                    {
+                        var technicianFilter = Builders<Technician>.Filter.Eq(t => t.Id, booking.TechnicianId);
+                        var technician = await _technicianCollection.Find(technicianFilter).FirstOrDefaultAsync();
+                        if (technician != null && !string.IsNullOrEmpty(technician.UserId))
+                        {
+                            var userFilter = Builders<User>.Filter.Eq(u => u.Id, technician.UserId);
+                            var user = await _userCollection.Find(userFilter).FirstOrDefaultAsync();
+                            technicianName = user?.FullName ?? user?.Email ?? booking.TechnicianId;
+                        }
+                        else
+                        {
+                            technicianName = booking.TechnicianId;
+                        }
+                        Console.WriteLine($"Technician {booking.TechnicianId}: {technicianName}");
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine($"Error fetching technician {booking.TechnicianId}: {ex.Message}");
+                        technicianName = booking.TechnicianId;
+                    }
+                }
+
+                // Get service name
+                string serviceName = "Unknown";
+                if (!string.IsNullOrEmpty(booking.ServiceId))
+                {
+                    try
+                    {
+                        var serviceFilter = Builders<Service>.Filter.Eq(s => s.Id, booking.ServiceId);
+                        var service = await _serviceCollection.Find(serviceFilter).FirstOrDefaultAsync();
+                        serviceName = service?.ServiceName ?? booking.ServiceId;
+                        Console.WriteLine($"Service {booking.ServiceId}: {serviceName}");
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine($"Error fetching service {booking.ServiceId}: {ex.Message}");
+                        serviceName = booking.ServiceId;
+                    }
+                }
+
                 bookingFinancials.Add(new BookingFinancialDto
                 {
                     Id = booking.Id,
                     BookingCode = booking.BookingCode,
                     CustomerId = booking.CustomerId,
+                    CustomerName = customerName,
                     TechnicianId = booking.TechnicianId,
+                    TechnicianName = technicianName,
                     ServiceId = booking.ServiceId,
+                    ServiceName = serviceName,
                     FinalPrice = booking.FinalPrice,
                     HoldingAmount = booking.HoldingAmount,
                     CommissionAmount = booking.CommissionAmount,
@@ -143,22 +209,44 @@ namespace WebApiDotNet.Repository
                 string customerName = "Unknown";
                 if (!string.IsNullOrEmpty(booking.CustomerId))
                 {
-                    var customerFilter = Builders<User>.Filter.Eq(u => u.Id, booking.CustomerId);
-                    var customer = await _userCollection.Find(customerFilter).FirstOrDefaultAsync();
-                    customerName = customer?.FullName ?? customer?.Email ?? "Unknown";
+                    try
+                    {
+                        var customerFilter = Builders<User>.Filter.Eq(u => u.Id, booking.CustomerId);
+                        var customer = await _userCollection.Find(customerFilter).FirstOrDefaultAsync();
+                        customerName = customer?.FullName ?? customer?.Email ?? booking.CustomerId;
+                        Console.WriteLine($"Customer {booking.CustomerId}: {customerName}");
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine($"Error fetching customer {booking.CustomerId}: {ex.Message}");
+                        customerName = booking.CustomerId;
+                    }
                 }
 
                 // Get technician name
                 string technicianName = "Unknown";
                 if (!string.IsNullOrEmpty(booking.TechnicianId))
                 {
-                    var technicianFilter = Builders<Technician>.Filter.Eq(t => t.Id, booking.TechnicianId);
-                    var technician = await _technicianCollection.Find(technicianFilter).FirstOrDefaultAsync();
-                    if (technician != null && !string.IsNullOrEmpty(technician.UserId))
+                    try
                     {
-                        var userFilter = Builders<User>.Filter.Eq(u => u.Id, technician.UserId);
-                        var user = await _userCollection.Find(userFilter).FirstOrDefaultAsync();
-                        technicianName = user?.FullName ?? user?.Email ?? "Unknown";
+                        var technicianFilter = Builders<Technician>.Filter.Eq(t => t.Id, booking.TechnicianId);
+                        var technician = await _technicianCollection.Find(technicianFilter).FirstOrDefaultAsync();
+                        if (technician != null && !string.IsNullOrEmpty(technician.UserId))
+                        {
+                            var userFilter = Builders<User>.Filter.Eq(u => u.Id, technician.UserId);
+                            var user = await _userCollection.Find(userFilter).FirstOrDefaultAsync();
+                            technicianName = user?.FullName ?? user?.Email ?? booking.TechnicianId;
+                        }
+                        else
+                        {
+                            technicianName = booking.TechnicianId;
+                        }
+                        Console.WriteLine($"Technician {booking.TechnicianId}: {technicianName}");
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine($"Error fetching technician {booking.TechnicianId}: {ex.Message}");
+                        technicianName = booking.TechnicianId;
                     }
                 }
 
@@ -166,9 +254,18 @@ namespace WebApiDotNet.Repository
                 string serviceName = "Unknown";
                 if (!string.IsNullOrEmpty(booking.ServiceId))
                 {
-                    var serviceFilter = Builders<Service>.Filter.Eq(s => s.Id, booking.ServiceId);
-                    var service = await _serviceCollection.Find(serviceFilter).FirstOrDefaultAsync();
-                    serviceName = service?.ServiceName ?? "Unknown";
+                    try
+                    {
+                        var serviceFilter = Builders<Service>.Filter.Eq(s => s.Id, booking.ServiceId);
+                        var service = await _serviceCollection.Find(serviceFilter).FirstOrDefaultAsync();
+                        serviceName = service?.ServiceName ?? booking.ServiceId;
+                        Console.WriteLine($"Service {booking.ServiceId}: {serviceName}");
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine($"Error fetching service {booking.ServiceId}: {ex.Message}");
+                        serviceName = booking.ServiceId;
+                    }
                 }
 
                 bookingFinancials.Add(new BookingFinancialDto
