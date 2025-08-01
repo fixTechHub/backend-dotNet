@@ -18,8 +18,11 @@ namespace WebApiDotNet.DTOs
         public string Id { get; set; }
         public string BookingCode { get; set; }
         public string CustomerId { get; set; }
+        public string CustomerName { get; set; }
         public string TechnicianId { get; set; }
+        public string TechnicianName { get; set; }
         public string ServiceId { get; set; }
+        public string ServiceName { get; set; }
         public double? FinalPrice { get; set; }
         public double? HoldingAmount { get; set; }
         public double? CommissionAmount { get; set; }

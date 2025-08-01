@@ -12,12 +12,14 @@ namespace WebApiDotNet.Repository
         private readonly IMongoCollection<Booking> _bookingCollection;
         private readonly IMongoCollection<Technician> _technicianCollection;
         private readonly IMongoCollection<User> _userCollection;
+        private readonly IMongoCollection<Service> _serviceCollection;
 
         public FinancialReportRepository(MongoDbContext context)
         {
             _bookingCollection = context.Bookings;
             _technicianCollection = context.Technicians;
             _userCollection = context.Users;
+            _serviceCollection = context.Services;
         }
 
         public async Task<FinancialSummaryDto> GetFinancialSummaryAsync()
@@ -137,13 +139,48 @@ namespace WebApiDotNet.Repository
             var bookingFinancials = new List<BookingFinancialDto>();
             foreach (var booking in bookings)
             {
+                // Get customer name
+                string customerName = "Unknown";
+                if (!string.IsNullOrEmpty(booking.CustomerId))
+                {
+                    var customerFilter = Builders<User>.Filter.Eq(u => u.Id, booking.CustomerId);
+                    var customer = await _userCollection.Find(customerFilter).FirstOrDefaultAsync();
+                    customerName = customer?.FullName ?? customer?.Email ?? "Unknown";
+                }
+
+                // Get technician name
+                string technicianName = "Unknown";
+                if (!string.IsNullOrEmpty(booking.TechnicianId))
+                {
+                    var technicianFilter = Builders<Technician>.Filter.Eq(t => t.Id, booking.TechnicianId);
+                    var technician = await _technicianCollection.Find(technicianFilter).FirstOrDefaultAsync();
+                    if (technician != null && !string.IsNullOrEmpty(technician.UserId))
+                    {
+                        var userFilter = Builders<User>.Filter.Eq(u => u.Id, technician.UserId);
+                        var user = await _userCollection.Find(userFilter).FirstOrDefaultAsync();
+                        technicianName = user?.FullName ?? user?.Email ?? "Unknown";
+                    }
+                }
+
+                // Get service name
+                string serviceName = "Unknown";
+                if (!string.IsNullOrEmpty(booking.ServiceId))
+                {
+                    var serviceFilter = Builders<Service>.Filter.Eq(s => s.Id, booking.ServiceId);
+                    var service = await _serviceCollection.Find(serviceFilter).FirstOrDefaultAsync();
+                    serviceName = service?.ServiceName ?? "Unknown";
+                }
+
                 bookingFinancials.Add(new BookingFinancialDto
                 {
                     Id = booking.Id,
                     BookingCode = booking.BookingCode,
                     CustomerId = booking.CustomerId,
+                    CustomerName = customerName,
                     TechnicianId = booking.TechnicianId,
+                    TechnicianName = technicianName,
                     ServiceId = booking.ServiceId,
+                    ServiceName = serviceName,
                     FinalPrice = booking.FinalPrice,
                     HoldingAmount = booking.HoldingAmount,
                     CommissionAmount = booking.CommissionAmount,

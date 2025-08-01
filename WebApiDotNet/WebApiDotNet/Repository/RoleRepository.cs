@@ -20,5 +20,10 @@ namespace WebApiDotNet.Repository
         {
             return await _collection.Find(_ => true).ToListAsync();
         }
+
+        public async Task<Role?> GetByIdAsync(string id)
+        {
+            return await _collection.Find(x => x.Id == id).FirstOrDefaultAsync();
+        }
     }
 } 

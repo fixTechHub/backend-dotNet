@@ -7,5 +7,6 @@ namespace WebApiDotNet.Services
     public interface IRoleService
     {
         Task<List<RoleDto>> GetAllAsync();
+        Task<RoleDto?> GetByIdAsync(string id);
     }
 } 

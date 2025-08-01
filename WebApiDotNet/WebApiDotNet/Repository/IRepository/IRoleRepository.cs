@@ -7,5 +7,6 @@ namespace WebApiDotNet.Repository.IRepository
     public interface IRoleRepository
     {
         Task<List<Role>> GetAllAsync();
+        Task<Role?> GetByIdAsync(string id);
     }
 } 

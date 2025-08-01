@@ -10,25 +10,37 @@ namespace WebApiDotNet.Services
     {
         private readonly IUserRepository _repository;
         private readonly IBookingRepository _bookingRepository;
+        private readonly IRoleService _roleService;
         private readonly IMapper _mapper;
 
-        public UserService(IUserRepository repository, IBookingRepository bookingRepository, IMapper mapper)
+        public UserService(IUserRepository repository, IBookingRepository bookingRepository, IRoleService roleService, IMapper mapper)
         {
             _repository = repository;
             _bookingRepository = bookingRepository;
+            _roleService = roleService;
             _mapper = mapper;
         }
 
         public async Task<List<UserDto>> GetAllAsync()
         {
             var users = await _repository.GetAllAsync();
-            return _mapper.Map<List<UserDto>>(users);
+            var userDtos = _mapper.Map<List<UserDto>>(users);
+            
+            // Populate role names
+            await PopulateRoleNames(userDtos);
+            
+            return userDtos;
         }
 
         public async Task<UserDto?> GetByIdAsync(string id)
         {
             var user = await _repository.GetByIdAsync(id);
-            return user == null ? null : _mapper.Map<UserDto>(user);
+            if (user == null)
+                return null;
+                
+            var userDto = _mapper.Map<UserDto>(user);
+            await PopulateRoleName(userDto);
+            return userDto;
         }
 
         public async Task<UserDto?> UpdateAsync(string id, UpdateUserDto updateUserDto)
@@ -49,7 +61,10 @@ namespace WebApiDotNet.Services
             }
             user.UpdatedAt = DateTime.UtcNow;
             await _repository.UpdateAsync(user);
-            return _mapper.Map<UserDto>(user);
+            
+            var userDto = _mapper.Map<UserDto>(user);
+            await PopulateRoleName(userDto);
+            return userDto;
         }
 
         public async Task<UserDto?> LockUserAsync(string id, LockUserDto lockUserDto)
@@ -64,7 +79,10 @@ namespace WebApiDotNet.Services
             user.LockedReason = lockUserDto.LockedReason;
             user.UpdatedAt = DateTime.UtcNow;
             await _repository.UpdateAsync(user);
-            return _mapper.Map<UserDto>(user);
+            
+            var userDto = _mapper.Map<UserDto>(user);
+            await PopulateRoleName(userDto);
+            return userDto;
         }
 
         public async Task<UserDto?> UnlockUserAsync(string id)
@@ -79,7 +97,10 @@ namespace WebApiDotNet.Services
             user.LockedReason = null; // Clear the locked reason
             user.UpdatedAt = DateTime.UtcNow;
             await _repository.UpdateAsync(user);
-            return _mapper.Map<UserDto>(user);
+            
+            var userDto = _mapper.Map<UserDto>(user);
+            await PopulateRoleName(userDto);
+            return userDto;
         }
 
         public async Task<List<UserDto>> FilterUsersAsync(UserFilterCriteria criteria)
@@ -182,7 +203,40 @@ namespace WebApiDotNet.Services
                 }
             }
 
-            return filtered.Select(u => _mapper.Map<UserDto>(u)).ToList();
+            var userDtos = filtered.Select(u => _mapper.Map<UserDto>(u)).ToList();
+            await PopulateRoleNames(userDtos);
+            return userDtos;
+        }
+
+        private async Task PopulateRoleName(UserDto userDto)
+        {
+            if (!string.IsNullOrEmpty(userDto.Role))
+            {
+                var role = await _roleService.GetByIdAsync(userDto.Role);
+                userDto.RoleName = role?.Name;
+            }
+        }
+
+        private async Task PopulateRoleNames(List<UserDto> userDtos)
+        {
+            // Get all unique role IDs
+            var roleIds = userDtos.Where(u => !string.IsNullOrEmpty(u.Role))
+                                 .Select(u => u.Role)
+                                 .Distinct()
+                                 .ToList();
+
+            // Get all roles in one query
+            var roles = await _roleService.GetAllAsync();
+            var roleDict = roles.ToDictionary(r => r.Id, r => r.Name);
+
+            // Populate role names
+            foreach (var userDto in userDtos)
+            {
+                if (!string.IsNullOrEmpty(userDto.Role) && roleDict.ContainsKey(userDto.Role))
+                {
+                    userDto.RoleName = roleDict[userDto.Role];
+                }
+            }
         }
     }
 }

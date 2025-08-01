@@ -23,5 +23,11 @@ namespace WebApiDotNet.Services
             var roles = await _repository.GetAllAsync();
             return _mapper.Map<List<RoleDto>>(roles);
         }
+
+        public async Task<RoleDto?> GetByIdAsync(string id)
+        {
+            var role = await _repository.GetByIdAsync(id);
+            return role == null ? null : _mapper.Map<RoleDto>(role);
+        }
     }
 } 
