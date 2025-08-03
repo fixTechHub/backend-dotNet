@@ -1,11 +1,13 @@
 using Microsoft.AspNetCore.Mvc;
 using WebApiDotNet.Services;
 using WebApiDotNet.DTOs;
+using WebApiDotNet.Attributes;
 
 namespace WebApiDotNet.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
+    [RequireAdmin]
     public class DashboardController : ControllerBase
     {
         private readonly IUserService _userService;

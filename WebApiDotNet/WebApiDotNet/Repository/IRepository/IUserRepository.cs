@@ -6,6 +6,7 @@ namespace WebApiDotNet.Repository.IRepository
     {
         Task<List<User>> GetAllAsync();
         Task<User?> GetByIdAsync(string id);
+        Task<User?> GetByEmailAsync(string email);
         Task UpdateAsync(User user);
     }
 }

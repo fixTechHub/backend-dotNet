@@ -1,11 +1,13 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using WebApiDotNet.DTOs;
 using WebApiDotNet.Services;
+using WebApiDotNet.Attributes;
 
 namespace WebApiDotNet.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
+    [RequireAdmin]
     public class CouponController : ControllerBase
     {
         private readonly ICouponService _service;

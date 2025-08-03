@@ -2,11 +2,13 @@ using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 using WebApiDotNet.Services;
 using WebApiDotNet.DTOs;
+using WebApiDotNet.Attributes;
 
 namespace WebApiDotNet.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
+    [RequireAdmin]
     public class ServiceController : ControllerBase
     {
         private readonly IServiceService _serviceService;

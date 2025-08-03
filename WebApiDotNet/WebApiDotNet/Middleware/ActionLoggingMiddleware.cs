@@ -92,11 +92,9 @@ namespace WebApiDotNet.Middleware
                             Console.WriteLine("Warning: ScopeFactory is null, skipping action logging");
                             return;
                         }
-
                         // Create a new scope to avoid IFeatureCollection disposed error
                         using var scope = scopeFactory.CreateScope();
                         var actionLogService = scope.ServiceProvider.GetService<ActionLogService>();
-                        
                         if (actionLogService != null)
                         {
                             await actionLogService.LogActionAsync(

@@ -3,11 +3,13 @@ using System;
 using System.Threading.Tasks;
 using WebApiDotNet.DTOs;
 using WebApiDotNet.Services;
+using WebApiDotNet.Attributes;
 
 namespace WebApiDotNet.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
+    [RequireAdmin]
     public class WarrantyController : ControllerBase
     {
         private readonly IWarrantyService _warrantyService;

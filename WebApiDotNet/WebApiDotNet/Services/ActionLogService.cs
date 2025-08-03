@@ -106,9 +106,9 @@ namespace WebApiDotNet.Services
         }
 
         // Helper method để log action
-        public async Task LogActionAsync(string userId, string actionType, string method, string route, 
-            object parameters = null, object query = null, object body = null, 
-            int statusCode = 200, string ip = null, string userAgent = null, string description = null)
+        public async Task LogActionAsync(string? userId, string? actionType, string? method, string? route, 
+            object? parameters = null, object? query = null, object? body = null, 
+            int statusCode = 200, string? ip = null, string? userAgent = null, string? description = null)
         {
             try
             {

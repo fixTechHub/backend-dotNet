@@ -3,16 +3,28 @@
   "WorkspaceRootPath": "D:\\DATN\\WebApiDotNet\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{97199CD6-6CF7-4EC4-B5BD-2ED46BC05CA5}|WebApiDotNet\\WebApiDotNet.csproj|d:\\datn\\webapidotnet\\webapidotnet\\controllers\\dashboardcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{97199CD6-6CF7-4EC4-B5BD-2ED46BC05CA5}|WebApiDotNet\\WebApiDotNet.csproj|solutionrelative:webapidotnet\\controllers\\dashboardcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{DEA68D8E-DA30-0816-6564-ED7BF0FA30F6}|WebApiDotNet\\WebApiDotNet.csproj|d:\\datn\\webapidotnet\\webapidotnet\\middleware\\actionloggingmiddleware.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{DEA68D8E-DA30-0816-6564-ED7BF0FA30F6}|WebApiDotNet\\WebApiDotNet.csproj|solutionrelative:webapidotnet\\middleware\\actionloggingmiddleware.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{97199CD6-6CF7-4EC4-B5BD-2ED46BC05CA5}|WebApiDotNet\\WebApiDotNet.csproj|d:\\datn\\webapidotnet\\webapidotnet\\models\\booking.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{97199CD6-6CF7-4EC4-B5BD-2ED46BC05CA5}|WebApiDotNet\\WebApiDotNet.csproj|solutionrelative:webapidotnet\\models\\booking.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{DEA68D8E-DA30-0816-6564-ED7BF0FA30F6}|WebApiDotNet\\WebApiDotNet.csproj|d:\\datn\\webapidotnet\\webapidotnet\\attributes\\requireadminattribute.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{DEA68D8E-DA30-0816-6564-ED7BF0FA30F6}|WebApiDotNet\\WebApiDotNet.csproj|solutionrelative:webapidotnet\\attributes\\requireadminattribute.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{97199CD6-6CF7-4EC4-B5BD-2ED46BC05CA5}|WebApiDotNet\\WebApiDotNet.csproj|d:\\datn\\webapidotnet\\webapidotnet\\data\\mappingprofile.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{97199CD6-6CF7-4EC4-B5BD-2ED46BC05CA5}|WebApiDotNet\\WebApiDotNet.csproj|solutionrelative:webapidotnet\\data\\mappingprofile.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{DEA68D8E-DA30-0816-6564-ED7BF0FA30F6}|WebApiDotNet\\WebApiDotNet.csproj|d:\\datn\\webapidotnet\\webapidotnet\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{DEA68D8E-DA30-0816-6564-ED7BF0FA30F6}|WebApiDotNet\\WebApiDotNet.csproj|solutionrelative:webapidotnet\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{DEA68D8E-DA30-0816-6564-ED7BF0FA30F6}|WebApiDotNet\\WebApiDotNet.csproj|d:\\datn\\webapidotnet\\webapidotnet\\controllers\\dashboardcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{DEA68D8E-DA30-0816-6564-ED7BF0FA30F6}|WebApiDotNet\\WebApiDotNet.csproj|solutionrelative:webapidotnet\\controllers\\dashboardcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{DEA68D8E-DA30-0816-6564-ED7BF0FA30F6}|WebApiDotNet\\WebApiDotNet.csproj|d:\\datn\\webapidotnet\\webapidotnet\\data\\mappingprofile.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{DEA68D8E-DA30-0816-6564-ED7BF0FA30F6}|WebApiDotNet\\WebApiDotNet.csproj|solutionrelative:webapidotnet\\data\\mappingprofile.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{DEA68D8E-DA30-0816-6564-ED7BF0FA30F6}|WebApiDotNet\\WebApiDotNet.csproj|d:\\datn\\webapidotnet\\webapidotnet\\models\\booking.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{DEA68D8E-DA30-0816-6564-ED7BF0FA30F6}|WebApiDotNet\\WebApiDotNet.csproj|solutionrelative:webapidotnet\\models\\booking.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -267,6 +279,45 @@
             {
               "$type": "Document",
               "DocumentIndex": 0,
+              "Title": "ActionLoggingMiddleware.cs",
+              "DocumentMoniker": "D:\\DATN\\WebApiDotNet\\WebApiDotNet\\Middleware\\ActionLoggingMiddleware.cs",
+              "RelativeDocumentMoniker": "WebApiDotNet\\Middleware\\ActionLoggingMiddleware.cs",
+              "ToolTip": "D:\\DATN\\WebApiDotNet\\WebApiDotNet\\Middleware\\ActionLoggingMiddleware.cs",
+              "RelativeToolTip": "WebApiDotNet\\Middleware\\ActionLoggingMiddleware.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-08-02T16:27:24.39Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "RequireAdminAttribute.cs",
+              "DocumentMoniker": "D:\\DATN\\WebApiDotNet\\WebApiDotNet\\Attributes\\RequireAdminAttribute.cs",
+              "RelativeDocumentMoniker": "WebApiDotNet\\Attributes\\RequireAdminAttribute.cs",
+              "ToolTip": "D:\\DATN\\WebApiDotNet\\WebApiDotNet\\Attributes\\RequireAdminAttribute.cs",
+              "RelativeToolTip": "WebApiDotNet\\Attributes\\RequireAdminAttribute.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAUAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-08-02T16:27:06.17Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "Program.cs",
+              "DocumentMoniker": "D:\\DATN\\WebApiDotNet\\WebApiDotNet\\Program.cs",
+              "RelativeDocumentMoniker": "WebApiDotNet\\Program.cs",
+              "ToolTip": "D:\\DATN\\WebApiDotNet\\WebApiDotNet\\Program.cs",
+              "RelativeToolTip": "WebApiDotNet\\Program.cs",
+              "ViewState": "AgIAADAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-08-02T16:26:55.135Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
               "Title": "DashboardController.cs",
               "DocumentMoniker": "D:\\DATN\\WebApiDotNet\\WebApiDotNet\\Controllers\\DashboardController.cs",
               "RelativeDocumentMoniker": "WebApiDotNet\\Controllers\\DashboardController.cs",
@@ -279,7 +330,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 4,
               "Title": "MappingProfile.cs",
               "DocumentMoniker": "D:\\DATN\\WebApiDotNet\\WebApiDotNet\\Data\\MappingProfile.cs",
               "RelativeDocumentMoniker": "WebApiDotNet\\Data\\MappingProfile.cs",
@@ -291,7 +342,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 5,
               "Title": "Booking.cs",
               "DocumentMoniker": "D:\\DATN\\WebApiDotNet\\WebApiDotNet\\Models\\Booking.cs",
               "RelativeDocumentMoniker": "WebApiDotNet\\Models\\Booking.cs",
@@ -299,8 +350,7 @@
               "RelativeToolTip": "WebApiDotNet\\Models\\Booking.cs",
               "ViewState": "AgIAAIgAAAAAAAAAAAAQwIMAAAAKAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-07-15T06:15:43.139Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-07-15T06:15:43.139Z"
             }
           ]
         },

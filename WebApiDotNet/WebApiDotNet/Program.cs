@@ -6,6 +6,7 @@ using WebApiDotNet.Repository;
 using WebApiDotNet.Services;
 using WebApiDotNet.Middleware;
 
+
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Logging.ClearProviders();
@@ -47,6 +48,12 @@ builder.Services.AddScoped<ICommissionConfigService, CommissionConfigService>();
 builder.Services.AddScoped<IFinancialReportService, FinancialReportService>();
 builder.Services.AddScoped<ActionLogService>();
 
+// Configure JWT settings
+builder.Services.Configure<JwtSettings>(builder.Configuration.GetSection("JwtSettings"));
+builder.Services.AddScoped<IJwtValidationService, JwtValidationService>();
+
+
+
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowFrontend", policy =>
@@ -81,6 +88,5 @@ else
 app.UseCors("AllowFrontend");
 // app.UseHttpsRedirection(); // This is not needed behind Render's proxy
 app.UseActionLogging(); // Add action logging middleware
-app.UseAuthorization();
 app.MapControllers();
 app.Run();

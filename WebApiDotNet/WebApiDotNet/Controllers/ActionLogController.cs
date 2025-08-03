@@ -4,11 +4,13 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using WebApiDotNet.DTOs;
 using WebApiDotNet.Services;
+using WebApiDotNet.Attributes;
 
 namespace WebApiDotNet.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
+    [RequireAdmin]
     public class ActionLogController : ControllerBase
     {
         private readonly ActionLogService _actionLogService;
