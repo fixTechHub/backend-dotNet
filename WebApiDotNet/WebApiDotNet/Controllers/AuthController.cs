@@ -1,6 +1,10 @@
 using Microsoft.AspNetCore.Mvc;
 using WebApiDotNet.Services;
 using WebApiDotNet.Attributes;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 namespace WebApiDotNet.Controllers
 {
@@ -9,10 +13,12 @@ namespace WebApiDotNet.Controllers
     public class AuthController : ControllerBase
     {
         private readonly IJwtValidationService _jwtValidationService;
+        private readonly IConfiguration _configuration;
 
-        public AuthController(IJwtValidationService jwtValidationService)
+        public AuthController(IJwtValidationService jwtValidationService, IConfiguration configuration)
         {
             _jwtValidationService = jwtValidationService;
+            _configuration = configuration;
         }
 
         [HttpGet("validate")]
@@ -48,6 +54,53 @@ namespace WebApiDotNet.Controllers
             {
                 return Unauthorized(new { message = "Token validation failed", error = ex.Message });
             }
+        }
+
+        [HttpGet("test-token")]
+        public IActionResult GetTestToken()
+        {
+            try
+            {
+                var secretKey = _configuration["JwtSettings:SecretKey"];
+                var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey));
+                var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+
+                var claims = new[]
+                {
+                    new Claim("userId", "admin-user"),
+                    new Claim("email", "admin@fixtech.com"),
+                    new Claim("role", "ADMIN"),
+                    new Claim("fullName", "Admin User")
+                };
+
+                var token = new JwtSecurityToken(
+                    issuer: "fixtech",
+                    audience: "admin",
+                    claims: claims,
+                    expires: DateTime.UtcNow.AddHours(24),
+                    signingCredentials: credentials
+                );
+
+                var tokenString = new JwtSecurityTokenHandler().WriteToken(token);
+
+                return Ok(new { 
+                    token = tokenString,
+                    message = "Test token created successfully"
+                });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { message = "Failed to create test token", error = ex.Message });
+            }
+        }
+
+        [HttpGet("ping")]
+        public IActionResult Ping()
+        {
+            return Ok(new { 
+                message = "Backend is running",
+                timestamp = DateTime.UtcNow
+            });
         }
     }
 } 
