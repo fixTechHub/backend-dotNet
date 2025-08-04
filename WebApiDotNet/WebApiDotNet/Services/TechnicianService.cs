@@ -53,6 +53,13 @@ namespace WebApiDotNet.Services
                 return null;
             if (technician.Status != TechnicianStatus.PENDING)
                 throw new InvalidOperationException("Chỉ được duyệt kỹ thuật viên khi trạng thái là PENDING!");
+            
+            // Validate status string
+            if (!Enum.TryParse<TechnicianStatus>(status, true, out var statusEnum))
+            {
+                throw new ArgumentException($"Status không hợp lệ: {status}. Các giá trị hợp lệ: {string.Join(", ", Enum.GetNames<TechnicianStatus>())}");
+            }
+            
             var updated = await _repository.UpdateStatusAsync(id, status, note);
             return updated == null ? null : _mapper.Map<TechnicianDto>(updated);
         }

@@ -19,6 +19,7 @@ namespace WebApiDotNet.Models
         public string CategoryId { get; set; }
 
         [BsonElement("serviceType")]
+        [BsonRepresentation(BsonType.String)]
         public ServiceType ServiceType { get; set; }
 
         [BsonElement("estimatedMarketPrice")]

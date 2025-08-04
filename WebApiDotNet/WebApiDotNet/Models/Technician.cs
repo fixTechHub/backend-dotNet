@@ -27,6 +27,7 @@ namespace WebApiDotNet.Models
         public string BackIdImage { get; set; }
 
         [BsonElement("status")]
+        [BsonRepresentation(BsonType.String)]
         public TechnicianStatus Status { get; set; } = TechnicianStatus.PENDING;
 
         [BsonElement("pendingDeletionAt")]
@@ -49,6 +50,7 @@ namespace WebApiDotNet.Models
         public List<string> SpecialtiesCategories { get; set; } = new();
 
         [BsonElement("availability")]
+        [BsonRepresentation(BsonType.String)]
         public TechnicianAvailability Availability { get; set; } = TechnicianAvailability.FREE;
 
         [BsonElement("balance")]
