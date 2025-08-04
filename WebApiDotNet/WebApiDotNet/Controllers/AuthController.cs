@@ -46,7 +46,7 @@ namespace WebApiDotNet.Controllers
                 // Kiểm tra role phải là ADMIN
                 if (role.ToUpper() != "ADMIN")
                 {
-                    return Forbid(new { message = "Access denied. Admin role required." });
+                    return Forbid();
                 }
 
                 // Trả về thông tin user từ token
