@@ -8,7 +8,7 @@ namespace WebApiDotNet.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    [RequireAdmin]
+    // [RequireAdmin]
     public class ServiceController : ControllerBase
     {
         private readonly IServiceService _serviceService;

@@ -9,7 +9,7 @@ namespace WebApiDotNet.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    [RequireAdmin]
+    // [RequireAdmin] 
     public class CommissionConfigController : ControllerBase
     {
         private readonly ICommissionConfigService _commissionConfigService;

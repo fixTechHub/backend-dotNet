@@ -10,7 +10,7 @@ namespace WebApiDotNet.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    [RequireAdmin]
+    //[RequireAdmin]
     public class ActionLogController : ControllerBase
     {
         private readonly ActionLogService _actionLogService;

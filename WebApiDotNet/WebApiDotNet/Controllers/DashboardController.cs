@@ -7,7 +7,7 @@ namespace WebApiDotNet.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    [RequireAdmin]
+    //[RequireAdmin]
     public class DashboardController : ControllerBase
     {
         private readonly IUserService _userService;

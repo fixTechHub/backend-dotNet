@@ -9,7 +9,7 @@ namespace WebApiDotNet.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    [RequireAdmin]
+    // [RequireAdmin] 
     public class CategoryController : ControllerBase
     {
         private readonly ICategoryService _categoryService;
