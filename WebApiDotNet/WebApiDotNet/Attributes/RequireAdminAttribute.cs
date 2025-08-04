@@ -35,8 +35,8 @@ namespace WebApiDotNet.Attributes
             // Validate token và lấy role
             var role = _jwtValidationService.GetRoleFromToken(token);
             
-            // Chỉ cần token hợp lệ và có role (không cần strict ADMIN)
-            if (string.IsNullOrEmpty(role))
+            // Kiểm tra role phải là ADMIN
+            if (string.IsNullOrEmpty(role) || role.ToUpper() != "ADMIN")
             {
                 context.Result = new ForbidResult();
                 return;

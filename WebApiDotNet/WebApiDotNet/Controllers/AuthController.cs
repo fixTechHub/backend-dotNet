@@ -43,6 +43,12 @@ namespace WebApiDotNet.Controllers
                     return Unauthorized(new { message = "Invalid token" });
                 }
 
+                // Kiểm tra role phải là ADMIN
+                if (role.ToUpper() != "ADMIN")
+                {
+                    return Forbid(new { message = "Access denied. Admin role required." });
+                }
+
                 // Trả về thông tin user từ token
                 return Ok(new { 
                     message = "Token is valid",
