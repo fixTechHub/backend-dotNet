@@ -3,13 +3,11 @@ using System;
 using System.Threading.Tasks;
 using WebApiDotNet.DTOs;
 using WebApiDotNet.Services;
-using WebApiDotNet.Attributes;
 
 namespace WebApiDotNet.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    [RequireAdmin] 
     public class CategoryController : ControllerBase
     {
         private readonly ICategoryService _categoryService;
@@ -73,12 +71,12 @@ namespace WebApiDotNet.Controllers
             try
             {
                 var created = await _categoryService.CreateAsync(dto);
-                return Ok(new { message = "Tạo danh mục thành công", data = created });
+                 return Ok(created);
             }
             catch (Exception ex)
             {
                 var msg = ex.Message;
-                if (msg.Contains("Danh mục đã tồn tại") && msg.Contains("Tên"))
+                if (msg.Contains("Danh mục đã tồn tại"))
                     return BadRequest(new { errors = new { CategoryName = new[] { msg } } });
                 if (msg.Contains("Icon đã tồn tại"))
                     return BadRequest(new { errors = new { Icon = new[] { msg } } });
@@ -94,7 +92,7 @@ namespace WebApiDotNet.Controllers
             try
             {
                 var updated = await _categoryService.UpdateAsync(id, dto);
-                return Ok(new { message = "Cập nhật danh mục thành công", data = updated });
+                return Ok(updated);
             }
             catch (Exception ex)
             {

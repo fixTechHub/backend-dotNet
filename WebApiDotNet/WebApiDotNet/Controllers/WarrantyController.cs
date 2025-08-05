@@ -3,7 +3,6 @@ using System;
 using System.Threading.Tasks;
 using WebApiDotNet.DTOs;
 using WebApiDotNet.Services;
-using WebApiDotNet.Attributes;
 
 namespace WebApiDotNet.Controllers
 {

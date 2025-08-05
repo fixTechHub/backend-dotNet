@@ -4,7 +4,6 @@ using WebApiDotNet.Data;
 using WebApiDotNet.Repository.IRepository;
 using WebApiDotNet.Repository;
 using WebApiDotNet.Services;
-using WebApiDotNet.Middleware;
 using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -30,7 +29,6 @@ builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
 builder.Services.AddScoped<IWarrantyRepository, WarrantyRepository>();
 builder.Services.AddScoped<IServiceRepository, ServiceRepository>();
 builder.Services.AddScoped<ICommissionConfigRepository, CommissionConfigRepository>();
-builder.Services.AddScoped<IActionLogRepository, ActionLogRepository>();
 builder.Services.AddScoped<IFinancialReportRepository, FinancialReportRepository>();
 
 builder.Services.AddScoped<ICouponService, CouponService>();
@@ -46,11 +44,9 @@ builder.Services.AddScoped<IWarrantyService, WarrantyService>();
 builder.Services.AddScoped<IServiceService, ServiceService>();  
 builder.Services.AddScoped<ICommissionConfigService, CommissionConfigService>();
 builder.Services.AddScoped<IFinancialReportService, FinancialReportService>();
-builder.Services.AddScoped<ActionLogService>();
 
 // Configure JWT settings
 builder.Services.Configure<JwtSettings>(builder.Configuration.GetSection("JwtSettings"));
-builder.Services.AddScoped<IJwtValidationService, JwtValidationService>();
 
 
 
@@ -67,35 +63,7 @@ builder.Services.AddCors(options =>
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen(c =>
-{
-    c.SwaggerDoc("v1", new OpenApiInfo { Title = "WebApiDotNet", Version = "v1" });
-    
-    // Cấu hình authorization cho Swagger
-    c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
-    {
-        Description = "JWT Authorization header using the Bearer scheme. Example: \"Authorization: Bearer {token}\"",
-        Name = "Authorization",
-        In = ParameterLocation.Header,
-        Type = SecuritySchemeType.ApiKey,
-        Scheme = "Bearer"
-    });
-
-    c.AddSecurityRequirement(new OpenApiSecurityRequirement
-    {
-        {
-            new OpenApiSecurityScheme
-            {
-                Reference = new OpenApiReference
-                {
-                    Type = ReferenceType.SecurityScheme,
-                    Id = "Bearer"
-                }
-            },
-            new string[] {}
-        }
-    });
-});
+builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
@@ -114,7 +82,5 @@ else
 }
 
 app.UseCors("AllowFrontend");
-// app.UseHttpsRedirection(); // This is not needed behind Render's proxy
-app.UseActionLogging(); // Add action logging middleware
 app.MapControllers();
 app.Run();

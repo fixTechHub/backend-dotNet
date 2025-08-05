@@ -1,7 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using WebApiDotNet.DTOs;
 using WebApiDotNet.Services;
-using WebApiDotNet.Attributes;
 
 namespace WebApiDotNet.Controllers
 {

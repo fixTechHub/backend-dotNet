@@ -2,7 +2,6 @@ using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 using WebApiDotNet.Services;
 using WebApiDotNet.DTOs;
-using WebApiDotNet.Attributes;
 
 namespace WebApiDotNet.Controllers
 {
@@ -39,6 +38,10 @@ namespace WebApiDotNet.Controllers
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] CreateServiceDto dto)
         {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+            if (dto == null)
+                return BadRequest(new { errors = new { general = new[] { "Dữ liệu không hợp lệ" } } });
             try
             {
                 var created = await _serviceService.CreateAsync(dto);
@@ -57,6 +60,8 @@ namespace WebApiDotNet.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> Update(string id, [FromBody] UpdateServiceDto dto)
         {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
             try
             {
                 var updated = await _serviceService.UpdateAsync(id, dto);
