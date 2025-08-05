@@ -36,5 +36,11 @@ namespace WebApiDotNet.Services
             var updated = await _repository.UpdateStatusAsync(id, status, isReviewedByAdmin);
             return updated == null ? null : _mapper.Map<WarrantyDto>(updated);
         }
+
+        public async Task<WarrantyDto?> UpdateDetailsAsync(string id, UpdateWarrantyDetailsDto dto)
+        {
+            var updated = await _repository.UpdateDetailsAsync(id, dto);
+            return updated == null ? null : _mapper.Map<WarrantyDto>(updated);
+        }
     }
 } 

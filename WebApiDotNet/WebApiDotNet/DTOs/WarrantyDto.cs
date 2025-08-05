@@ -11,8 +11,10 @@ namespace WebApiDotNet.DTOs
         public DateTime RequestDate { get; set; }
         public string ReportedIssue { get; set; }
         public bool IsUnderWarranty { get; set; }
-        public DateTime ExpireAt { get; set; }
+        public DateTime? ExpireAt { get; set; }
         public string Status { get; set; }
+        public string? ResolutionNote { get; set; }
+        public string? RejectionReason { get; set; }
         public bool IsReviewedByAdmin { get; set; }
         public DateTime CreatedAt { get; set; }
     }

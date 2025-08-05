@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using WebApiDotNet.Models;
+using WebApiDotNet.DTOs;
 
 namespace WebApiDotNet.Repository.IRepository
 {
@@ -9,5 +10,6 @@ namespace WebApiDotNet.Repository.IRepository
         Task<List<Warranty>> GetAllAsync();
         Task<Warranty?> GetByIdAsync(string id);
         Task<Warranty?> UpdateStatusAsync(string id, string status, bool isReviewedByAdmin);
+        Task<Warranty?> UpdateDetailsAsync(string id, UpdateWarrantyDetailsDto dto);
     }
 } 

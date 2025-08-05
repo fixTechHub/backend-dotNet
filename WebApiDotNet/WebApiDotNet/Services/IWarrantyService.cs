@@ -9,5 +9,6 @@ namespace WebApiDotNet.Services
         Task<List<WarrantyDto>> GetAllAsync();
         Task<WarrantyDto?> GetByIdAsync(string id);
         Task<WarrantyDto?> UpdateStatusAsync(string id, string status, bool isReviewedByAdmin);
+        Task<WarrantyDto?> UpdateDetailsAsync(string id, UpdateWarrantyDetailsDto dto);
     }
 } 

@@ -97,7 +97,7 @@ namespace WebApiDotNet.Controllers
             catch (Exception ex)
             {
                 var msg = ex.Message;
-                if (msg.Contains("Danh mục đã tồn tại") && msg.Contains("Tên"))
+                if (msg.Contains("Danh mục đã tồn tại"))
                     return BadRequest(new { errors = new { CategoryName = new[] { msg } } });
                 if (msg.Contains("Icon đã tồn tại"))
                     return BadRequest(new { errors = new { Icon = new[] { msg } } });

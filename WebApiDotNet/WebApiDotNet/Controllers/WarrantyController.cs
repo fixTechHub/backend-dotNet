@@ -60,5 +60,20 @@ namespace WebApiDotNet.Controllers
                 return StatusCode(500, $"Internal server error: {ex.Message}");
             }
         }
+
+        [HttpPut("details/{id}")]
+        public async Task<IActionResult> UpdateDetails(string id, [FromBody] UpdateWarrantyDetailsDto dto)
+        {
+            try
+            {
+                var result = await _warrantyService.UpdateDetailsAsync(id, dto);
+                if (result == null) return NotFound();
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
+        }
     }
 } 
