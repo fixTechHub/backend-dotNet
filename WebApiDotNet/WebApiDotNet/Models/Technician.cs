@@ -74,8 +74,8 @@ namespace WebApiDotNet.Models
         [BsonElement("totalWithdrawn")]
         public double TotalWithdrawn { get; set; } = 0;
 
-        [BsonElement("rates")]
-        public TechnicianRates Rates { get; set; }
+        [BsonElement("inspectionFee")]
+        public double InspectionFee { get; set; }
 
         [BsonElement("pricesLastUpdatedAt")]
         public DateTime? PricesLastUpdatedAt { get; set; }
@@ -109,25 +109,6 @@ namespace WebApiDotNet.Models
         public string AccountHolder { get; set; }
         [BsonElement("branch")]
         public string Branch { get; set; }
-    }
-
-    public class TechnicianRates
-    {
-        [BsonElement("inspectionFee")]
-        public double InspectionFee { get; set; }
-
-        [BsonElement("laborTiers")]
-        public LaborTiers LaborTiers { get; set; }
-    }
-
-    public class LaborTiers
-    {
-        [BsonElement("tier1")]
-        public double? Tier1 { get; set; }
-        [BsonElement("tier2")]
-        public double? Tier2 { get; set; }
-        [BsonElement("tier3")]
-        public double? Tier3 { get; set; }
     }
 
     public enum TechnicianStatus

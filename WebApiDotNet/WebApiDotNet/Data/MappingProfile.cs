@@ -28,20 +28,14 @@ namespace WebApiDotNet.Data
                 .ForMember(dest => dest.Availability, opt => opt.MapFrom(src => Enum.Parse<TechnicianAvailability>(src.Availability.ToString())));
             CreateMap<GeoJsonPoint, GeoJsonPointDto>().ReverseMap();
             CreateMap<BankAccount, BankAccountDto>().ReverseMap();
-            CreateMap<TechnicianRates, TechnicianRatesDto>().ReverseMap();
-            CreateMap<LaborTiers, LaborTiersDto>().ReverseMap();
             CreateMap<SystemReport, SystemReportDto>()
                 .ForMember(dest => dest.Tag, opt => opt.MapFrom(src => src.Tag.ToString()))
                 .ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.Status.ToString()));            
             CreateMap<Role, RoleDto>().ReverseMap();
             CreateMap<CommissionConfig, CommissionConfigDto>().ReverseMap();
             CreateMap<Warranty, WarrantyDto>().ReverseMap();
-            CreateMap<Service, ServiceDto>()
-                .ForMember(dest => dest.ServiceType, opt => opt.MapFrom(src => src.ServiceType.ToString()))
-                .ReverseMap()
-                .ForMember(dest => dest.ServiceType, opt => opt.MapFrom(src => Enum.Parse<ServiceType>(src.ServiceType)));
+            CreateMap<Service, ServiceDto>().ReverseMap();
             CreateMap<Schedule, ScheduleDto>().ReverseMap();
-            CreateMap<EstimatedMarketPrice, EstimatedMarketPriceDto>().ReverseMap();
             CreateMap<Quote, QuoteDto>()
                 .ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.Status.ToString()));            
             CreateMap<QuoteItem, QuoteItemDto>().ReverseMap();
@@ -82,13 +76,11 @@ namespace WebApiDotNet.Data
             CreateMap<CreateServiceDto, Service>()
                 .ForMember(dest => dest.Id, opt => opt.Ignore())
                 .ForMember(dest => dest.CreatedAt, opt => opt.Ignore())
-                .ForMember(dest => dest.UpdatedAt, opt => opt.Ignore())
-                .ForMember(dest => dest.ServiceType, opt => opt.MapFrom(src => Enum.Parse<ServiceType>(src.ServiceType, true)));
+                .ForMember(dest => dest.UpdatedAt, opt => opt.Ignore());
             CreateMap<UpdateServiceDto, Service>()
                 .ForMember(dest => dest.Id, opt => opt.Ignore())
                 .ForMember(dest => dest.CreatedAt, opt => opt.Ignore())
-                .ForMember(dest => dest.UpdatedAt, opt => opt.Ignore())
-                .ForMember(dest => dest.ServiceType, opt => opt.MapFrom(src => Enum.Parse<ServiceType>(src.ServiceType, true)));
+                .ForMember(dest => dest.UpdatedAt, opt => opt.Ignore());
             CreateMap<ReportDto, Report>()
                 .ForMember(dest => dest.Type, opt => opt.MapFrom(src => Enum.Parse<ReportType>(src.Type, true)))
                 .ForMember(dest => dest.Status, opt => opt.MapFrom(src => Enum.Parse<ReportStatus>(src.Status, true)));

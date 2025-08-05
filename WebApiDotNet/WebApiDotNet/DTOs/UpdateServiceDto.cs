@@ -9,9 +9,6 @@ namespace WebApiDotNet.DTOs
         public string ServiceName { get; set; }
         [Required(ErrorMessage = "CategoryId is required")]
         public string CategoryId { get; set; }
-        [Required(ErrorMessage = "ServiceType is required")]
-        public string ServiceType { get; set; }
-        public EstimatedMarketPriceDto? EstimatedMarketPrice { get; set; }
         [Required(ErrorMessage = "Icon is required")]
         public string Icon { get; set; }
         [Required(ErrorMessage = "Description is required")]

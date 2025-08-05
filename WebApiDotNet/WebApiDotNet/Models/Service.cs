@@ -1,6 +1,7 @@
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 using System;
+using System.Collections.Generic;
 
 namespace WebApiDotNet.Models
 {
@@ -18,13 +19,6 @@ namespace WebApiDotNet.Models
         [BsonRepresentation(BsonType.ObjectId)]
         public string CategoryId { get; set; }
 
-        [BsonElement("serviceType")]
-        [BsonRepresentation(BsonType.String)]
-        public ServiceType ServiceType { get; set; }
-
-        [BsonElement("estimatedMarketPrice")]
-        public EstimatedMarketPrice? EstimatedMarketPrice { get; set; }
-
         [BsonElement("icon")]
         public string Icon { get; set; }
 
@@ -37,27 +31,16 @@ namespace WebApiDotNet.Models
         [BsonElement("isDeleted")]
         public bool IsDeleted { get; set; } = false;
 
+        [BsonElement("embedding")]
+        public List<double> Embedding { get; set; } = new();
+
         [BsonElement("createdAt")]
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
         [BsonElement("updatedAt")]
         public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
+        
         [BsonElement("deletedAt")]
         public DateTime? DeletedAt { get; set; }
-    }
-
-    public class EstimatedMarketPrice
-    {
-        [BsonElement("min")]
-        public double? Min { get; set; }
-
-        [BsonElement("max")]
-        public double? Max { get; set; }
-    }
-
-    public enum ServiceType
-    {
-        FIXED,
-        COMPLEX
     }
 }

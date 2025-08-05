@@ -31,10 +31,10 @@ namespace WebApiDotNet.DTOs
         public double TotalCommissionPaid { get; set; }
         public double TotalHoldingAmount { get; set; }
         public double TotalWithdrawn { get; set; }
-        public TechnicianRatesDto Rates { get; set; }
+        public double InspectionFee { get; set; }
         public DateTime? PricesLastUpdatedAt { get; set; }
-        public string? Note { get; set; }
         public DateTime CreatedAt { get; set; }
+        public string? Note { get; set; }
     }
 
     public class GeoJsonPointDto
@@ -50,19 +50,4 @@ namespace WebApiDotNet.DTOs
         public string AccountHolder { get; set; }
         public string Branch { get; set; }
     }
-
-    public class TechnicianRatesDto
-    {
-        public double InspectionFee { get; set; }
-        public LaborTiersDto LaborTiers { get; set; }
-    }
-
-    public class LaborTiersDto
-    {
-        public double? Tier1 { get; set; }
-        public double? Tier2 { get; set; }
-        public double? Tier3 { get; set; }
-    }
-
-    
 } 
