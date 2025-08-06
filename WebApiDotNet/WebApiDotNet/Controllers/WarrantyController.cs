@@ -8,7 +8,6 @@ namespace WebApiDotNet.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    // [RequireAdmin]
     public class WarrantyController : ControllerBase
     {
         private readonly IWarrantyService _warrantyService;
