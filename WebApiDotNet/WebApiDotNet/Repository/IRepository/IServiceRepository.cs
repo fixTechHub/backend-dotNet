@@ -9,6 +9,7 @@ namespace WebApiDotNet.Repository.IRepository
         Task<List<Service>> GetAllAsync();
         Task<List<Service>> GetDeletedAsync();
         Task<Service> GetByIdAsync(string id);
+        Task<Service> GetDeletedByIdAsync(string id);
         Task<Service> CreateAsync(Service service);
         Task<Service> UpdateAsync(string id, Service service);
         Task DeleteAsync(string id);

@@ -32,6 +32,11 @@ namespace WebApiDotNet.Repository
             return await _services.Find(s => s.Id == id && !s.IsDeleted).FirstOrDefaultAsync();
         }
 
+        public async Task<Service> GetDeletedByIdAsync(string id)
+        {
+            return await _services.Find(s => s.Id == id && s.IsDeleted).FirstOrDefaultAsync();
+        }
+
         public async Task<Service> CreateAsync(Service service)
         {
             service.CreatedAt = DateTime.UtcNow;
@@ -43,7 +48,7 @@ namespace WebApiDotNet.Repository
         public async Task<Service> UpdateAsync(string id, Service service)
         {
             service.UpdatedAt = DateTime.UtcNow;
-            await _services.ReplaceOneAsync(s => s.Id == id && !s.IsDeleted, service);
+            await _services.ReplaceOneAsync(s => s.Id == id, service);
             return service;
         }
 
