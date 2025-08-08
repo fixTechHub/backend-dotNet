@@ -65,6 +65,7 @@ namespace WebApiDotNet.Services
             var service = await _repo.GetByIdAsync(id);
             if (service == null) throw new Exception("Không tìm thấy dịch vụ");
             service.IsDeleted = true;
+            service.IsActive = false;
             service.DeletedAt = DateTime.UtcNow;
             await _repo.UpdateAsync(id, service);
         }
