@@ -52,6 +52,7 @@ namespace WebApiDotNet.Repository
         {
             var update = Builders<Category>.Update
                 .Set(c => c.IsDeleted, true)
+                .Set(c => c.IsActive, false)
                 .Set(c => c.DeletedAt, DateTime.UtcNow)
                 .Set(c => c.UpdatedAt, DateTime.UtcNow);
             await _categories.UpdateOneAsync(c => c.Id == id && !c.IsDeleted, update);

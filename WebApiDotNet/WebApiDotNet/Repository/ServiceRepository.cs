@@ -51,6 +51,7 @@ namespace WebApiDotNet.Repository
         {
             var update = Builders<Service>.Update
                 .Set(s => s.IsDeleted, true)
+                .Set(s => s.IsActive, false)
                 .Set(s => s.DeletedAt, DateTime.UtcNow)
                 .Set(s => s.UpdatedAt, DateTime.UtcNow);
             await _services.UpdateOneAsync(s => s.Id == id && !s.IsDeleted, update);

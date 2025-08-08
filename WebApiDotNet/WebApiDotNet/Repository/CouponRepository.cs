@@ -53,6 +53,7 @@ namespace WebApiDotNet.Repository
         {
             var update = Builders<Coupon>.Update
                 .Set(c => c.IsDeleted, true)
+                .Set(c => c.IsActive, false)
                 .Set(c => c.DeletedAt, DateTime.UtcNow)
                 .Set(c => c.UpdatedAt, DateTime.UtcNow);
 
