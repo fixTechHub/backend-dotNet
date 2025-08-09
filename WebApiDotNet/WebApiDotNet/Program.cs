@@ -7,6 +7,9 @@ using WebApiDotNet.Services;
 using Microsoft.OpenApi.Models;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Http;
+using WebApiDotNet.Data;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -17,6 +20,7 @@ builder.Logging.AddConsole(); // Thêm dòng này nếu chưa có
 // Add services to the container.
 builder.Services.Configure<MongoDbSettings>(builder.Configuration.GetSection("MongoDbSettings"));
 builder.Services.AddSingleton<MongoDbContext>();
+builder.Services.Configure<JwtSettings>(builder.Configuration.GetSection("Jwt"));
 
 builder.Services.AddAutoMapper(typeof(MappingProfile));
 
@@ -33,6 +37,7 @@ builder.Services.AddScoped<IWarrantyRepository, WarrantyRepository>();
 builder.Services.AddScoped<IServiceRepository, ServiceRepository>();
 builder.Services.AddScoped<ICommissionConfigRepository, CommissionConfigRepository>();
 builder.Services.AddScoped<IFinancialReportRepository, FinancialReportRepository>();
+builder.Services.AddScoped<IRefreshTokenRepository, RefreshTokenRepository>();
 
 builder.Services.AddScoped<ICouponService, CouponService>();
 builder.Services.AddScoped<ICouponUsageService, CouponUsageService>();
@@ -47,63 +52,51 @@ builder.Services.AddScoped<IWarrantyService, WarrantyService>();
 builder.Services.AddScoped<IServiceService, ServiceService>();  
 builder.Services.AddScoped<ICommissionConfigService, CommissionConfigService>();
 builder.Services.AddScoped<IFinancialReportService, FinancialReportService>();
+builder.Services.AddScoped<IEmailService, EmailService>();
 
-// Configure JWT settings
-builder.Services.Configure<JwtSettings>(builder.Configuration.GetSection("JwtSettings"));
-
-// Configure JWT Authentication
-var jwtSettings = builder.Configuration.GetSection("JwtSettings").Get<JwtSettings>();
-if (jwtSettings != null && !string.IsNullOrEmpty(jwtSettings.SecretKey))
+// Authentication: configure JWT from appsettings:Jwt
+var jwtSection = builder.Configuration.GetSection("Jwt");
+var jwtKey = jwtSection.GetValue<string>("Key");
+var jwtIssuer = jwtSection.GetValue<string>("Issuer");
+var jwtAudience = jwtSection.GetValue<string>("Audience");
+if (!string.IsNullOrWhiteSpace(jwtKey))
 {
     builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         .AddJwtBearer(options =>
         {
             options.TokenValidationParameters = new TokenValidationParameters
             {
-                ValidateIssuer = false,
-                ValidateAudience = false,
+                ValidateIssuer = true,
+                ValidateAudience = true,
                 ValidateLifetime = true,
                 ValidateIssuerSigningKey = true,
-                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings.SecretKey)),
-                RoleClaimType = "role" // Map role claim từ JWT
+                ValidIssuer = jwtIssuer,
+                ValidAudience = jwtAudience,
+                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtKey)),
+                ClockSkew = TimeSpan.Zero
             };
-            
-            // Configure JWT Bearer to read from cookie
+
+            // Read JWT from HttpOnly cookie as fallback
             options.Events = new JwtBearerEvents
             {
                 OnMessageReceived = context =>
                 {
-                    // Try to get token from Authorization header first
-                    if (context.Request.Headers.ContainsKey("Authorization"))
+                    if (string.IsNullOrEmpty(context.Token))
                     {
-                        var authHeader = context.Request.Headers["Authorization"].FirstOrDefault();
-                        if (!string.IsNullOrEmpty(authHeader) && authHeader.StartsWith("Bearer "))
+                        var cookieName = builder.Configuration.GetValue<string>("Jwt:AccessTokenCookieName") ?? "AuthToken";
+                        if (context.Request.Cookies.TryGetValue(cookieName, out var token))
                         {
-                            context.Token = authHeader.Substring("Bearer ".Length);
-                            return Task.CompletedTask;
+                            context.Token = token;
                         }
                     }
-                    
-                    // If not in header, try to get from cookie
-                    var token = context.Request.Cookies["token"] ?? context.Request.Cookies["jwt_token"];
-                    if (!string.IsNullOrEmpty(token))
-                    {
-                        context.Token = token;
-                    }
-                    
                     return Task.CompletedTask;
                 }
             };
         });
 }
 
-// Configure Authorization
-builder.Services.AddAuthorization(options =>
-{
-    options.AddPolicy("AdminOnly", policy => policy.RequireRole("Admin"));
-    options.AddPolicy("UserOnly", policy => policy.RequireRole("User"));
-    options.AddPolicy("TechnicianOnly", policy => policy.RequireRole("Technician"));
-});
+// Authorization (basic)
+builder.Services.AddAuthorization();
 
 
 
@@ -111,16 +104,43 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowFrontend", policy =>
     {
-        policy.AllowAnyOrigin() // Cho phép tất cả các nguồn gốc
-              .AllowAnyHeader()
-              .AllowAnyMethod();
+        policy.WithOrigins(
+                "http://localhost:5173",
+                "http://localhost:5174",
+                "http://localhost:3001"
+            )
+            .AllowAnyHeader()
+            .AllowAnyMethod()
+            .AllowCredentials();
     });
 });
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(c =>
+{
+    c.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo { Title = "WebApiDotNet", Version = "v1" });
+    var jwtSecurityScheme = new Microsoft.OpenApi.Models.OpenApiSecurityScheme
+    {
+        BearerFormat = "JWT",
+        Name = "Authorization",
+        In = Microsoft.OpenApi.Models.ParameterLocation.Header,
+        Type = Microsoft.OpenApi.Models.SecuritySchemeType.Http,
+        Scheme = JwtBearerDefaults.AuthenticationScheme,
+        Description = "Put Bearer {your token}",
+        Reference = new Microsoft.OpenApi.Models.OpenApiReference
+        {
+            Id = JwtBearerDefaults.AuthenticationScheme,
+            Type = Microsoft.OpenApi.Models.ReferenceType.SecurityScheme
+        }
+    };
+    c.AddSecurityDefinition(jwtSecurityScheme.Reference.Id, jwtSecurityScheme);
+    c.AddSecurityRequirement(new Microsoft.OpenApi.Models.OpenApiSecurityRequirement
+    {
+        { jwtSecurityScheme, Array.Empty<string>() }
+    });
+});
 
 var app = builder.Build();
 

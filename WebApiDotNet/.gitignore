@@ -1,3 +1,22 @@
+# Node/React env files
+.env
+.env.local
+**/.env
+**/.env.local
+
+# .NET local settings (keep secrets out of git)
+WebApiDotNet/appsettings.json
+WebApiDotNet/appsettings.Development.json
+WebApiDotNet/appsettings.*.local.json
+
+# User secrets or temp files
+*.secret.json
+secrets.json
+UserSecrets/
+*.user
+*.suo
+*.swp
+*.log
 # Environment files
 .env
 .env.local

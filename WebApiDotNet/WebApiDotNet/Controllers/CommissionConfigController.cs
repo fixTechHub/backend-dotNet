@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 using System;
 using System.Threading.Tasks;
 using WebApiDotNet.DTOs;
@@ -8,6 +9,7 @@ namespace WebApiDotNet.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
+    [Authorize(Roles = "ADMIN")]
     public class CommissionConfigController : ControllerBase
     {
         private readonly ICommissionConfigService _commissionConfigService;

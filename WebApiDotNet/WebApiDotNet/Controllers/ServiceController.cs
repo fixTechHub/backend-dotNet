@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 using System.Threading.Tasks;
 using WebApiDotNet.Services;
 using WebApiDotNet.DTOs;
@@ -6,6 +7,7 @@ using WebApiDotNet.DTOs;
 namespace WebApiDotNet.Controllers
 {
     [ApiController]
+    [Authorize(Roles = "ADMIN")]
     [Route("api/[controller]")]
     public class ServiceController : ControllerBase
     {

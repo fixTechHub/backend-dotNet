@@ -1,10 +1,12 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 using WebApiDotNet.DTOs;
 using WebApiDotNet.Services;
 
 namespace WebApiDotNet.Controllers
 {
     [ApiController]
+    [Authorize(Roles = "ADMIN")]
     [Route("api/[controller]")]
     public class CouponController : ControllerBase
     {

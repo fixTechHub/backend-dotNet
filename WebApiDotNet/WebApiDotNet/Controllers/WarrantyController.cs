@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 using System;
 using System.Threading.Tasks;
 using WebApiDotNet.DTOs;
@@ -7,6 +8,7 @@ using WebApiDotNet.Services;
 namespace WebApiDotNet.Controllers
 {
     [ApiController]
+    [Authorize(Roles = "ADMIN")]
     [Route("api/[controller]")]
     public class WarrantyController : ControllerBase
     {
