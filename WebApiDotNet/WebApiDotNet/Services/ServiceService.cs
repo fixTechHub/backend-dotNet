@@ -71,11 +71,10 @@ namespace WebApiDotNet.Services
         }
         public async Task RestoreAsync(string id)
         {
-            var service = await _repo.GetByIdAsync(id);
-            if (service == null) throw new Exception("Không tìm thấy dịch vụ");
-            service.IsDeleted = false;
-            service.DeletedAt = null;
-            await _repo.UpdateAsync(id, service);
+            if (!await _repo.ExistsDeletedAsync(id))
+                throw new Exception("Không tìm thấy dịch vụ đã xóa");
+
+            await _repo.RestoreAsync(id);
         }
         public async Task<bool> ExistsAsync(string id)
         {
