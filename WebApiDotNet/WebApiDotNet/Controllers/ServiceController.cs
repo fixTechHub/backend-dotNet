@@ -86,15 +86,8 @@ namespace WebApiDotNet.Controllers
         [HttpPost("{id}/restore")]
         public async Task<IActionResult> Restore(string id)
         {
-            try
-            {
-                await _serviceService.RestoreAsync(id);
-                return Ok(new { message = "Khôi phục dịch vụ thành công" });
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(new { errors = new { general = new[] { ex.Message } } });
-            }
+            await _serviceService.RestoreAsync(id);
+            return Ok(new { message = "Khôi phục dịch vụ thành công" });
         }
     }
 } 
