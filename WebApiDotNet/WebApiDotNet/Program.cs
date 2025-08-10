@@ -7,9 +7,7 @@ using WebApiDotNet.Services;
 using Microsoft.OpenApi.Models;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Http;
-using WebApiDotNet.Data;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
