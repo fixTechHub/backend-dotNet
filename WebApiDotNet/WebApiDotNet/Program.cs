@@ -59,8 +59,16 @@ var jwtSection = builder.Configuration.GetSection("Jwt");
 var jwtKey = jwtSection.GetValue<string>("Key");
 var jwtIssuer = jwtSection.GetValue<string>("Issuer");
 var jwtAudience = jwtSection.GetValue<string>("Audience");
+
+// Add logging to debug JWT configuration
+Console.WriteLine($"🔐 JWT Configuration:");
+Console.WriteLine($"  Key: {(string.IsNullOrEmpty(jwtKey) ? "❌ NULL" : "✅ SET")}");
+Console.WriteLine($"  Issuer: {jwtIssuer}");
+Console.WriteLine($"  Audience: {jwtAudience}");
+
 if (!string.IsNullOrWhiteSpace(jwtKey))
 {
+    Console.WriteLine("✅ JWT Authentication configured successfully");
     builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         .AddJwtBearer(options =>
         {
@@ -93,6 +101,13 @@ if (!string.IsNullOrWhiteSpace(jwtKey))
                 }
             };
         });
+}
+else
+{
+    Console.WriteLine("❌ JWT Authentication NOT configured - missing key");
+    Console.WriteLine("⚠️  All [Authorize] attributes will be ignored!");
+    Console.WriteLine("💡 Check Render Environment Variables for JWT__Key");
+    Console.WriteLine("💡 Or check if appsettings.Production.json exists and has JWT configuration");
 }
 
 // Authorization (basic)

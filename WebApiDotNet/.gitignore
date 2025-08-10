@@ -4,10 +4,15 @@
 **/.env
 **/.env.local
 
-# .NET local settings (keep secrets out of git)
+# .NET configuration files (keep secrets out of git)
 WebApiDotNet/appsettings.json
 WebApiDotNet/appsettings.Development.json
+WebApiDotNet/appsettings.Production.json
 WebApiDotNet/appsettings.*.local.json
+WebApiDotNet/appsettings.*.json
+
+# Documentation with sensitive info
+WebApiDotNet/README.md
 
 # User secrets or temp files
 *.secret.json
