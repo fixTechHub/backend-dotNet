@@ -53,8 +53,6 @@ namespace WebApiDotNet.Controllers
                 var msg = ex.Message;
                 if (msg.Contains("Dịch vụ đã tồn tại") && msg.Contains("Tên"))
                     return BadRequest(new { errors = new { ServiceName = new[] { msg } } });
-                if (msg.Contains("Icon đã tồn tại"))
-                    return BadRequest(new { errors = new { Icon = new[] { msg } } });
                 return BadRequest(new { errors = new { general = new[] { msg } } });
             }
         }
@@ -73,8 +71,6 @@ namespace WebApiDotNet.Controllers
                 var msg = ex.Message;
                 if (msg.Contains("Dịch vụ đã tồn tại") && msg.Contains("Tên"))
                     return BadRequest(new { errors = new { ServiceName = new[] { msg } } });
-                if (msg.Contains("Icon đã tồn tại"))
-                    return BadRequest(new { errors = new { Icon = new[] { msg } } });
                 return BadRequest(new { errors = new { general = new[] { msg } } });
             }
         }

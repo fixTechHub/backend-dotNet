@@ -80,8 +80,6 @@ namespace WebApiDotNet.Controllers
                 var msg = ex.Message;
                 if (msg.Contains("Danh mục đã tồn tại"))
                     return BadRequest(new { errors = new { CategoryName = new[] { msg } } });
-                if (msg.Contains("Icon đã tồn tại"))
-                    return BadRequest(new { errors = new { Icon = new[] { msg } } });
                 return BadRequest(new { errors = new { general = new[] { msg } } });
             }
         }
@@ -101,8 +99,6 @@ namespace WebApiDotNet.Controllers
                 var msg = ex.Message;
                 if (msg.Contains("Danh mục đã tồn tại"))
                     return BadRequest(new { errors = new { CategoryName = new[] { msg } } });
-                if (msg.Contains("Icon đã tồn tại"))
-                    return BadRequest(new { errors = new { Icon = new[] { msg } } });
                 return BadRequest(new { errors = new { general = new[] { msg } } });
             }
         }

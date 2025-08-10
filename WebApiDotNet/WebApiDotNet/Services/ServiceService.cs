@@ -33,11 +33,9 @@ namespace WebApiDotNet.Services
         }
         public async Task<ServiceDto> CreateAsync(CreateServiceDto dto)
         {
-            // Kiểm tra trùng tên, icon
+            // Kiểm tra trùng tên, bỏ kiểm tra trùng icon
             if (await _repo.ExistsByNameAsync(dto.ServiceName))
                 throw new Exception("Tên dịch vụ đã tồn tại");
-            if (await _repo.ExistsByIconAsync(dto.Icon))
-                throw new Exception("Icon đã tồn tại");
             
             var service = _mapper.Map<Service>(dto);
             service.CreatedAt = DateTime.UtcNow;
@@ -49,11 +47,9 @@ namespace WebApiDotNet.Services
         {
             var service = await _repo.GetByIdAsync(id);
             if (service == null) throw new Exception("Không tìm thấy dịch vụ");
-            // Kiểm tra trùng tên, icon (trừ chính bản ghi đang sửa)
+            // Kiểm tra trùng tên (trừ chính bản ghi đang sửa), bỏ kiểm tra trùng icon
             if (service.ServiceName != dto.ServiceName && await _repo.ExistsByNameAsync(dto.ServiceName))
                 throw new Exception("Tên dịch vụ đã tồn tại");
-            if (service.Icon != dto.Icon && await _repo.ExistsByIconAsync(dto.Icon))
-                throw new Exception("Icon đã tồn tại");
             
             _mapper.Map(dto, service);
             service.UpdatedAt = DateTime.UtcNow;

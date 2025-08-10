@@ -81,10 +81,5 @@ namespace WebApiDotNet.Repository
         {
             return await _categories.Find(c => c.CategoryName == name && !c.IsDeleted).AnyAsync();
         }
-
-        public async Task<bool> ExistsByIconAsync(string icon)
-        {
-            return await _categories.Find(c => c.Icon == icon && !c.IsDeleted).AnyAsync();
-        }
     }
 }
