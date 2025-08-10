@@ -255,7 +255,7 @@ namespace WebApiDotNet.Controllers
             await _userRepo.UpdateAsync(user);
 
             // Send email with reset link
-            var frontendUrl = _configuration["Email:FrontendResetUrl"] ?? "https://front-7xiokagph-kds-projects-ce66334c.vercel.app/forgot-password";
+            var frontendUrl = _configuration["Email:FrontendResetUrl"] ?? "https://front-7xiokagph-kds-projects-ce66334c.vercel.app/reset-password";
             var resetLink = $"{frontendUrl}?code={user.VerificationCode}&email={Uri.EscapeDataString(email)}";
             var html = $"<p>We received a request to reset your password.</p><p><a href='{resetLink}'>Click here to reset</a> (valid for 15 minutes).</p>";
             try
