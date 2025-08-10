@@ -121,7 +121,7 @@ builder.Services.AddCors(options =>
                 "http://localhost:5173",
                 "http://localhost:5174",
                 "http://localhost:3001",
-                "https://front-r1rwoj55x-kds-projects-ce66334c.vercel.app"
+                "https://front-d91nxzzw6-kds-projects-ce66334c.vercel.app"
             )
             .AllowAnyHeader()
             .AllowAnyMethod()
