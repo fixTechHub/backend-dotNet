@@ -123,7 +123,7 @@ builder.Services.AddCors(options =>
                 "http://localhost:3001",
                 "https://front-pcw3xl50l-kds-projects-ce66334c.vercel.app",
                 "https://front-end-git-dat-kds-projects-ce66334c.vercel.app",
-                "https://fixtech.id.vn/api"
+                
             )
             .AllowAnyHeader()
             .AllowAnyMethod()
