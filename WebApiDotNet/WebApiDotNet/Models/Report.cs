@@ -42,7 +42,8 @@ namespace WebApiDotNet.Models
     public enum ReportType
     {
         REPORT,
-        VIOLATION
+        VIOLATION,
+        WARRANTY
     }
 
     public enum ReportStatus
