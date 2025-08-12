@@ -3,6 +3,7 @@ using MongoDB.Bson;
 using WebApiDotNet.DTOs;
 using WebApiDotNet.Models;
 using WebApiDotNet.Repository.IRepository;
+using System.Linq;
 
 namespace WebApiDotNet.Services
 {
@@ -51,8 +52,16 @@ namespace WebApiDotNet.Services
                 UsedAt = DateTime.UtcNow
             };
 
+            // 🔄 Tăng số lần sử dụng
             coupon.UsedCount += 1;
             coupon.UpdatedAt = DateTime.UtcNow;
+
+            // 🚫 Kiểm tra và tự động chuyển status từ active sang inactive khi đạt giới hạn
+            if (coupon.UsedCount >= coupon.TotalUsageLimit)
+            {
+                coupon.IsActive = false;
+                Console.WriteLine($"🔄 Mã giảm giá {coupon.Code} đã đạt giới hạn sử dụng ({coupon.UsedCount}/{coupon.TotalUsageLimit}). Tự động chuyển sang inactive.");
+            }
 
             await _repository.CreateAsync(usage);
             await _couponRepository.UpdateAsync(couponId, coupon);
@@ -62,6 +71,58 @@ namespace WebApiDotNet.Services
         {
             var usage = await _repository.GetByIdAsync(id);
             return usage == null ? null : _mapper.Map<CouponUsageDto>(usage);
+        }
+
+        /// <summary>
+        /// Kiểm tra và cập nhật trạng thái của tất cả coupon dựa trên số lần sử dụng
+        /// </summary>
+        public async Task CheckAndUpdateCouponStatusesAsync()
+        {
+            var allCoupons = await _couponRepository.GetAllAsync();
+            var activeCoupons = allCoupons.Where(c => c.IsActive).ToList();
+            var updatedCoupons = new List<Coupon>();
+
+            foreach (var coupon in activeCoupons)
+            {
+                if (coupon.UsedCount >= coupon.TotalUsageLimit)
+                {
+                    coupon.IsActive = false;
+                    coupon.UpdatedAt = DateTime.UtcNow;
+                    updatedCoupons.Add(coupon);
+                    Console.WriteLine($"🔄 Mã giảm giá {coupon.Code} đã đạt giới hạn sử dụng ({coupon.UsedCount}/{coupon.TotalUsageLimit}). Chuyển sang inactive.");
+                }
+            }
+
+            // Cập nhật tất cả coupon đã thay đổi
+            if (updatedCoupons.Any())
+            {
+                var updateTasks = updatedCoupons.Select(c => _couponRepository.UpdateAsync(c.Id, c));
+                await Task.WhenAll(updateTasks);
+                Console.WriteLine($"✅ Đã cập nhật trạng thái của {updatedCoupons.Count} mã giảm giá.");
+            }
+        }
+
+        /// <summary>
+        /// Lấy thống kê sử dụng coupon
+        /// </summary>
+        public async Task<CouponUsageStatsDto> GetCouponUsageStatsAsync()
+        {
+            var allCoupons = await _couponRepository.GetAllAsync();
+            var activeCoupons = allCoupons.Where(c => c.IsActive).ToList();
+            var inactiveCoupons = allCoupons.Where(c => !c.IsActive).ToList();
+
+            var stats = new CouponUsageStatsDto
+            {
+                TotalCoupons = allCoupons.Count,
+                ActiveCoupons = activeCoupons.Count,
+                InactiveCoupons = inactiveCoupons.Count,
+                CouponsNearLimit = activeCoupons.Count(c => c.UsedCount >= c.TotalUsageLimit * 0.8), // 80% giới hạn
+                CouponsAtLimit = activeCoupons.Count(c => c.UsedCount >= c.TotalUsageLimit),
+                TotalUsageCount = allCoupons.Sum(c => c.UsedCount),
+                AverageUsageRate = allCoupons.Any() ? allCoupons.Average(c => (double)c.UsedCount / c.TotalUsageLimit) : 0
+            };
+
+            return stats;
         }
     }
 }

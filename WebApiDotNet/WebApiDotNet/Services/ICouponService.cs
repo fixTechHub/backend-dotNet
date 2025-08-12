@@ -13,5 +13,6 @@ namespace WebApiDotNet.Services
         Task DeleteCouponAsync(string id);
         Task RestoreCouponAsync(string id);
         Task<bool> CanUserUseCouponAsync(string couponId, string userId);
+        Task<CouponUsageInfoDto> GetCouponUsageInfoAsync(string couponId);
     }
 }

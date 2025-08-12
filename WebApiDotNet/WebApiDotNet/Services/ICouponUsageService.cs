@@ -8,5 +8,7 @@ namespace WebApiDotNet.Services
         Task<List<CouponUsageDto>> GetByCouponIdAsync(string couponId);
         Task TrackUsageAsync(string couponId, string userId, string bookingId);
         Task<CouponUsageDto?> GetByIdAsync(string id);
+        Task CheckAndUpdateCouponStatusesAsync();
+        Task<CouponUsageStatsDto> GetCouponUsageStatsAsync();
     }
 }

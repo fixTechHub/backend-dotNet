@@ -164,5 +164,19 @@ namespace WebApiDotNet.Controllers
                 return StatusCode(500, new { message = "Lỗi server", error = ex.Message });
             }
         }
+
+        [HttpGet("{couponId}/usage-info")]
+        public async Task<IActionResult> GetCouponUsageInfo(string couponId)
+        {
+            try
+            {
+                var usageInfo = await _service.GetCouponUsageInfoAsync(couponId);
+                return Ok(usageInfo);
+            }
+            catch (Exception ex)
+            {
+                return NotFound(new { message = ex.Message });
+            }
+        }
     }
 }

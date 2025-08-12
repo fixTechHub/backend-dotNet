@@ -53,7 +53,7 @@ namespace WebApiDotNet.Controllers
         {
             try
             {
-                await _warrantyService.UpdateStatusAsync(id, dto.Status, dto.IsReviewedByAdmin);
+                await _warrantyService.UpdateStatusAsync(id, dto.Status);
                 return NoContent();
             }
             catch (Exception ex)

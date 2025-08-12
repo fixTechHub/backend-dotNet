@@ -189,6 +189,20 @@ namespace WebApiDotNet.Services
             var coupon = await _repository.GetByIdAsync(couponId);
             if (coupon == null || !coupon.IsActive) return false;
 
+            // 🚫 Kiểm tra xem coupon đã đạt giới hạn sử dụng chưa
+            if (coupon.UsedCount >= coupon.TotalUsageLimit)
+            {
+                // Tự động chuyển sang inactive nếu đạt giới hạn
+                if (coupon.IsActive)
+                {
+                    coupon.IsActive = false;
+                    coupon.UpdatedAt = DateTime.UtcNow;
+                    await _repository.UpdateAsync(couponId, coupon);
+                    Console.WriteLine($"🔄 Mã giảm giá {coupon.Code} đã đạt giới hạn sử dụng ({coupon.UsedCount}/{coupon.TotalUsageLimit}). Tự động chuyển sang inactive.");
+                }
+                return false;
+            }
+
             switch (coupon.Audience)
             {
                 case CouponAudience.NEW_USER:
@@ -204,6 +218,36 @@ namespace WebApiDotNet.Services
                 default:
                     return false;
             }
+        }
+
+        /// <summary>
+        /// Lấy thông tin chi tiết về trạng thái sử dụng của coupon
+        /// </summary>
+        public async Task<CouponUsageInfoDto> GetCouponUsageInfoAsync(string couponId)
+        {
+            var coupon = await _repository.GetByIdAsync(couponId);
+            if (coupon == null)
+                throw new Exception("Mã giảm giá không tồn tại");
+
+            var usageInfo = new CouponUsageInfoDto
+            {
+                CouponId = coupon.Id,
+                Code = coupon.Code,
+                IsActive = coupon.IsActive,
+                UsedCount = coupon.UsedCount,
+                TotalUsageLimit = coupon.TotalUsageLimit,
+                RemainingUses = Math.Max(0, coupon.TotalUsageLimit - coupon.UsedCount),
+                UsagePercentage = coupon.TotalUsageLimit > 0 ? (double)coupon.UsedCount / coupon.TotalUsageLimit * 100 : 0,
+                IsAtLimit = coupon.UsedCount >= coupon.TotalUsageLimit,
+                IsNearLimit = coupon.UsedCount >= coupon.TotalUsageLimit * 0.8, // 80% giới hạn
+                StatusMessage = coupon.UsedCount >= coupon.TotalUsageLimit 
+                    ? "Đã đạt giới hạn sử dụng" 
+                    : coupon.UsedCount >= coupon.TotalUsageLimit * 0.8 
+                        ? "Gần đạt giới hạn sử dụng" 
+                        : "Còn sử dụng được"
+            };
+
+            return usageInfo;
         }
     }
 }

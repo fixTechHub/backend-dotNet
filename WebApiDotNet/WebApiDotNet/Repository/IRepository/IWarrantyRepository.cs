@@ -9,7 +9,7 @@ namespace WebApiDotNet.Repository.IRepository
     {
         Task<List<Warranty>> GetAllAsync();
         Task<Warranty?> GetByIdAsync(string id);
-        Task<Warranty?> UpdateStatusAsync(string id, string status, bool isReviewedByAdmin);
+        Task<Warranty?> UpdateStatusAsync(string id, string status);
         Task<Warranty?> UpdateDetailsAsync(string id, UpdateWarrantyDetailsDto dto);
     }
 } 

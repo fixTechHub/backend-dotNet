@@ -41,13 +41,13 @@ namespace WebApiDotNet.Repository
             return w;
         }
 
-        public async Task<Warranty?> UpdateStatusAsync(string id, string status, bool isReviewedByAdmin)
+        public async Task<Warranty?> UpdateStatusAsync(string id, string status)
         {
             var filter = Builders<Warranty>.Filter.Eq(w => w.Id, id);
             var statusEnum = (WarrantyStatus)Enum.Parse(typeof(WarrantyStatus), status, true);
             var update = Builders<Warranty>.Update
                 .Set(w => w.Status, statusEnum)
-                .Set(w => w.IsReviewedByAdmin, isReviewedByAdmin)
+                .Set(w => w.IsReviewedByAdmin, true) // 🔄 Tự động set IsReviewedByAdmin = true khi admin thay đổi
                 .Set(w => w.UpdatedAt, DateTime.UtcNow);
             var options = new FindOneAndUpdateOptions<Warranty> { ReturnDocument = ReturnDocument.After };
             return await _collection.FindOneAndUpdateAsync(filter, update, options);
@@ -60,7 +60,7 @@ namespace WebApiDotNet.Repository
             
             var update = Builders<Warranty>.Update
                 .Set(w => w.Status, statusEnum)
-                .Set(w => w.IsReviewedByAdmin, dto.IsReviewedByAdmin)
+                .Set(w => w.IsReviewedByAdmin, true) // 🔄 Tự động set IsReviewedByAdmin = true khi admin thay đổi
                 .Set(w => w.UpdatedAt, DateTime.UtcNow);
 
             // Chỉ update ResolutionNote nếu có giá trị

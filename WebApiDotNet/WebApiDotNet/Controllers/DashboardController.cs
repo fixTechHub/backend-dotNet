@@ -195,6 +195,34 @@ namespace WebApiDotNet.Controllers
             return Ok(usage);
         }
 
+        [HttpPost("couponusages/check-status")]
+        public async Task<IActionResult> CheckAndUpdateCouponStatuses()
+        {
+            try
+            {
+                await _couponUsageService.CheckAndUpdateCouponStatusesAsync();
+                return Ok(new { message = "Đã kiểm tra và cập nhật trạng thái coupon thành công" });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = "Lỗi khi cập nhật trạng thái coupon", error = ex.Message });
+            }
+        }
+
+        [HttpGet("couponusages/stats")]
+        public async Task<IActionResult> GetCouponUsageStats()
+        {
+            try
+            {
+                var stats = await _couponUsageService.GetCouponUsageStatsAsync();
+                return Ok(stats);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = "Lỗi khi lấy thống kê coupon", error = ex.Message });
+            }
+        }
+
         // REPORT
         [HttpGet("reports")]
         public async Task<IActionResult> GetAllReports() => Ok(await _reportService.GetAllAsync());

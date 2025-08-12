@@ -31,9 +31,9 @@ namespace WebApiDotNet.Services
             return warranty == null ? null : _mapper.Map<WarrantyDto>(warranty);
         }
 
-        public async Task<WarrantyDto?> UpdateStatusAsync(string id, string status, bool isReviewedByAdmin)
+        public async Task<WarrantyDto?> UpdateStatusAsync(string id, string status)
         {
-            var updated = await _repository.UpdateStatusAsync(id, status, isReviewedByAdmin);
+            var updated = await _repository.UpdateStatusAsync(id, status); // 🔄 Chỉ truyền 2 parameters
             return updated == null ? null : _mapper.Map<WarrantyDto>(updated);
         }
 
