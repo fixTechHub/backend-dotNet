@@ -35,5 +35,8 @@ namespace WebApiDotNet.Data
         public IMongoCollection<BookingPrice> BookingPrices => _database.GetCollection<BookingPrice>("bookingprices");
         public IMongoCollection<CommissionConfig> CommissionConfigs => _database.GetCollection<CommissionConfig>("commissionconfigs");
         public IMongoCollection<RefreshToken> RefreshTokens => _database.GetCollection<RefreshToken>("refreshtokens");
+        public IMongoCollection<Package> Packages => _database.GetCollection<Package>("commissionpackages");
+        public IMongoCollection<TechnicianSubscription> TechnicianSubscriptions => _database.GetCollection<TechnicianSubscription>("techniciansubscriptions");
+
     }
 }

@@ -99,6 +99,33 @@ namespace WebApiDotNet.Data
                 .ForMember(dest => dest.PaymentStatus, opt => opt.MapFrom(src => src.PaymentStatus.ToString()));
             CreateMap<Technician, TechnicianFinancialDto>();
             CreateMap<Technician, TechnicianFinancialSummaryDto>();
+
+            CreateMap<Package, PackageDto>().ReverseMap();
+CreateMap<CreatePackageDto, Package>()
+                .ForMember(dest => dest.Id, opt => opt.Ignore())
+                .ForMember(dest => dest.CreatedAt, opt => opt.Ignore())
+                .ForMember(dest => dest.UpdatedAt, opt => opt.Ignore());
+            CreateMap<UpdatePackageDto, Package>()
+                .ForMember(dest => dest.Id, opt => opt.Ignore())
+                .ForMember(dest => dest.CreatedAt, opt => opt.Ignore())
+                .ForMember(dest => dest.UpdatedAt, opt => opt.Ignore());
+
+            // TechnicianSubscription mappings
+            CreateMap<TechnicianSubscription, TechnicianSubscriptionDto>()
+                .ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.Status.ToString()));
+            CreateMap<PaymentHistoryItem, PaymentHistoryItemDto>()
+                .ForMember(dest => dest.PaymentStatus, opt => opt.MapFrom(src => src.PaymentStatus.ToString()));
+            CreateMap<TechnicianSubscriptionDto, TechnicianSubscription>()
+                .ForMember(dest => dest.Status, opt => opt.MapFrom(src => Enum.Parse<SubscriptionStatus>(src.Status)))
+                .ForMember(dest => dest.PaymentStatus, opt => opt.MapFrom(src => Enum.Parse<SubscriptionPaymentStatus>(src.PaymentStatus)));
+            CreateMap<CreateTechnicianSubscriptionDto, TechnicianSubscription>()
+                .ForMember(dest => dest.Id, opt => opt.Ignore())
+                .ForMember(dest => dest.CreatedAt, opt => opt.Ignore())
+                .ForMember(dest => dest.UpdatedAt, opt => opt.Ignore());
+            CreateMap<UpdateTechnicianSubscriptionDto, TechnicianSubscription>()
+                .ForMember(dest => dest.Id, opt => opt.Ignore())
+                .ForMember(dest => dest.CreatedAt, opt => opt.Ignore())
+                .ForMember(dest => dest.UpdatedAt, opt => opt.Ignore());
         }
     }
 }

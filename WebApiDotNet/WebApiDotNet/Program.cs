@@ -36,6 +36,8 @@ builder.Services.AddScoped<IServiceRepository, ServiceRepository>();
 builder.Services.AddScoped<ICommissionConfigRepository, CommissionConfigRepository>();
 builder.Services.AddScoped<IFinancialReportRepository, FinancialReportRepository>();
 builder.Services.AddScoped<IRefreshTokenRepository, RefreshTokenRepository>();
+builder.Services.AddScoped<IPackageRepository, PackageRepository>();
+builder.Services.AddScoped<ITechnicianSubscriptionRepository, TechnicianSubscriptionRepository>();
 
 builder.Services.AddScoped<ICouponService, CouponService>();
 builder.Services.AddScoped<ICouponUsageService, CouponUsageService>();
@@ -51,7 +53,8 @@ builder.Services.AddScoped<IServiceService, ServiceService>();
 builder.Services.AddScoped<ICommissionConfigService, CommissionConfigService>();
 builder.Services.AddScoped<IFinancialReportService, FinancialReportService>();
 builder.Services.AddScoped<IEmailService, EmailService>();
-
+builder.Services.AddScoped<IPackageService, PackageService>();
+builder.Services.AddScoped<ITechnicianSubscriptionService, TechnicianSubscriptionService>();
 // Authentication: configure JWT from appsettings:Jwt
 var jwtSection = builder.Configuration.GetSection("Jwt");
 var jwtKey = jwtSection.GetValue<string>("Key");
