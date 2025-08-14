@@ -2,6 +2,7 @@
 using WebApiDotNet.DTOs;
 using WebApiDotNet.Models;
 using WebApiDotNet.Repository.IRepository;
+using MongoDB.Bson;
 
 namespace WebApiDotNet.Services
 {
@@ -11,13 +12,15 @@ namespace WebApiDotNet.Services
         private readonly IMapper _mapper;
         private readonly IBookingService _bookingService;
         private readonly IUserService _userService;
+        private readonly ICouponUsageRepository _couponUsageRepository;
 
-        public CouponService(ICouponRepository repository, IMapper mapper, IBookingService bookingService, IUserService userService)
+        public CouponService(ICouponRepository repository, IMapper mapper, IBookingService bookingService, IUserService userService, ICouponUsageRepository couponUsageRepository)
         {
             _repository = repository;
             _mapper = mapper;
             _bookingService = bookingService;
             _userService = userService;
+            _couponUsageRepository = couponUsageRepository;
         }
 
         public async Task<List<CouponDto>> GetAllCouponsAsync()
@@ -49,6 +52,20 @@ namespace WebApiDotNet.Services
             var coupon = await _repository.GetByIdAsync(id);
             var now = DateTime.UtcNow;
             if (coupon != null && coupon.IsActive && coupon.EndDate < now)
+            {
+                coupon.IsActive = false;
+                await _repository.UpdateAsync(coupon.Id, coupon);
+            }
+            return _mapper.Map<CouponDto>(coupon);
+        }
+
+        public async Task<CouponDto> GetCouponByCodeAsync(string code)
+        {
+            var coupon = await _repository.GetByCodeAsync(code);
+            if (coupon == null) return null;
+            
+            var now = DateTime.UtcNow;
+            if (coupon.IsActive && coupon.EndDate < now)
             {
                 coupon.IsActive = false;
                 await _repository.UpdateAsync(coupon.Id, coupon);
@@ -203,6 +220,14 @@ namespace WebApiDotNet.Services
                 return false;
             }
 
+            // 🔍 Kiểm tra xem user đã từng sử dụng coupon này chưa
+            var hasUsed = await _couponUsageRepository.HasUserUsedCouponAsync(couponId, userId);
+            
+            if (hasUsed)
+            {
+                return false; // User đã sử dụng coupon này rồi
+            }
+
             switch (coupon.Audience)
             {
                 case CouponAudience.NEW_USER:
@@ -248,6 +273,55 @@ namespace WebApiDotNet.Services
             };
 
             return usageInfo;
+        }
+
+        /// <summary>
+        /// Lấy danh sách coupon mà user có thể sử dụng
+        /// </summary>
+        public async Task<List<CouponDto>> GetUserCouponsAsync(string userId)
+        {
+            var allCoupons = await _repository.GetAllAsync();
+            var now = DateTime.UtcNow;
+            var availableCoupons = new List<CouponDto>();
+
+            foreach (var coupon in allCoupons)
+            {
+                // Kiểm tra trạng thái cơ bản
+                if (!coupon.IsActive || coupon.EndDate < now || coupon.UsedCount >= coupon.TotalUsageLimit)
+                    continue;
+
+                // Kiểm tra xem user đã sử dụng coupon này chưa
+                var hasUsed = await _couponUsageRepository.HasUserUsedCouponAsync(coupon.Id, userId);
+                if (hasUsed)
+                    continue;
+
+                // Kiểm tra audience
+                bool canUseByAudience = false;
+                switch (coupon.Audience)
+                {
+                    case CouponAudience.NEW_USER:
+                        var hasBookings = await _bookingService.HasUserBookingsAsync(userId);
+                        canUseByAudience = !hasBookings;
+                        break;
+                    case CouponAudience.EXISTING_USER:
+                        var user = await _userService.GetByIdAsync(userId);
+                        canUseByAudience = user != null && user.Status == "Active";
+                        break;
+                    case CouponAudience.ALL:
+                        canUseByAudience = true;
+                        break;
+                    case CouponAudience.SPECIFIC_USERS:
+                        canUseByAudience = coupon.UserIds?.Contains(userId) == true;
+                        break;
+                }
+
+                if (canUseByAudience)
+                {
+                    availableCoupons.Add(_mapper.Map<CouponDto>(coupon));
+                }
+            }
+
+            return availableCoupons;
         }
     }
 }

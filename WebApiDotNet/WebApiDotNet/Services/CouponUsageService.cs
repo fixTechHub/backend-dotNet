@@ -38,11 +38,11 @@ namespace WebApiDotNet.Services
             if (coupon == null || !coupon.IsActive)
                 throw new Exception("Coupon không tồn tại hoặc không khả dụng");
 
-            // 🔍 Kiểm tra nếu đã từng dùng coupon này cho bookingId này bởi userId  
-            var existingUsage = await _repository.GetByConditionAsync(u => u.CouponId == ObjectId.Parse(couponId) && u.UserId == ObjectId.Parse(userId));
+            // 🔍 Kiểm tra xem user đã từng sử dụng coupon này chưa (một lần duy nhất)
+            var hasUsed = await _repository.HasUserUsedCouponAsync(couponId, userId);
 
-            if (existingUsage != null)
-                throw new Exception("Bạn đã sử dụng mã giảm giá này cho đơn đặt dịch vụ này rồi!");
+            if (hasUsed)
+                throw new Exception("Bạn đã sử dụng mã giảm giá này rồi! Mỗi mã giảm giá chỉ có thể sử dụng một lần duy nhất.");
 
             var usage = new CouponUsage
             {

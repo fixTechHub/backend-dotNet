@@ -33,5 +33,14 @@ namespace WebApiDotNet.Repository
         {
             return await _collection.Find(x => x.Id == id).FirstOrDefaultAsync();
         }
+
+        public async Task<bool> HasUserUsedCouponAsync(string couponId, string userId)
+        {
+            var filter = Builders<CouponUsage>.Filter.And(
+                Builders<CouponUsage>.Filter.Eq(u => u.CouponId, ObjectId.Parse(couponId)),
+                Builders<CouponUsage>.Filter.Eq(u => u.UserId, ObjectId.Parse(userId))
+            );
+            return await _collection.Find(filter).AnyAsync();
+        }
     }
 }

@@ -10,5 +10,6 @@ namespace WebApiDotNet.Repository.IRepository
         Task CreateAsync(CouponUsage usage);
         Task<CouponUsage?> GetByConditionAsync(Expression<Func<CouponUsage, bool>> filter);
         Task<CouponUsage?> GetByIdAsync(string id);
+        Task<bool> HasUserUsedCouponAsync(string couponId, string userId);
     }
 }
