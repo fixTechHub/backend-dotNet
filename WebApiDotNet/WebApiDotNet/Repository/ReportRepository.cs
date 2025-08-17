@@ -23,5 +23,16 @@ namespace WebApiDotNet.Repository
         {
             return await _collection.Find(report => report.Id == id).FirstOrDefaultAsync();
         }
+
+        public async Task<Report> UpdateAsync(Report report)
+        {
+            var filter = Builders<Report>.Filter.Eq(r => r.Id, report.Id);
+            var update = Builders<Report>.Update
+                .Set(r => r.Status, report.Status)
+                .Set(r => r.UpdatedAt, DateTime.UtcNow);
+
+            await _collection.UpdateOneAsync(filter, update);
+            return await GetByIdAsync(report.Id);
+        }
     }
 }

@@ -12,25 +12,46 @@ namespace WebApiDotNet.Models
 
         [BsonElement("type")]
         [BsonRepresentation(BsonType.String)]
-        public ReportType Type { get; set; } = ReportType.REPORT;
+        public ReportType Type { get; set; } = ReportType.BOOKING;
 
-        [BsonElement("reportedUserId")]
+        [BsonElement("bookingId")]
         [BsonRepresentation(BsonType.ObjectId)]
-        public string ReportedUserId { get; set; }
+        public string? BookingId { get; set; }
+
+        [BsonElement("warrantyId")]
+        [BsonRepresentation(BsonType.ObjectId)]
+        public string? WarrantyId { get; set; }
 
         [BsonElement("reporterId")]
         [BsonRepresentation(BsonType.ObjectId)]
         public string ReporterId { get; set; }
 
+        [BsonElement("reportedUserId")]
+        [BsonRepresentation(BsonType.ObjectId)]
+        public string ReportedUserId { get; set; }
+
+        [BsonElement("title")]
+        public string Title { get; set; }
+
+        [BsonElement("tag")]
+        [BsonRepresentation(BsonType.String)]
+        public ReportTag Tag { get; set; }
+
         [BsonElement("description")]
         public string Description { get; set; }
+
+        [BsonElement("evidences")]
+        public List<string> Evidences { get; set; } = new List<string>();
 
         [BsonElement("status")]
         [BsonRepresentation(BsonType.String)]
         public ReportStatus Status { get; set; } = ReportStatus.PENDING;
 
-        [BsonElement("penalty")]
-        public string? Penalty { get; set; } = null;
+        [BsonElement("responseDeadline")]
+        public DateTime? ResponseDeadline { get; set; }
+
+        [BsonElement("responseLocked")]
+        public bool ResponseLocked { get; set; } = false;
 
         [BsonElement("createdAt")]
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
@@ -41,17 +62,28 @@ namespace WebApiDotNet.Models
 
     public enum ReportType
     {
-        REPORT,
-        VIOLATION,
-        WARRANTY
+        BOOKING,
+        WARRANTY,
+        VIOLATION
+    }
+
+    public enum ReportTag
+    {
+        NO_SHOW,
+        LATE,
+        RUDE,
+        ISSUE,
+        OTHER,
+        WARRANTY_DENIED,
+        WARRANTY_DELAY,
+        POOR_FIX
     }
 
     public enum ReportStatus
     {
         PENDING,
-        CONFIRMED,
+        AWAITING_RESPONSE,
         REJECTED,
-        RESOLVED,
-        CLOSED
+        RESOLVED
     }
 }

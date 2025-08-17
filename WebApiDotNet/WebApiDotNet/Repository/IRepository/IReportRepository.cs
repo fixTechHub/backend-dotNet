@@ -6,5 +6,6 @@ namespace WebApiDotNet.Repository.IRepository
     {
         Task<List<Report>> GetAllAsync();
         Task<Report> GetByIdAsync(string id);
+        Task<Report> UpdateAsync(Report report);
     }
 }

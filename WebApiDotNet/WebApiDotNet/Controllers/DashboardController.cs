@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using WebApiDotNet.Services;
 using WebApiDotNet.DTOs;
+using WebApiDotNet.Models;
 
 namespace WebApiDotNet.Controllers
 {
@@ -233,6 +234,120 @@ namespace WebApiDotNet.Controllers
             var report = await _reportService.GetByIdAsync(id);
             if (report == null) return NotFound();
             return Ok(report);
+        }
+
+        [HttpGet("reports/user-counts")]
+        public async Task<IActionResult> GetUserReportCounts()
+        {
+            try
+            {
+                var reportCounts = await _reportService.GetUserReportCountsAsync();
+                return Ok(reportCounts);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = "Lỗi khi lấy số lần bị report của user", error = ex.Message });
+            }
+        }
+
+        [HttpGet("reports/user/{userId}/count")]
+        public async Task<IActionResult> GetUserReportCount(string userId)
+        {
+            try
+            {
+                if (string.IsNullOrEmpty(userId))
+                    return BadRequest(new { message = "UserId không được để trống" });
+                    
+                var count = await _reportService.GetUserReportCountAsync(userId);
+                return Ok(new { userId, reportCount = count });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = "Lỗi khi lấy số lần bị report của user", error = ex.Message });
+            }
+        }
+
+        [HttpGet("reports/type/{type}")]
+        public async Task<IActionResult> GetReportsByType(string type)
+        {
+            try
+            {
+                if (string.IsNullOrEmpty(type))
+                    return BadRequest(new { message = "Type không được để trống" });
+                
+                if (!Enum.TryParse<ReportType>(type, true, out var reportType))
+                    return BadRequest(new { message = "Type không hợp lệ" });
+                    
+                var reports = await _reportService.GetByTypeAsync(reportType);
+                return Ok(reports);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = "Lỗi khi lấy reports theo type", error = ex.Message });
+            }
+        }
+
+        [HttpGet("reports/status/{status}")]
+        public async Task<IActionResult> GetReportsByStatus(string status)
+        {
+            try
+            {
+                if (string.IsNullOrEmpty(status))
+                    return BadRequest(new { message = "Status không được để trống" });
+                
+                if (!Enum.TryParse<ReportStatus>(status, true, out var reportStatus))
+                    return BadRequest(new { message = "Status không hợp lệ" });
+                    
+                var reports = await _reportService.GetByStatusAsync(reportStatus);
+                return Ok(reports);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = "Lỗi khi lấy reports theo status", error = ex.Message });
+            }
+        }
+
+        [HttpGet("reports/user-counts/type/{type}")]
+        public async Task<IActionResult> GetUserReportCountsByType(string type)
+        {
+            try
+            {
+                if (string.IsNullOrEmpty(type))
+                    return BadRequest(new { message = "Type không được để trống" });
+                
+                if (!Enum.TryParse<ReportType>(type, true, out var reportType))
+                    return BadRequest(new { message = "Type không hợp lệ" });
+                    
+                var reportCounts = await _reportService.GetUserReportCountsByTypeAsync(reportType);
+                return Ok(reportCounts);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = "Lỗi khi lấy số lần bị report theo type", error = ex.Message });
+            }
+        }
+
+        [HttpPatch("reports/{id}/status")]
+        public async Task<IActionResult> UpdateReportStatus(string id, [FromBody] UpdateReportStatusDto dto)
+        {
+            try
+            {
+                if (string.IsNullOrEmpty(id))
+                    return BadRequest(new { message = "Report ID không được để trống" });
+                
+                if (!Enum.TryParse<ReportStatus>(dto.Status, true, out var newStatus))
+                    return BadRequest(new { message = "Status không hợp lệ" });
+
+                var updatedReport = await _reportService.UpdateStatusAsync(id, newStatus, dto.ResolvedBy);
+                if (updatedReport == null)
+                    return NotFound(new { message = "Report không tồn tại hoặc không thể cập nhật" });
+
+                return Ok(updatedReport);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = "Lỗi khi cập nhật status report", error = ex.Message });
+            }
         }
 
         //COMMISSION CONFIG

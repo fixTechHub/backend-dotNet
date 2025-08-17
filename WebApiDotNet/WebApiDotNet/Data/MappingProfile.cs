@@ -2,6 +2,7 @@
 using WebApiDotNet.DTOs;
 using WebApiDotNet.Models;
 using System;
+using WebApiDotNet.Models; // Để sử dụng ReportTag enum
 
 namespace WebApiDotNet.Data
 {
@@ -41,6 +42,7 @@ namespace WebApiDotNet.Data
             CreateMap<QuoteItem, QuoteItemDto>().ReverseMap();
             CreateMap<Report, ReportDto>()
                 .ForMember(dest => dest.Type, opt => opt.MapFrom(src => src.Type.ToString()))
+                .ForMember(dest => dest.Tag, opt => opt.MapFrom(src => src.Tag.ToString()))
                 .ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.Status.ToString()));
             
             // DTO -> Entity
@@ -55,7 +57,6 @@ namespace WebApiDotNet.Data
             CreateMap<CreateCouponDto, Coupon>()
                 .ForMember(dest => dest.Id, opt => opt.Ignore())
                 .ForMember(dest => dest.CreatedAt, opt => opt.Ignore())
-                .ForMember(dest => dest.UpdatedAt, opt => opt.Ignore())
                 .ForMember(dest => dest.UsedCount, opt => opt.Ignore())
                 .ForMember(dest => dest.Type, opt => opt.MapFrom(src => src.Type)); ;
             CreateMap<UpdateCouponDto, Coupon>()
@@ -83,6 +84,7 @@ namespace WebApiDotNet.Data
                 .ForMember(dest => dest.UpdatedAt, opt => opt.Ignore());
             CreateMap<ReportDto, Report>()
                 .ForMember(dest => dest.Type, opt => opt.MapFrom(src => Enum.Parse<ReportType>(src.Type, true)))
+                .ForMember(dest => dest.Tag, opt => opt.MapFrom(src => Enum.Parse<ReportTag>(src.Tag, true)))
                 .ForMember(dest => dest.Status, opt => opt.MapFrom(src => Enum.Parse<ReportStatus>(src.Status, true)));
             CreateMap<BookingDto, Booking>()
                 .ForMember(dest => dest.Status, opt => opt.MapFrom(src => Enum.Parse<BookingStatus>(src.Status, true)))
