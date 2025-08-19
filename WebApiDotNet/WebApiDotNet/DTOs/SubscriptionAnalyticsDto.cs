@@ -55,6 +55,7 @@ namespace WebApiDotNet.DTOs
     public class PackageAnalyticsDto
     {
         public string PackageId { get; set; } = string.Empty;
+        public string PackageName { get; set; } = string.Empty; // Thêm tên Package
         public int TotalSubscriptions { get; set; }
         public int ActiveSubscriptions { get; set; }
         public decimal Revenue { get; set; }

@@ -11,10 +11,12 @@ namespace WebApiDotNet.Services
     public class AnalyticsService : IAnalyticsService
     {
         private readonly ITechnicianSubscriptionRepository _subscriptionRepository;
+        private readonly IPackageRepository _packageRepository;
 
-        public AnalyticsService(ITechnicianSubscriptionRepository subscriptionRepository)
+        public AnalyticsService(ITechnicianSubscriptionRepository subscriptionRepository, IPackageRepository packageRepository)
         {
             _subscriptionRepository = subscriptionRepository;
+            _packageRepository = packageRepository;
         }
 
         public async Task<SubscriptionAnalyticsDto> GetSubscriptionAnalyticsAsync(int year, string timeRange)
@@ -43,7 +45,7 @@ namespace WebApiDotNet.Services
                 
                 MonthlyMetrics = CalculateMonthlyMetrics(filteredSubscriptions, year, timeRange),
                 QuarterlyMetrics = CalculateQuarterlyMetrics(filteredSubscriptions, year, timeRange),
-                PackageAnalytics = CalculatePackageAnalytics(filteredSubscriptions),
+                PackageAnalytics = await CalculatePackageAnalyticsAsync(filteredSubscriptions),
                 StatusAnalytics = CalculateStatusAnalytics(filteredSubscriptions)
             };
 
@@ -283,23 +285,35 @@ namespace WebApiDotNet.Services
             return result;
         }
 
-        private List<PackageAnalyticsDto> CalculatePackageAnalytics(IEnumerable<TechnicianSubscription> subscriptions)
+        private async Task<List<PackageAnalyticsDto>> CalculatePackageAnalyticsAsync(IEnumerable<TechnicianSubscription> subscriptions)
         {
             var packageGroups = subscriptions
                 .GroupBy(s => s.PackageId)
-                .Select(g => new PackageAnalyticsDto
-                {
-                    PackageId = g.Key,
-                    TotalSubscriptions = g.Count(),
-                    ActiveSubscriptions = g.Count(s => s.Status == SubscriptionStatus.ACTIVE),
-                    Revenue = (decimal)g.Sum(s => s.Amount),
-                    AvgPrice = (decimal)g.Average(s => s.Amount),
-                    ConversionRate = g.Count() > 0 ? 
-                        (double)g.Count(s => s.Status == SubscriptionStatus.ACTIVE) / g.Count() * 100 : 0
-                })
+                .Select(g => new { PackageId = g.Key, Group = g })
                 .ToList();
+
+            var result = new List<PackageAnalyticsDto>();
             
-            return packageGroups;
+            foreach (var packageGroup in packageGroups)
+            {
+                var package = await _packageRepository.GetByIdAsync(packageGroup.PackageId);
+                var packageName = package?.Name ?? "Gói không xác định";
+                
+                var group = packageGroup.Group;
+                result.Add(new PackageAnalyticsDto
+                {
+                    PackageId = packageGroup.PackageId,
+                    PackageName = packageName,
+                    TotalSubscriptions = group.Count(),
+                    ActiveSubscriptions = group.Count(s => s.Status == SubscriptionStatus.ACTIVE),
+                    Revenue = (decimal)group.Sum(s => s.Amount),
+                    AvgPrice = (decimal)group.Average(s => s.Amount),
+                    ConversionRate = group.Count() > 0 ? 
+                        (double)group.Count(s => s.Status == SubscriptionStatus.ACTIVE) / group.Count() * 100 : 0
+                });
+            }
+            
+            return result;
         }
 
         private List<StatusAnalyticsDto> CalculateStatusAnalytics(IEnumerable<TechnicianSubscription> subscriptions)
