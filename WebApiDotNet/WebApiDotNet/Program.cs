@@ -57,6 +57,7 @@ builder.Services.AddScoped<IEmailService, EmailService>();
 builder.Services.AddScoped<IPackageService, PackageService>();
 builder.Services.AddScoped<ITechnicianSubscriptionService, TechnicianSubscriptionService>();
 builder.Services.AddScoped<IBookingStatusLogService, BookingStatusLogService>();
+builder.Services.AddScoped<IAnalyticsService, AnalyticsService>();
 // Authentication: configure JWT from appsettings:Jwt
 var jwtSection = builder.Configuration.GetSection("Jwt");
 var jwtKey = jwtSection.GetValue<string>("Key");

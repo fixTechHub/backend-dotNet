@@ -126,6 +126,19 @@ namespace WebApiDotNet.Repository
             return await _collection.Find(filter).ToListAsync();
         }
 
+        public async Task<List<TechnicianSubscription>> GetSubscriptionsByYearAsync(int year)
+        {
+            var startDate = new DateTime(year, 1, 1);
+            var endDate = startDate.AddYears(1);
+            
+            var filter = Builders<TechnicianSubscription>.Filter.And(
+                Builders<TechnicianSubscription>.Filter.Gte(s => s.CreatedAt, startDate),
+                Builders<TechnicianSubscription>.Filter.Lt(s => s.CreatedAt, endDate)
+            );
+            
+            return await _collection.Find(filter).ToListAsync();
+        }
+
         public async Task<bool> UpdatePaymentStatusAsync(string id, string paymentStatus, string? transactionId = null)
         {
             var filter = Builders<TechnicianSubscription>.Filter.Eq(s => s.Id, id);

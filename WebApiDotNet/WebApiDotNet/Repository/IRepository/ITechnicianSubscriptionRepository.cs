@@ -19,6 +19,7 @@ namespace WebApiDotNet.Repository.IRepository
         Task<double> GetTotalRevenueAsync();
         Task<double> GetMonthlyRevenueAsync(int year, int month);
         Task<List<TechnicianSubscription>> GetSubscriptionsByDateRangeAsync(DateTime startDate, DateTime endDate);
+        Task<List<TechnicianSubscription>> GetSubscriptionsByYearAsync(int year);
         
         // Payment related
         Task<bool> UpdatePaymentStatusAsync(string id, string paymentStatus, string? transactionId = null);
