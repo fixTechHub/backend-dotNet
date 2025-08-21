@@ -35,13 +35,17 @@ namespace WebApiDotNet.Services
                 CancelledSubscriptions = filteredSubscriptions.Count(s => s.Status == SubscriptionStatus.CANCELLED),
                 
                 TotalRevenue = (decimal)filteredSubscriptions.Sum(s => s.Amount),
-                AvgRevenuePerSubscription = filteredSubscriptions.Any() ? 
-                    (decimal)(filteredSubscriptions.Sum(s => s.Amount) / (double)filteredSubscriptions.Count()) : 0m,
-                
+                AvgRevenuePerSubscription = filteredSubscriptions.Any() ? (decimal)filteredSubscriptions.Average(s => s.Amount) : 0m,
                 RevenueGrowth = CalculateRevenueGrowth(filteredSubscriptions, year),
                 ConversionRate = CalculateConversionRate(filteredSubscriptions),
                 ChurnRate = CalculateChurnRate(filteredSubscriptions),
                 RetentionRate = CalculateRetentionRate(filteredSubscriptions),
+                
+                // Tỷ lệ rời bỏ chi tiết
+                CustomerCancellationRate = CalculateCustomerCancellationRate(filteredSubscriptions),
+                TotalChurnRate = CalculateTotalChurnRate(filteredSubscriptions),
+                ExpiredChurnRate = CalculateExpiredChurnRate(filteredSubscriptions),
+                SuspendedChurnRate = CalculateSuspendedChurnRate(filteredSubscriptions),
                 
                 MonthlyMetrics = CalculateMonthlyMetrics(filteredSubscriptions, year, timeRange),
                 QuarterlyMetrics = CalculateQuarterlyMetrics(filteredSubscriptions, year, timeRange),
@@ -64,6 +68,57 @@ namespace WebApiDotNet.Services
             var total = subscriptions.Count();
             var cancelled = subscriptions.Count(s => s.Status == SubscriptionStatus.CANCELLED);
             return total > 0 ? (double)cancelled / total * 100 : 0;
+        }
+
+        /// <summary>
+        /// Tính tỷ lệ rời bỏ khách hàng tự hủy (CANCELLED)
+        /// </summary>
+        /// <param name="subscriptions">Danh sách gói đăng ký</param>
+        /// <returns>Tỷ lệ rời bỏ khách hàng tự hủy (%)</returns>
+        private double CalculateCustomerCancellationRate(IEnumerable<TechnicianSubscription> subscriptions)
+        {
+            var total = subscriptions.Count();
+            var customerCancelled = subscriptions.Count(s => s.Status == SubscriptionStatus.CANCELLED);
+            return total > 0 ? (double)customerCancelled / total * 100 : 0;
+        }
+
+        /// <summary>
+        /// Tính tỷ lệ rời bỏ tổng hợp (bao gồm tất cả trạng thái không hoạt động)
+        /// </summary>
+        /// <param name="subscriptions">Danh sách gói đăng ký</param>
+        /// <returns>Tỷ lệ rời bỏ tổng hợp (%)</returns>
+        private double CalculateTotalChurnRate(IEnumerable<TechnicianSubscription> subscriptions)
+        {
+            var total = subscriptions.Count();
+            var totalChurned = subscriptions.Count(s => 
+                s.Status == SubscriptionStatus.CANCELLED || 
+                s.Status == SubscriptionStatus.EXPIRED || 
+                s.Status == SubscriptionStatus.SUSPENDED);
+            return total > 0 ? (double)totalChurned / total * 100 : 0;
+        }
+
+        /// <summary>
+        /// Tính tỷ lệ rời bỏ do hết hạn (EXPIRED)
+        /// </summary>
+        /// <param name="subscriptions">Danh sách gói đăng ký</param>
+        /// <returns>Tỷ lệ rời bỏ do hết hạn (%)</returns>
+        private double CalculateExpiredChurnRate(IEnumerable<TechnicianSubscription> subscriptions)
+        {
+            var total = subscriptions.Count();
+            var expired = subscriptions.Count(s => s.Status == SubscriptionStatus.EXPIRED);
+            return total > 0 ? (double)expired / total * 100 : 0;
+        }
+
+        /// <summary>
+        /// Tính tỷ lệ rời bỏ do bị đình chỉ (SUSPENDED)
+        /// </summary>
+        /// <param name="subscriptions">Danh sách gói đăng ký</param>
+        /// <returns>Tỷ lệ rời bỏ do bị đình chỉ (%)</returns>
+        private double CalculateSuspendedChurnRate(IEnumerable<TechnicianSubscription> subscriptions)
+        {
+            var total = subscriptions.Count();
+            var suspended = subscriptions.Count(s => s.Status == SubscriptionStatus.SUSPENDED);
+            return total > 0 ? (double)suspended / total * 100 : 0;
         }
 
         private double CalculateRetentionRate(IEnumerable<TechnicianSubscription> subscriptions)

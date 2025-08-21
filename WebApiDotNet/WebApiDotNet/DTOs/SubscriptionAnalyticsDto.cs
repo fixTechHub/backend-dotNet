@@ -22,6 +22,12 @@ namespace WebApiDotNet.DTOs
         public double ChurnRate { get; set; }
         public double RetentionRate { get; set; }
         
+        // Tỷ lệ rời bỏ chi tiết
+        public double CustomerCancellationRate { get; set; }  // Tỷ lệ khách hàng tự hủy (CANCELLED)
+        public double TotalChurnRate { get; set; }            // Tỷ lệ rời bỏ tổng hợp (tất cả trạng thái không hoạt động)
+        public double ExpiredChurnRate { get; set; }          // Tỷ lệ rời bỏ do hết hạn (EXPIRED)
+        public double SuspendedChurnRate { get; set; }        // Tỷ lệ rời bỏ do bị đình chỉ (SUSPENDED)
+        
         // Dữ liệu theo thời gian
         public List<MonthlyMetricDto> MonthlyMetrics { get; set; } = new List<MonthlyMetricDto>();
         public List<QuarterlyMetricDto> QuarterlyMetrics { get; set; } = new List<QuarterlyMetricDto>();
