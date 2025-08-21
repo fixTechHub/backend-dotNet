@@ -42,53 +42,110 @@ namespace WebApiDotNet.Repository
 
         public async Task<List<BookingFinancialDto>> GetAllBookingsFinancialAsync()
         {
-            // Sử dụng MongoDB Aggregation Pipeline để tránh N+1 Query Problem
-            var pipeline = new[]
+            try
             {
-                new BsonDocument("$match", new BsonDocument("Schedule", new BsonDocument("$type", "object"))),
-                new BsonDocument("$lookup", new BsonDocument
+                Console.WriteLine("🔍 Getting all bookings financial data...");
+                
+                // Trước tiên, hãy kiểm tra xem có bao nhiêu bookings trong database
+                var totalBookings = await _bookingCollection.CountDocumentsAsync(_ => true);
+                Console.WriteLine($"📊 Total bookings in database: {totalBookings}");
+                
+                if (totalBookings == 0)
                 {
-                    { "from", "Users" },
-                    { "localField", "CustomerId" },
-                    { "foreignField", "_id" },
-                    { "as", "customer" }
-                }),
-                new BsonDocument("$lookup", new BsonDocument
+                    Console.WriteLine("⚠️ No bookings found in database");
+                    return new List<BookingFinancialDto>();
+                }
+                
+                // Sử dụng MongoDB Aggregation Pipeline để tránh N+1 Query Problem
+                var pipeline = new[]
                 {
-                    { "from", "Technicians" },
-                    { "localField", "TechnicianId" },
-                    { "foreignField", "_id" },
-                    { "as", "technician" }
-                }),
-                new BsonDocument("$lookup", new BsonDocument
-                {
-                    { "from", "Services" },
-                    { "localField", "ServiceId" },
-                    { "foreignField", "_id" },
-                    { "as", "service" }
-                }),
-                new BsonDocument("$project", new BsonDocument
-                {
-                    { "Id", "$_id" },
-                    { "BookingCode", 1 },
-                    { "CustomerId", 1 },
-                    { "CustomerName", new BsonDocument("$ifNull", new BsonArray { "$customer.FullName", "$customer.Email", "Unknown" }) },
-                    { "TechnicianId", 1 },
-                    { "TechnicianName", new BsonDocument("$ifNull", new BsonArray { "$technician.FullName", "$technician.Email", "Unknown" }) },
-                    { "ServiceId", 1 },
-                    { "ServiceName", new BsonDocument("$ifNull", new BsonArray { "$service.ServiceName", "Unknown" }) },
-                    { "FinalPrice", 1 },
-                    { "HoldingAmount", 1 },
-                    { "CommissionAmount", 1 },
-                    { "TechnicianEarning", 1 },
-                    { "CreatedAt", 1 },
-                    { "Status", 1 },
-                    { "PaymentStatus", 1 }
-                })
-            };
+                    // Lấy tất cả bookings thay vì filter quá hạn chế
+                    new BsonDocument("$lookup", new BsonDocument
+                    {
+                        { "from", "Users" },
+                        { "localField", "CustomerId" },
+                        { "foreignField", "_id" },
+                        { "as", "customer" }
+                    }),
+                    new BsonDocument("$lookup", new BsonDocument
+                    {
+                        { "from", "Technicians" },
+                        { "localField", "TechnicianId" },
+                        { "foreignField", "_id" },
+                        { "as", "technician" }
+                    }),
+                    new BsonDocument("$lookup", new BsonDocument
+                    {
+                        { "from", "Services" },
+                        { "localField", "ServiceId" },
+                        { "foreignField", "_id" },
+                        { "as", "service" }
+                    }),
+                    new BsonDocument("$project", new BsonDocument
+                    {
+                        { "Id", "$_id" },
+                        { "BookingCode", 1 },
+                        { "CustomerId", 1 },
+                        { "CustomerName", new BsonDocument("$ifNull", new BsonArray { "$customer.FullName", "$customer.Email", "Unknown" }) },
+                        { "TechnicianId", 1 },
+                        { "TechnicianName", new BsonDocument("$ifNull", new BsonArray { "$technician.FullName", "$technician.Email", "Unknown" }) },
+                        { "ServiceId", 1 },
+                        { "ServiceName", new BsonDocument("$ifNull", new BsonArray { "$service.ServiceName", "Unknown" }) },
+                        { "FinalPrice", 1 },
+                        { "HoldingAmount", 1 },
+                        { "CommissionAmount", 1 },
+                        { "TechnicianEarning", 1 },
+                        { "CreatedAt", 1 },
+                        { "Status", 1 },
+                        { "PaymentStatus", 1 }
+                    })
+                };
 
-            var result = await _bookingCollection.Aggregate<BookingFinancialDto>(pipeline).ToListAsync();
-            return result;
+                var result = await _bookingCollection.Aggregate<BookingFinancialDto>(pipeline).ToListAsync();
+                Console.WriteLine($"✅ Retrieved {result.Count} bookings from database");
+                
+                // Nếu aggregation pipeline không trả về kết quả, hãy thử method đơn giản hơn
+                if (result.Count == 0)
+                {
+                    Console.WriteLine("⚠️ Aggregation pipeline returned 0 results, trying fallback method...");
+                    var fallbackBookings = await _bookingCollection.Find(_ => true).Limit(10).ToListAsync();
+                    Console.WriteLine($"📊 Fallback method found {fallbackBookings.Count} bookings");
+                    
+                    // Convert to DTO manually
+                    var fallbackResult = new List<BookingFinancialDto>();
+                    foreach (var booking in fallbackBookings)
+                    {
+                        fallbackResult.Add(new BookingFinancialDto
+                        {
+                            Id = booking.Id,
+                            BookingCode = booking.BookingCode,
+                            CustomerId = booking.CustomerId,
+                            CustomerName = "Unknown", // Will be populated later if needed
+                            TechnicianId = booking.TechnicianId,
+                            TechnicianName = "Unknown", // Will be populated later if needed
+                            ServiceId = booking.ServiceId,
+                            ServiceName = "Unknown", // Will be populated later if needed
+                            FinalPrice = booking.FinalPrice,
+                            HoldingAmount = booking.HoldingAmount,
+                            CommissionAmount = booking.CommissionAmount,
+                            TechnicianEarning = booking.TechnicianEarning,
+                            CreatedAt = booking.CreatedAt,
+                            Status = booking.Status.ToString(),
+                            PaymentStatus = booking.PaymentStatus.ToString()
+                        });
+                    }
+                    
+                    return fallbackResult;
+                }
+                
+                return result;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"❌ Error in GetAllBookingsFinancialAsync: {ex.Message}");
+                Console.WriteLine($"❌ Stack trace: {ex.StackTrace}");
+                throw;
+            }
         }
 
         public async Task<List<TechnicianFinancialSummaryDto>> GetAllTechniciansFinancialSummaryAsync()
