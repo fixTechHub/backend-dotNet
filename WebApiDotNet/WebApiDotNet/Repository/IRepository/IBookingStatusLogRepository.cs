@@ -13,5 +13,6 @@ namespace WebApiDotNet.Repository.IRepository
         Task<IEnumerable<BookingStatusLog>> GetByDateRangeAsync(DateTime fromDate, DateTime toDate);
         Task<IEnumerable<BookingStatusLog>> GetFilteredAsync(BookingStatusLogFilterDTO filter);
         Task<long> GetCountAsync(BookingStatusLogFilterDTO filter);
+        Task<List<BookingStatusLogResponseDTO>> GetFilteredWithJoinsAsync(BookingStatusLogFilterDTO filter);
     }
 }

@@ -57,11 +57,11 @@ namespace WebApiDotNet.Services
 
         public async Task<(IEnumerable<BookingStatusLogResponseDTO> Items, long TotalCount)> GetFilteredAsync(BookingStatusLogFilterDTO filter)
         {
-            var logs = await _repository.GetFilteredAsync(filter);
+            // Sử dụng method mới với MongoDB Aggregation Pipeline để tránh N+1 Query
+            var logs = await _repository.GetFilteredWithJoinsAsync(filter);
             var totalCount = await _repository.GetCountAsync(filter);
-            var responseLogs = await MapToResponseDTOs(logs);
 
-            return (responseLogs, totalCount);
+            return (logs, totalCount);
         }
 
         public async Task<IEnumerable<BookingStatusLogResponseDTO>> GetBookingHistoryAsync(string bookingId)

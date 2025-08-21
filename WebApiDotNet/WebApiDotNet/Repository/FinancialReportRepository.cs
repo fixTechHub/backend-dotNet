@@ -42,96 +42,53 @@ namespace WebApiDotNet.Repository
 
         public async Task<List<BookingFinancialDto>> GetAllBookingsFinancialAsync()
         {
-            var filter = Builders<Booking>.Filter.Type("Schedule", BsonType.Document);
-            var bookings = await _bookingCollection.Find(filter).ToListAsync();
-
-            var bookingFinancials = new List<BookingFinancialDto>();
-            foreach (var booking in bookings)
+            // Sử dụng MongoDB Aggregation Pipeline để tránh N+1 Query Problem
+            var pipeline = new[]
             {
-                // Get customer name
-                string customerName = "Unknown";
-                if (!string.IsNullOrEmpty(booking.CustomerId))
+                new BsonDocument("$match", new BsonDocument("Schedule", new BsonDocument("$type", "object"))),
+                new BsonDocument("$lookup", new BsonDocument
                 {
-                    try
-                    {
-                        var customerFilter = Builders<User>.Filter.Eq(u => u.Id, booking.CustomerId);
-                        var customer = await _userCollection.Find(customerFilter).FirstOrDefaultAsync();
-                        customerName = customer?.FullName ?? customer?.Email ?? booking.CustomerId;
-                        Console.WriteLine($"Customer {booking.CustomerId}: {customerName}");
-                    }
-                    catch (Exception ex)
-                    {
-                        Console.WriteLine($"Error fetching customer {booking.CustomerId}: {ex.Message}");
-                        customerName = booking.CustomerId;
-                    }
-                }
-
-                // Get technician name
-                string technicianName = "Unknown";
-                if (!string.IsNullOrEmpty(booking.TechnicianId))
+                    { "from", "Users" },
+                    { "localField", "CustomerId" },
+                    { "foreignField", "_id" },
+                    { "as", "customer" }
+                }),
+                new BsonDocument("$lookup", new BsonDocument
                 {
-                    try
-                    {
-                        var technicianFilter = Builders<Technician>.Filter.Eq(t => t.Id, booking.TechnicianId);
-                        var technician = await _technicianCollection.Find(technicianFilter).FirstOrDefaultAsync();
-                        if (technician != null && !string.IsNullOrEmpty(technician.UserId))
-                        {
-                            var userFilter = Builders<User>.Filter.Eq(u => u.Id, technician.UserId);
-                            var user = await _userCollection.Find(userFilter).FirstOrDefaultAsync();
-                            technicianName = user?.FullName ?? user?.Email ?? booking.TechnicianId;
-                        }
-                        else
-                        {
-                            technicianName = booking.TechnicianId;
-                        }
-                        Console.WriteLine($"Technician {booking.TechnicianId}: {technicianName}");
-                    }
-                    catch (Exception ex)
-                    {
-                        Console.WriteLine($"Error fetching technician {booking.TechnicianId}: {ex.Message}");
-                        technicianName = booking.TechnicianId;
-                    }
-                }
-
-                // Get service name
-                string serviceName = "Unknown";
-                if (!string.IsNullOrEmpty(booking.ServiceId))
+                    { "from", "Technicians" },
+                    { "localField", "TechnicianId" },
+                    { "foreignField", "_id" },
+                    { "as", "technician" }
+                }),
+                new BsonDocument("$lookup", new BsonDocument
                 {
-                    try
-                    {
-                        var serviceFilter = Builders<Service>.Filter.Eq(s => s.Id, booking.ServiceId);
-                        var service = await _serviceCollection.Find(serviceFilter).FirstOrDefaultAsync();
-                        serviceName = service?.ServiceName ?? booking.ServiceId;
-                        Console.WriteLine($"Service {booking.ServiceId}: {serviceName}");
-                    }
-                    catch (Exception ex)
-                    {
-                        Console.WriteLine($"Error fetching service {booking.ServiceId}: {ex.Message}");
-                        serviceName = booking.ServiceId;
-                    }
-                }
-
-                bookingFinancials.Add(new BookingFinancialDto
+                    { "from", "Services" },
+                    { "localField", "ServiceId" },
+                    { "foreignField", "_id" },
+                    { "as", "service" }
+                }),
+                new BsonDocument("$project", new BsonDocument
                 {
-                    Id = booking.Id,
-                    BookingCode = booking.BookingCode,
-                    CustomerId = booking.CustomerId,
-                    CustomerName = customerName,
-                    TechnicianId = booking.TechnicianId,
-                    TechnicianName = technicianName,
-                    ServiceId = booking.ServiceId,
-                    ServiceName = serviceName,
-                    FinalPrice = booking.FinalPrice,
-                    HoldingAmount = booking.HoldingAmount,
-                    CommissionAmount = booking.CommissionAmount,
-                    TechnicianEarning = booking.TechnicianEarning,
-                    CreatedAt = booking.CreatedAt,
-                    Status = booking.Status.ToString(),
-                    PaymentStatus = booking.PaymentStatus.ToString()
-                });
-            }
+                    { "Id", "$_id" },
+                    { "BookingCode", 1 },
+                    { "CustomerId", 1 },
+                    { "CustomerName", new BsonDocument("$ifNull", new BsonArray { "$customer.FullName", "$customer.Email", "Unknown" }) },
+                    { "TechnicianId", 1 },
+                    { "TechnicianName", new BsonDocument("$ifNull", new BsonArray { "$technician.FullName", "$technician.Email", "Unknown" }) },
+                    { "ServiceId", 1 },
+                    { "ServiceName", new BsonDocument("$ifNull", new BsonArray { "$service.ServiceName", "Unknown" }) },
+                    { "FinalPrice", 1 },
+                    { "HoldingAmount", 1 },
+                    { "CommissionAmount", 1 },
+                    { "TechnicianEarning", 1 },
+                    { "CreatedAt", 1 },
+                    { "Status", 1 },
+                    { "PaymentStatus", 1 }
+                })
+            };
 
-            return bookingFinancials;
+            var result = await _bookingCollection.Aggregate<BookingFinancialDto>(pipeline).ToListAsync();
+            return result;
         }
 
         public async Task<List<TechnicianFinancialSummaryDto>> GetAllTechniciansFinancialSummaryAsync()
@@ -198,97 +155,57 @@ namespace WebApiDotNet.Repository
 
         public async Task<List<BookingFinancialDto>> GetBookingsByTechnicianIdAsync(string technicianId)
         {
-            var filter = Builders<Booking>.Filter.Eq(b => b.TechnicianId, technicianId) &
-                        Builders<Booking>.Filter.Type("Schedule", BsonType.Document);
-            var bookings = await _bookingCollection.Find(filter).ToListAsync();
-
-            var bookingFinancials = new List<BookingFinancialDto>();
-            foreach (var booking in bookings)
+            // Sử dụng MongoDB Aggregation Pipeline để tránh N+1 Query Problem
+            var pipeline = new[]
             {
-                // Get customer name
-                string customerName = "Unknown";
-                if (!string.IsNullOrEmpty(booking.CustomerId))
+                new BsonDocument("$match", new BsonDocument
                 {
-                    try
-                    {
-                        var customerFilter = Builders<User>.Filter.Eq(u => u.Id, booking.CustomerId);
-                        var customer = await _userCollection.Find(customerFilter).FirstOrDefaultAsync();
-                        customerName = customer?.FullName ?? customer?.Email ?? booking.CustomerId;
-                        Console.WriteLine($"Customer {booking.CustomerId}: {customerName}");
-                    }
-                    catch (Exception ex)
-                    {
-                        Console.WriteLine($"Error fetching customer {booking.CustomerId}: {ex.Message}");
-                        customerName = booking.CustomerId;
-                    }
-                }
-
-                // Get technician name
-                string technicianName = "Unknown";
-                if (!string.IsNullOrEmpty(booking.TechnicianId))
+                    { "TechnicianId", technicianId },
+                    { "Schedule", new BsonDocument("$type", "object") }
+                }),
+                new BsonDocument("$lookup", new BsonDocument
                 {
-                    try
-                    {
-                        var technicianFilter = Builders<Technician>.Filter.Eq(t => t.Id, booking.TechnicianId);
-                        var technician = await _technicianCollection.Find(technicianFilter).FirstOrDefaultAsync();
-                        if (technician != null && !string.IsNullOrEmpty(technician.UserId))
-                        {
-                            var userFilter = Builders<User>.Filter.Eq(u => u.Id, technician.UserId);
-                            var user = await _userCollection.Find(userFilter).FirstOrDefaultAsync();
-                            technicianName = user?.FullName ?? user?.Email ?? booking.TechnicianId;
-                        }
-                        else
-                        {
-                            technicianName = booking.TechnicianId;
-                        }
-                        Console.WriteLine($"Technician {booking.TechnicianId}: {technicianName}");
-                    }
-                    catch (Exception ex)
-                    {
-                        Console.WriteLine($"Error fetching technician {booking.TechnicianId}: {ex.Message}");
-                        technicianName = booking.TechnicianId;
-                    }
-                }
-
-                // Get service name
-                string serviceName = "Unknown";
-                if (!string.IsNullOrEmpty(booking.ServiceId))
+                    { "from", "Users" },
+                    { "localField", "CustomerId" },
+                    { "foreignField", "_id" },
+                    { "as", "customer" }
+                }),
+                new BsonDocument("$lookup", new BsonDocument
                 {
-                    try
-                    {
-                        var serviceFilter = Builders<Service>.Filter.Eq(s => s.Id, booking.ServiceId);
-                        var service = await _serviceCollection.Find(serviceFilter).FirstOrDefaultAsync();
-                        serviceName = service?.ServiceName ?? booking.ServiceId;
-                        Console.WriteLine($"Service {booking.ServiceId}: {serviceName}");
-                    }
-                    catch (Exception ex)
-                    {
-                        Console.WriteLine($"Error fetching service {booking.ServiceId}: {ex.Message}");
-                        serviceName = booking.ServiceId;
-                    }
-                }
-
-                bookingFinancials.Add(new BookingFinancialDto
+                    { "from", "Technicians" },
+                    { "localField", "TechnicianId" },
+                    { "foreignField", "_id" },
+                    { "as", "technician" }
+                }),
+                new BsonDocument("$lookup", new BsonDocument
                 {
-                    Id = booking.Id,
-                    BookingCode = booking.BookingCode,
-                    CustomerId = booking.CustomerId,
-                    CustomerName = customerName,
-                    TechnicianId = booking.TechnicianId,
-                    TechnicianName = technicianName,
-                    ServiceId = booking.ServiceId,
-                    ServiceName = serviceName,
-                    FinalPrice = booking.FinalPrice,
-                    HoldingAmount = booking.HoldingAmount,
-                    CommissionAmount = booking.CommissionAmount,
-                    TechnicianEarning = booking.TechnicianEarning,
-                    CreatedAt = booking.CreatedAt,
-                    Status = booking.Status.ToString(),
-                    PaymentStatus = booking.PaymentStatus.ToString()
-                });
-            }
+                    { "from", "Services" },
+                    { "localField", "ServiceId" },
+                    { "foreignField", "_id" },
+                    { "as", "service" }
+                }),
+                new BsonDocument("$project", new BsonDocument
+                {
+                    { "Id", "$_id" },
+                    { "BookingCode", 1 },
+                    { "CustomerId", 1 },
+                    { "CustomerName", new BsonDocument("$ifNull", new BsonArray { "$customer.FullName", "$customer.Email", "Unknown" }) },
+                    { "TechnicianId", 1 },
+                    { "TechnicianName", new BsonDocument("$ifNull", new BsonArray { "$technician.FullName", "$technician.Email", "Unknown" }) },
+                    { "ServiceId", 1 },
+                    { "ServiceName", new BsonDocument("$ifNull", new BsonArray { "$service.ServiceName", "Unknown" }) },
+                    { "FinalPrice", 1 },
+                    { "HoldingAmount", 1 },
+                    { "CommissionAmount", 1 },
+                    { "TechnicianEarning", 1 },
+                    { "CreatedAt", 1 },
+                    { "Status", 1 },
+                    { "PaymentStatus", 1 }
+                })
+            };
 
-            return bookingFinancials;
+            var result = await _bookingCollection.Aggregate<BookingFinancialDto>(pipeline).ToListAsync();
+            return result;
         }
 
         public async Task<double> GetTotalRevenueAsync()

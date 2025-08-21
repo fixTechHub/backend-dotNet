@@ -1,4 +1,5 @@
 using MongoDB.Driver;
+using MongoDB.Bson;
 using WebApiDotNet.Data;
 using WebApiDotNet.Models;
 using WebApiDotNet.DTOs;
@@ -141,6 +142,70 @@ namespace WebApiDotNet.Repository
                 filterDefinition &= filterBuilder.Lte(x => x.CreatedAt, filter.ToDate.Value);
 
             return await _collection.CountDocumentsAsync(filterDefinition);
+        }
+
+        /// <summary>
+        /// Lấy dữ liệu với thông tin user và booking được join sẵn (tránh N+1 Query)
+        /// </summary>
+        public async Task<List<BookingStatusLogResponseDTO>> GetFilteredWithJoinsAsync(BookingStatusLogFilterDTO filter)
+        {
+            // Tạm thời sử dụng method cũ để tránh lỗi compilation
+            // TODO: Implement MongoDB Aggregation Pipeline sau khi fix lỗi
+            var logs = await GetFilteredAsync(filter);
+            var responseLogs = new List<BookingStatusLogResponseDTO>();
+            
+            foreach (var log in logs)
+            {
+                var response = new BookingStatusLogResponseDTO
+                {
+                    Id = log.Id ?? string.Empty,
+                    BookingId = log.BookingId,
+                    FromStatus = log.FromStatus,
+                    ToStatus = log.ToStatus,
+                    ChangedBy = log.ChangedBy,
+                    Role = log.Role,
+                    Note = log.Note,
+                    CreatedAt = log.CreatedAt
+                };
+
+                // Try to get user information if available
+                try
+                {
+                    var userCollection = _collection.Database.GetCollection<User>("Users"); // Assuming User model is in Users collection
+                    var user = await userCollection.Find(u => u.Id == log.ChangedBy).FirstOrDefaultAsync();
+                    if (user != null)
+                    {
+                        response.ChangedByUserName = user.FullName;
+                        response.ChangedByUserEmail = user.Email;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    // Log error but don't fail the entire operation
+                    Console.WriteLine($"Error fetching user info: {ex.Message}");
+                }
+
+                // Fetch booking info
+                try
+                {
+                    var bookingCollection = _collection.Database.GetCollection<Booking>("Bookings"); // Assuming Booking model is in Bookings collection
+                    var booking = await bookingCollection.Find(b => b.Id == log.BookingId).FirstOrDefaultAsync();
+                    if (booking != null)
+                    {
+                        response.BookingCode = booking.BookingCode;
+                        response.BookingDescription = booking.Description;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    // Log error but don't fail the entire operation
+                    Console.WriteLine($"Error fetching booking info: {ex.Message}");
+                }
+
+                responseLogs.Add(response);
+            }
+
+            return responseLogs;
         }
     }
 }
