@@ -116,25 +116,25 @@ namespace WebApiDotNet.Repository
                     foreach (var booking in fallbackBookings)
                     {
                         fallbackResult.Add(new BookingFinancialDto
-                        {
-                            Id = booking.Id,
-                            BookingCode = booking.BookingCode,
-                            CustomerId = booking.CustomerId,
+                {
+                    Id = booking.Id,
+                    BookingCode = booking.BookingCode,
+                    CustomerId = booking.CustomerId,
                             CustomerName = "Unknown", // Will be populated later if needed
-                            TechnicianId = booking.TechnicianId,
+                    TechnicianId = booking.TechnicianId,
                             TechnicianName = "Unknown", // Will be populated later if needed
-                            ServiceId = booking.ServiceId,
+                    ServiceId = booking.ServiceId,
                             ServiceName = "Unknown", // Will be populated later if needed
-                            FinalPrice = booking.FinalPrice,
-                            HoldingAmount = booking.HoldingAmount,
-                            CommissionAmount = booking.CommissionAmount,
-                            TechnicianEarning = booking.TechnicianEarning,
-                            CreatedAt = booking.CreatedAt,
-                            Status = booking.Status.ToString(),
-                            PaymentStatus = booking.PaymentStatus.ToString()
-                        });
-                    }
-                    
+                    FinalPrice = booking.FinalPrice,
+                    HoldingAmount = booking.HoldingAmount,
+                    CommissionAmount = booking.CommissionAmount,
+                    TechnicianEarning = booking.TechnicianEarning,
+                    CreatedAt = booking.CreatedAt,
+                    Status = booking.Status.ToString(),
+                    PaymentStatus = booking.PaymentStatus.ToString()
+                });
+            }
+
                     return fallbackResult;
                 }
                 
@@ -160,9 +160,8 @@ namespace WebApiDotNet.Repository
                 var userFilter = Builders<User>.Filter.Eq(u => u.Id, technician.UserId);
                 var user = await _userCollection.Find(userFilter).FirstOrDefaultAsync();
 
-                // Get booking count for this technician
-                var bookingFilter = Builders<Booking>.Filter.Eq(b => b.TechnicianId, technician.Id) &
-                                  Builders<Booking>.Filter.Type("Schedule", BsonType.Document);
+                // Get booking count for this technician - chỉ cần kiểm tra TechnicianId
+                var bookingFilter = Builders<Booking>.Filter.Eq(b => b.TechnicianId, technician.Id);
                 var bookingCount = await _bookingCollection.CountDocumentsAsync(bookingFilter);
 
                 technicianSummaries.Add(new TechnicianFinancialSummaryDto
