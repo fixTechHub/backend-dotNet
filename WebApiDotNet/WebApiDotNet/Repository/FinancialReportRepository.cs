@@ -22,6 +22,16 @@ namespace WebApiDotNet.Repository
             _serviceCollection = context.Services;
         }
 
+        // Helper method để tạo filter cho Schedule với format hợp lệ
+        private FilterDefinition<Booking> GetValidScheduleFilter()
+        {
+            return Builders<Booking>.Filter.Or(
+                Builders<Booking>.Filter.Type("schedule", BsonType.Document),
+                Builders<Booking>.Filter.Type("schedule", BsonType.Null),
+                Builders<Booking>.Filter.Not(Builders<Booking>.Filter.Exists("schedule"))
+            );
+        }
+
         public async Task<FinancialSummaryDto> GetFinancialSummaryAsync()
         {
             var totalRevenue = await GetTotalRevenueAsync();
@@ -56,88 +66,47 @@ namespace WebApiDotNet.Repository
                     return new List<BookingFinancialDto>();
                 }
                 
-                // Sử dụng MongoDB Aggregation Pipeline để tránh N+1 Query Problem
-                var pipeline = new[]
-                {
-                    // Lấy tất cả bookings thay vì filter quá hạn chế
-                    new BsonDocument("$lookup", new BsonDocument
-                    {
-                        { "from", "Users" },
-                        { "localField", "CustomerId" },
-                        { "foreignField", "_id" },
-                        { "as", "customer" }
-                    }),
-                    new BsonDocument("$lookup", new BsonDocument
-                    {
-                        { "from", "Technicians" },
-                        { "localField", "TechnicianId" },
-                        { "foreignField", "_id" },
-                        { "as", "technician" }
-                    }),
-                    new BsonDocument("$lookup", new BsonDocument
-                    {
-                        { "from", "Services" },
-                        { "localField", "ServiceId" },
-                        { "foreignField", "_id" },
-                        { "as", "service" }
-                    }),
-                    new BsonDocument("$project", new BsonDocument
-                    {
-                        { "Id", "$_id" },
-                        { "BookingCode", 1 },
-                        { "CustomerId", 1 },
-                        { "CustomerName", new BsonDocument("$ifNull", new BsonArray { "$customer.FullName", "$customer.Email", "Unknown" }) },
-                        { "TechnicianId", 1 },
-                        { "TechnicianName", new BsonDocument("$ifNull", new BsonArray { "$technician.FullName", "$technician.Email", "Unknown" }) },
-                        { "ServiceId", 1 },
-                        { "ServiceName", new BsonDocument("$ifNull", new BsonArray { "$service.ServiceName", "Unknown" }) },
-                        { "FinalPrice", 1 },
-                        { "HoldingAmount", 1 },
-                        { "CommissionAmount", 1 },
-                        { "TechnicianEarning", 1 },
-                        { "CreatedAt", 1 },
-                        { "Status", 1 },
-                        { "PaymentStatus", 1 }
-                    })
-                };
-
-                var result = await _bookingCollection.Aggregate<BookingFinancialDto>(pipeline).ToListAsync();
-                Console.WriteLine($"✅ Retrieved {result.Count} bookings from database");
+                // Sử dụng filter để bỏ qua những booking có Schedule không phải là object
+                Console.WriteLine("🔍 Using filter to skip bookings with invalid Schedule format...");
                 
-                // Nếu aggregation pipeline không trả về kết quả, hãy thử method đơn giản hơn
-                if (result.Count == 0)
+                // Filter chỉ lấy những bookings có Schedule là object/document hoặc null
+                var filter = GetValidScheduleFilter();
+                
+                var allBookings = await _bookingCollection.Find(filter).ToListAsync();
+                Console.WriteLine($"📊 Found {allBookings.Count} bookings with valid Schedule format");
+                
+                var result = new List<BookingFinancialDto>();
+                foreach (var booking in allBookings)
                 {
-                    Console.WriteLine("⚠️ Aggregation pipeline returned 0 results, trying fallback method...");
-                    var fallbackBookings = await _bookingCollection.Find(_ => true).Limit(10).ToListAsync();
-                    Console.WriteLine($"📊 Fallback method found {fallbackBookings.Count} bookings");
-                    
-                    // Convert to DTO manually
-                    var fallbackResult = new List<BookingFinancialDto>();
-                    foreach (var booking in fallbackBookings)
+                    try
                     {
-                        fallbackResult.Add(new BookingFinancialDto
-                {
-                    Id = booking.Id,
-                    BookingCode = booking.BookingCode,
-                    CustomerId = booking.CustomerId,
+                        result.Add(new BookingFinancialDto
+                        {
+                            Id = booking.Id,
+                            BookingCode = booking.BookingCode,
+                            CustomerId = booking.CustomerId,
                             CustomerName = "Unknown", // Will be populated later if needed
-                    TechnicianId = booking.TechnicianId,
+                            TechnicianId = booking.TechnicianId,
                             TechnicianName = "Unknown", // Will be populated later if needed
-                    ServiceId = booking.ServiceId,
+                            ServiceId = booking.ServiceId,
                             ServiceName = "Unknown", // Will be populated later if needed
-                    FinalPrice = booking.FinalPrice,
-                    HoldingAmount = booking.HoldingAmount,
-                    CommissionAmount = booking.CommissionAmount,
-                    TechnicianEarning = booking.TechnicianEarning,
-                    CreatedAt = booking.CreatedAt,
-                    Status = booking.Status.ToString(),
-                    PaymentStatus = booking.PaymentStatus.ToString()
-                });
-            }
-
-                    return fallbackResult;
+                            FinalPrice = booking.FinalPrice,
+                            HoldingAmount = booking.HoldingAmount,
+                            CommissionAmount = booking.CommissionAmount,
+                            TechnicianEarning = booking.TechnicianEarning,
+                            CreatedAt = booking.CreatedAt,
+                            Status = booking.Status.ToString(),
+                            PaymentStatus = booking.PaymentStatus.ToString()
+                        });
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine($"⚠️ Error processing booking {booking.Id}: {ex.Message}");
+                        // Continue with next booking
+                    }
                 }
                 
+                Console.WriteLine($"✅ Successfully processed {result.Count} bookings");
                 return result;
             }
             catch (Exception ex)
@@ -199,8 +168,8 @@ namespace WebApiDotNet.Repository
                 Id = technician.Id,
                 UserId = technician.UserId,
                 FullName = user?.FullName ?? "Unknown",
-                Email = user?.Email ?? "",
-                Phone = user?.Phone ?? "",
+                Email = user?.Email ?? "Unknown",
+                Phone = user?.Phone ?? "Unknown",
                 TotalEarning = technician.TotalEarning,
                 TotalCommissionPaid = technician.TotalCommissionPaid,
                 TotalHoldingAmount = technician.TotalHoldingAmount,
@@ -211,89 +180,92 @@ namespace WebApiDotNet.Repository
 
         public async Task<List<BookingFinancialDto>> GetBookingsByTechnicianIdAsync(string technicianId)
         {
-            // Sử dụng MongoDB Aggregation Pipeline để tránh N+1 Query Problem
-            var pipeline = new[]
+            try
             {
-                new BsonDocument("$match", new BsonDocument
-                {
-                    { "TechnicianId", technicianId },
-                    { "Schedule", new BsonDocument("$type", "object") }
-                }),
-                new BsonDocument("$lookup", new BsonDocument
-                {
-                    { "from", "Users" },
-                    { "localField", "CustomerId" },
-                    { "foreignField", "_id" },
-                    { "as", "customer" }
-                }),
-                new BsonDocument("$lookup", new BsonDocument
-                {
-                    { "from", "Technicians" },
-                    { "localField", "TechnicianId" },
-                    { "foreignField", "_id" },
-                    { "as", "technician" }
-                }),
-                new BsonDocument("$lookup", new BsonDocument
-                {
-                    { "from", "Services" },
-                    { "localField", "ServiceId" },
-                    { "foreignField", "_id" },
-                    { "as", "service" }
-                }),
-                new BsonDocument("$project", new BsonDocument
-                {
-                    { "Id", "$_id" },
-                    { "BookingCode", 1 },
-                    { "CustomerId", 1 },
-                    { "CustomerName", new BsonDocument("$ifNull", new BsonArray { "$customer.FullName", "$customer.Email", "Unknown" }) },
-                    { "TechnicianId", 1 },
-                    { "TechnicianName", new BsonDocument("$ifNull", new BsonArray { "$technician.FullName", "$technician.Email", "Unknown" }) },
-                    { "ServiceId", 1 },
-                    { "ServiceName", new BsonDocument("$ifNull", new BsonArray { "$service.ServiceName", "Unknown" }) },
-                    { "FinalPrice", 1 },
-                    { "HoldingAmount", 1 },
-                    { "CommissionAmount", 1 },
-                    { "TechnicianEarning", 1 },
-                    { "CreatedAt", 1 },
-                    { "Status", 1 },
-                    { "PaymentStatus", 1 }
-                })
-            };
+                // Kết hợp filter cho TechnicianId và Schedule format
+                var filter = Builders<Booking>.Filter.And(
+                    Builders<Booking>.Filter.Eq(b => b.TechnicianId, technicianId),
+                    GetValidScheduleFilter()
+                );
+                var bookings = await _bookingCollection.Find(filter).ToListAsync();
 
-            var result = await _bookingCollection.Aggregate<BookingFinancialDto>(pipeline).ToListAsync();
-            return result;
+                var result = new List<BookingFinancialDto>();
+                foreach (var booking in bookings)
+                {
+                    try
+                    {
+                        result.Add(new BookingFinancialDto
+                        {
+                            Id = booking.Id,
+                            BookingCode = booking.BookingCode,
+                            CustomerId = booking.CustomerId,
+                            CustomerName = "Unknown",
+                            TechnicianId = booking.TechnicianId,
+                            TechnicianName = "Unknown",
+                            ServiceId = booking.ServiceId,
+                            ServiceName = "Unknown",
+                            FinalPrice = booking.FinalPrice,
+                            HoldingAmount = booking.HoldingAmount,
+                            CommissionAmount = booking.CommissionAmount,
+                            TechnicianEarning = booking.TechnicianEarning,
+                            CreatedAt = booking.CreatedAt,
+                            Status = booking.Status.ToString(),
+                            PaymentStatus = booking.PaymentStatus.ToString()
+                        });
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine($"⚠️ Error processing booking {booking.Id}: {ex.Message}");
+                    }
+                }
+
+                return result;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"❌ Error in GetBookingsByTechnicianIdAsync: {ex.Message}");
+                throw;
+            }
         }
 
         public async Task<double> GetTotalRevenueAsync()
         {
-            var filter = Builders<Booking>.Filter.Type("Schedule", BsonType.Document) &
-                        Builders<Booking>.Filter.Ne(b => b.FinalPrice, null);
-            var bookings = await _bookingCollection.Find(filter).ToListAsync();
-            return bookings.Sum(b => b.FinalPrice ?? 0);
+            var filter = Builders<Booking>.Filter.And(
+                Builders<Booking>.Filter.Eq(b => b.Status, BookingStatus.DONE),
+                GetValidScheduleFilter()
+            );
+            var total = await _bookingCollection.Find(filter).ToListAsync();
+            return total.Sum(b => b.FinalPrice ?? 0);
         }
 
         public async Task<double> GetTotalHoldingAmountAsync()
         {
-            var filter = Builders<Booking>.Filter.Type("Schedule", BsonType.Document) &
-                        Builders<Booking>.Filter.Ne(b => b.HoldingAmount, null);
-            var bookings = await _bookingCollection.Find(filter).ToListAsync();
-            return bookings.Sum(b => b.HoldingAmount ?? 0);
+            var filter = Builders<Booking>.Filter.And(
+                Builders<Booking>.Filter.Eq(b => b.Status, BookingStatus.DONE),
+                GetValidScheduleFilter()
+            );
+            var total = await _bookingCollection.Find(filter).ToListAsync();
+            return total.Sum(b => b.HoldingAmount ?? 0);
         }
 
         public async Task<double> GetTotalCommissionAmountAsync()
         {
-            var filter = Builders<Booking>.Filter.Type("Schedule", BsonType.Document) &
-                        Builders<Booking>.Filter.Ne(b => b.CommissionAmount, null);
-            var bookings = await _bookingCollection.Find(filter).ToListAsync();
-            return bookings.Sum(b => b.CommissionAmount ?? 0);
+            var filter = Builders<Booking>.Filter.And(
+                Builders<Booking>.Filter.Eq(b => b.Status, BookingStatus.DONE),
+                GetValidScheduleFilter()
+            );
+            var total = await _bookingCollection.Find(filter).ToListAsync();
+            return total.Sum(b => b.CommissionAmount ?? 0);
         }
 
         public async Task<double> GetTotalTechnicianEarningAsync()
         {
-            var filter = Builders<Booking>.Filter.Type("Schedule", BsonType.Document) &
-                        Builders<Booking>.Filter.Ne(b => b.TechnicianEarning, null);
-            var bookings = await _bookingCollection.Find(filter).ToListAsync();
-            return bookings.Sum(b => b.TechnicianEarning ?? 0);
+            var filter = Builders<Booking>.Filter.And(
+                Builders<Booking>.Filter.Eq(b => b.Status, BookingStatus.DONE),
+                GetValidScheduleFilter()
+            );
+            var total = await _bookingCollection.Find(filter).ToListAsync();
+            return total.Sum(b => b.TechnicianEarning ?? 0);
         }
 
         public async Task<double> GetTotalWithdrawnAsync()
@@ -303,4 +275,4 @@ namespace WebApiDotNet.Repository
             return technicians.Sum(t => t.TotalWithdrawn);
         }
     }
-} 
+}
