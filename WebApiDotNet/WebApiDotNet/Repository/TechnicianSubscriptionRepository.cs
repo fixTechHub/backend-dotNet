@@ -51,7 +51,7 @@ namespace WebApiDotNet.Repository
             var update = Builders<TechnicianSubscription>.Update
                 .Set(s => s.Status, subscription.Status)
                 .Set(s => s.EndDate, subscription.EndDate)
-                .Set(s => s.Amount, subscription.Amount)
+                // Bỏ logic set Amount vì không cần thiết
                 .Set(s => s.PaymentStatus, subscription.PaymentStatus)
                 .Set(s => s.PaymentMethod, subscription.PaymentMethod)
                 .Set(s => s.TransactionId, subscription.TransactionId)
@@ -96,9 +96,24 @@ namespace WebApiDotNet.Repository
 
         public async Task<double> GetTotalRevenueAsync()
         {
-            var filter = Builders<TechnicianSubscription>.Filter.Eq(s => s.PaymentStatus, SubscriptionPaymentStatus.PAID);
-            var subscriptions = await _collection.Find(filter).ToListAsync();
-            return subscriptions.Sum(s => s.Amount);
+            // Tính doanh thu từ tất cả subscriptions (không phân biệt payment status)
+            var subscriptions = await _collection.Find(_ => true).ToListAsync();
+            
+            // Debug logging
+            Console.WriteLine($"🔍 Total subscriptions found: {subscriptions.Count}");
+            foreach (var sub in subscriptions)
+            {
+                Console.WriteLine($"📊 Subscription {sub.Id}: Amount = {sub.Amount}, Status = {sub.Status}, PaymentStatus = {sub.PaymentStatus}");
+            }
+            
+            // Tính doanh thu từ paymentHistory.amount thay vì amount
+            var totalRevenue = subscriptions.Sum(s => 
+                s.PaymentHistory?.Sum(ph => ph.Amount) ?? 0
+            );
+            
+            Console.WriteLine($"💰 Total Revenue calculated: {totalRevenue}");
+            
+            return totalRevenue;
         }
 
         public async Task<double> GetMonthlyRevenueAsync(int year, int month)
@@ -106,14 +121,18 @@ namespace WebApiDotNet.Repository
             var startDate = new DateTime(year, month, 1);
             var endDate = startDate.AddMonths(1);
             
+            // Tính doanh thu theo tháng từ tất cả subscriptions (không phân biệt payment status)
             var filter = Builders<TechnicianSubscription>.Filter.And(
-                Builders<TechnicianSubscription>.Filter.Eq(s => s.PaymentStatus, SubscriptionPaymentStatus.PAID),
                 Builders<TechnicianSubscription>.Filter.Gte(s => s.CreatedAt, startDate),
                 Builders<TechnicianSubscription>.Filter.Lt(s => s.CreatedAt, endDate)
             );
             
             var subscriptions = await _collection.Find(filter).ToListAsync();
-            return subscriptions.Sum(s => s.Amount);
+            
+            // Tính doanh thu từ paymentHistory.amount thay vì amount
+            return subscriptions.Sum(s => 
+                s.PaymentHistory?.Sum(ph => ph.Amount) ?? 0
+            );
         }
 
         public async Task<List<TechnicianSubscription>> GetSubscriptionsByDateRangeAsync(DateTime startDate, DateTime endDate)

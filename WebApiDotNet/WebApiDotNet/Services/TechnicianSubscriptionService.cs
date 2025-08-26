@@ -156,7 +156,7 @@ namespace WebApiDotNet.Services
                     Status = subscription.Status.ToString(),
                     StartDate = subscription.StartDate,
                     EndDate = subscription.EndDate,
-                    Amount = subscription.Amount,
+                    Amount = subscription.PaymentHistory?.Sum(ph => ph.Amount) ?? 0,
                     PaymentStatus = subscription.PaymentStatus.ToString(),
                     AutoRenew = subscription.AutoRenew
                 });

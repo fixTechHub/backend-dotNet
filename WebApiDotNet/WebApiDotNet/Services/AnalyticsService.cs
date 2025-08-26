@@ -34,8 +34,9 @@ namespace WebApiDotNet.Services
                 PendingSubscriptions = filteredSubscriptions.Count(s => s.Status == SubscriptionStatus.PENDING_ACTIVATION),
                 CancelledSubscriptions = filteredSubscriptions.Count(s => s.Status == SubscriptionStatus.CANCELLED),
                 
-                TotalRevenue = (decimal)filteredSubscriptions.Sum(s => s.Amount),
-                AvgRevenuePerSubscription = filteredSubscriptions.Any() ? (decimal)filteredSubscriptions.Average(s => s.Amount) : 0m,
+                TotalRevenue = (decimal)filteredSubscriptions.Sum(s => s.PaymentHistory?.Sum(ph => ph.Amount) ?? 0),
+                AvgRevenuePerSubscription = filteredSubscriptions.Any() ? 
+                    (decimal)filteredSubscriptions.Average(s => s.PaymentHistory?.Sum(ph => ph.Amount) ?? 0) : 0m,
                 RevenueGrowth = CalculateRevenueGrowth(filteredSubscriptions, year),
                 ConversionRate = CalculateConversionRate(filteredSubscriptions),
                 ChurnRate = CalculateChurnRate(filteredSubscriptions),
@@ -130,8 +131,8 @@ namespace WebApiDotNet.Services
 
         private decimal CalculateRevenueGrowth(IEnumerable<TechnicianSubscription> subscriptions, int year)
         {
-            // Tính doanh thu năm hiện tại
-            var currentYearRevenue = subscriptions.Sum(s => s.Amount);
+            // Tính doanh thu năm hiện tại từ paymentHistory.amount
+            var currentYearRevenue = subscriptions.Sum(s => s.PaymentHistory?.Sum(ph => ph.Amount) ?? 0);
             
             // TODO: Implement logic tính doanh thu năm trước
             // Hiện tại return 0, có thể mở rộng sau
@@ -183,7 +184,7 @@ namespace WebApiDotNet.Services
                     {
                         var monthSubscriptions = subscriptions.Where(s => s.CreatedAt.Month == currentMonth).ToList();
                         var monthActive = monthSubscriptions.Count(s => s.Status == SubscriptionStatus.ACTIVE);
-                        var monthRevenue = monthSubscriptions.Sum(s => s.Amount);
+                        var monthRevenue = monthSubscriptions.Sum(s => s.PaymentHistory?.Sum(ph => ph.Amount) ?? 0);
                         var conversionRate = monthSubscriptions.Count > 0 ? 
                             (double)monthActive / monthSubscriptions.Count * 100 : 0;
                         
@@ -202,7 +203,7 @@ namespace WebApiDotNet.Services
                         // Nếu không phải năm hiện tại, hiển thị tháng đầu tiên
                         var monthSubscriptions = subscriptions.Where(s => s.CreatedAt.Month == 1).ToList();
                         var monthActive = monthSubscriptions.Count(s => s.Status == SubscriptionStatus.ACTIVE);
-                        var monthRevenue = monthSubscriptions.Sum(s => s.Amount);
+                        var monthRevenue = monthSubscriptions.Sum(s => s.PaymentHistory?.Sum(ph => ph.Amount) ?? 0);
                         var conversionRate = monthSubscriptions.Count > 0 ? 
                             (double)monthActive / monthSubscriptions.Count * 100 : 0;
                         
@@ -230,7 +231,7 @@ namespace WebApiDotNet.Services
                         {
                             var monthSubscriptions = subscriptions.Where(s => s.CreatedAt.Month == i).ToList();
                             var monthActive = monthSubscriptions.Count(s => s.Status == SubscriptionStatus.ACTIVE);
-                            var monthRevenue = monthSubscriptions.Sum(s => s.Amount);
+                            var monthRevenue = monthSubscriptions.Sum(s => s.PaymentHistory?.Sum(ph => ph.Amount) ?? 0);
                             var conversionRate = monthSubscriptions.Count > 0 ? 
                                 (double)monthActive / monthSubscriptions.Count * 100 : 0;
                             
@@ -252,7 +253,7 @@ namespace WebApiDotNet.Services
                         {
                             var monthSubscriptions = subscriptions.Where(s => s.CreatedAt.Month == i).ToList();
                             var monthActive = monthSubscriptions.Count(s => s.Status == SubscriptionStatus.ACTIVE);
-                            var monthRevenue = monthSubscriptions.Sum(s => s.Amount);
+                            var monthRevenue = monthSubscriptions.Sum(s => s.PaymentHistory?.Sum(ph => ph.Amount) ?? 0);
                             var conversionRate = monthSubscriptions.Count > 0 ? 
                                 (double)monthActive / monthSubscriptions.Count * 100 : 0;
                             
@@ -278,7 +279,7 @@ namespace WebApiDotNet.Services
                             s.CreatedAt.Month == i + 1).ToList();
                         
                         var monthActive = monthSubscriptions.Count(s => s.Status == SubscriptionStatus.ACTIVE);
-                        var monthRevenue = monthSubscriptions.Sum(s => s.Amount);
+                        var monthRevenue = monthSubscriptions.Sum(s => s.PaymentHistory?.Sum(ph => ph.Amount) ?? 0);
                         var conversionRate = monthSubscriptions.Count > 0 ? 
                             (double)monthActive / monthSubscriptions.Count * 100 : 0;
                         
@@ -321,7 +322,7 @@ namespace WebApiDotNet.Services
                             s.CreatedAt.Month >= startMonth && s.CreatedAt.Month <= endMonth).ToList();
                         
                         var quarterActive = quarterSubscriptions.Count(s => s.Status == SubscriptionStatus.ACTIVE);
-                        var quarterRevenue = quarterSubscriptions.Sum(s => s.Amount);
+                        var quarterRevenue = quarterSubscriptions.Sum(s => s.PaymentHistory?.Sum(ph => ph.Amount) ?? 0);
                         var conversionRate = quarterSubscriptions.Count > 0 ? 
                             (double)quarterActive / quarterSubscriptions.Count * 100 : 0;
                         
@@ -361,8 +362,8 @@ namespace WebApiDotNet.Services
                     PackageName = packageName,
                     TotalSubscriptions = group.Count(),
                     ActiveSubscriptions = group.Count(s => s.Status == SubscriptionStatus.ACTIVE),
-                    Revenue = (decimal)group.Sum(s => s.Amount),
-                    AvgPrice = (decimal)group.Average(s => s.Amount),
+                    Revenue = (decimal)group.Sum(s => s.PaymentHistory?.Sum(ph => ph.Amount) ?? 0),
+                    AvgPrice = (decimal)group.Average(s => s.PaymentHistory?.Sum(ph => ph.Amount) ?? 0),
                     ConversionRate = group.Count() > 0 ? 
                         (double)group.Count(s => s.Status == SubscriptionStatus.ACTIVE) / group.Count() * 100 : 0
                 });
@@ -379,8 +380,8 @@ namespace WebApiDotNet.Services
                 {
                     Status = g.Key.ToString(),
                     Count = g.Count(),
-                    Revenue = (decimal)g.Sum(s => s.Amount),
-                    AvgRevenue = g.Count() > 0 ? (decimal)(g.Sum(s => s.Amount) / g.Count()) : 0
+                    Revenue = (decimal)g.Sum(s => s.PaymentHistory?.Sum(ph => ph.Amount) ?? 0),
+                    AvgRevenue = g.Count() > 0 ? (decimal)(g.Sum(s => s.PaymentHistory?.Sum(ph => ph.Amount) ?? 0) / g.Count()) : 0
                 })
                 .ToList();
             

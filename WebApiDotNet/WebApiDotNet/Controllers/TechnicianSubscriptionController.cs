@@ -206,8 +206,9 @@ namespace WebApiDotNet.Controllers
                 if (string.IsNullOrWhiteSpace(dto.PackageId))
                     return BadRequest(new { errors = new { PackageId = new[] { "PackageId is required" } } });
 
-                if (dto.Amount <= 0)
-                    return BadRequest(new { errors = new { Amount = new[] { "Amount must be greater than 0" } } });
+                // Bỏ validation Amount vì không cần thiết nữa
+                // if (dto.Amount <= 0)
+                //     return BadRequest(new { errors = new { Amount = new[] { "Amount must be greater than 0" } } });
 
                 var result = await _subscriptionService.CreateAsync(dto);
                 return Ok(new { message = "Tạo subscription thành công", data = result });
