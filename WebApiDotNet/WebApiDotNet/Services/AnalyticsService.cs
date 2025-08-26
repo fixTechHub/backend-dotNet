@@ -131,12 +131,34 @@ namespace WebApiDotNet.Services
 
         private decimal CalculateRevenueGrowth(IEnumerable<TechnicianSubscription> subscriptions, int year)
         {
-            // Tính doanh thu năm hiện tại từ paymentHistory.amount
-            var currentYearRevenue = subscriptions.Sum(s => s.PaymentHistory?.Sum(ph => ph.Amount) ?? 0);
+            var currentDate = DateTime.Now;
+            var currentMonth = currentDate.Month;
+            var currentYear = currentDate.Year;
             
-            // TODO: Implement logic tính doanh thu năm trước
-            // Hiện tại return 0, có thể mở rộng sau
-            return 0m;
+            // Tính doanh thu tháng hiện tại
+            var currentMonthRevenue = subscriptions
+                .Where(s => s.PaymentHistory != null && s.PaymentHistory.Any(ph => 
+                    ph.CreatedAt.Month == currentMonth && ph.CreatedAt.Year == currentYear))
+                .Sum(s => s.PaymentHistory?.Where(ph => 
+                    ph.CreatedAt.Month == currentMonth && ph.CreatedAt.Year == currentYear)
+                    .Sum(ph => ph.Amount) ?? 0);
+            
+            // Tính doanh thu cùng tháng năm ngoái
+            var lastYear = currentYear - 1;
+            var lastYearSameMonthRevenue = subscriptions
+                .Where(s => s.PaymentHistory != null && s.PaymentHistory.Any(ph => 
+                    ph.CreatedAt.Month == currentMonth && ph.CreatedAt.Year == lastYear))
+                .Sum(s => s.PaymentHistory?.Where(ph => 
+                    ph.CreatedAt.Month == currentMonth && ph.CreatedAt.Year == lastYear)
+                    .Sum(ph => ph.Amount) ?? 0);
+            
+            // Tính tỷ lệ tăng trưởng so với cùng tháng năm ngoái
+            if (lastYearSameMonthRevenue == 0)
+            {
+                return currentMonthRevenue > 0 ? 100m : 0m;
+            }
+            
+            return Math.Round(((decimal)(currentMonthRevenue - lastYearSameMonthRevenue) / (decimal)lastYearSameMonthRevenue) * 100m, 2);
         }
 
         private IEnumerable<TechnicianSubscription> FilterSubscriptionsByTimeRange(
