@@ -3,16 +3,8 @@
   "WorkspaceRootPath": "D:\\DATN\\WebApiDotNet\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{97199CD6-6CF7-4EC4-B5BD-2ED46BC05CA5}|WebApiDotNet\\WebApiDotNet.csproj|d:\\datn\\webapidotnet\\webapidotnet\\controllers\\dashboardcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{97199CD6-6CF7-4EC4-B5BD-2ED46BC05CA5}|WebApiDotNet\\WebApiDotNet.csproj|solutionrelative:webapidotnet\\controllers\\dashboardcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{97199CD6-6CF7-4EC4-B5BD-2ED46BC05CA5}|WebApiDotNet\\WebApiDotNet.csproj|d:\\datn\\webapidotnet\\webapidotnet\\models\\booking.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{97199CD6-6CF7-4EC4-B5BD-2ED46BC05CA5}|WebApiDotNet\\WebApiDotNet.csproj|solutionrelative:webapidotnet\\models\\booking.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{97199CD6-6CF7-4EC4-B5BD-2ED46BC05CA5}|WebApiDotNet\\WebApiDotNet.csproj|d:\\datn\\webapidotnet\\webapidotnet\\data\\mappingprofile.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{97199CD6-6CF7-4EC4-B5BD-2ED46BC05CA5}|WebApiDotNet\\WebApiDotNet.csproj|solutionrelative:webapidotnet\\data\\mappingprofile.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{DEA68D8E-DA30-0816-6564-ED7BF0FA30F6}|WebApiDotNet\\WebApiDotNet.csproj|d:\\datn\\webapidotnet\\webapidotnet\\webapidotnet.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|",
+      "RelativeMoniker": "D:0:0:{DEA68D8E-DA30-0816-6564-ED7BF0FA30F6}|WebApiDotNet\\WebApiDotNet.csproj|solutionrelative:webapidotnet\\webapidotnet.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|"
     }
   ],
   "DocumentGroupContainers": [
@@ -267,39 +259,14 @@
             {
               "$type": "Document",
               "DocumentIndex": 0,
-              "Title": "DashboardController.cs",
-              "DocumentMoniker": "D:\\DATN\\WebApiDotNet\\WebApiDotNet\\Controllers\\DashboardController.cs",
-              "RelativeDocumentMoniker": "WebApiDotNet\\Controllers\\DashboardController.cs",
-              "ToolTip": "D:\\DATN\\WebApiDotNet\\WebApiDotNet\\Controllers\\DashboardController.cs",
-              "RelativeToolTip": "WebApiDotNet\\Controllers\\DashboardController.cs",
+              "Title": "WebApiDotNet",
+              "DocumentMoniker": "D:\\DATN\\WebApiDotNet\\WebApiDotNet\\WebApiDotNet.csproj",
+              "RelativeDocumentMoniker": "WebApiDotNet\\WebApiDotNet.csproj",
+              "ToolTip": "D:\\DATN\\WebApiDotNet\\WebApiDotNet\\WebApiDotNet.csproj",
+              "RelativeToolTip": "WebApiDotNet\\WebApiDotNet.csproj",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-07-24T14:21:49.623Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "MappingProfile.cs",
-              "DocumentMoniker": "D:\\DATN\\WebApiDotNet\\WebApiDotNet\\Data\\MappingProfile.cs",
-              "RelativeDocumentMoniker": "WebApiDotNet\\Data\\MappingProfile.cs",
-              "ToolTip": "D:\\DATN\\WebApiDotNet\\WebApiDotNet\\Data\\MappingProfile.cs",
-              "RelativeToolTip": "WebApiDotNet\\Data\\MappingProfile.cs",
-              "ViewState": "AgIAAAwAAAAAAAAAAAApwB8AAAAlAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-07-15T06:17:09.493Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "Booking.cs",
-              "DocumentMoniker": "D:\\DATN\\WebApiDotNet\\WebApiDotNet\\Models\\Booking.cs",
-              "RelativeDocumentMoniker": "WebApiDotNet\\Models\\Booking.cs",
-              "ToolTip": "D:\\DATN\\WebApiDotNet\\WebApiDotNet\\Models\\Booking.cs",
-              "RelativeToolTip": "WebApiDotNet\\Models\\Booking.cs",
-              "ViewState": "AgIAAIgAAAAAAAAAAAAQwIMAAAAKAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-07-15T06:15:43.139Z",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
+              "WhenOpened": "2025-08-27T14:10:38.705Z",
               "EditorCaption": ""
             }
           ]

@@ -12,11 +12,13 @@ namespace WebApiDotNet.Services
     {
         private readonly ITechnicianSubscriptionRepository _subscriptionRepository;
         private readonly IPackageRepository _packageRepository;
+        private readonly IBookingRepository _bookingRepository;
 
-        public AnalyticsService(ITechnicianSubscriptionRepository subscriptionRepository, IPackageRepository packageRepository)
+        public AnalyticsService(ITechnicianSubscriptionRepository subscriptionRepository, IPackageRepository packageRepository, IBookingRepository bookingRepository)
         {
             _subscriptionRepository = subscriptionRepository;
             _packageRepository = packageRepository;
+            _bookingRepository = bookingRepository;
         }
 
         public async Task<SubscriptionAnalyticsDto> GetSubscriptionAnalyticsAsync(int year, string timeRange)
@@ -26,6 +28,15 @@ namespace WebApiDotNet.Services
             // Lọc dữ liệu theo timeRange
             var filteredSubscriptions = FilterSubscriptionsByTimeRange(subscriptions, year, timeRange);
             
+            // Doanh thu từ bán Package
+            var packageRevenue = (decimal)filteredSubscriptions.Sum(s => s.PaymentHistory?.Sum(ph => ph.Amount) ?? 0);
+
+            // Lấy bookings để cộng thêm 8% từ TechnicianEarning của đơn đã PAID
+            var allBookings = await _bookingRepository.GetAllAsync();
+            var filteredBookings = FilterBookingsByTimeRange(allBookings, year, timeRange)
+                .Where(b => b.PaymentStatus == PaymentStatus.PAID);
+            var extraFromTechnicianEarning = (decimal)filteredBookings.Sum(b => (b.TechnicianEarning ?? 0) * 0.08);
+
             var result = new SubscriptionAnalyticsDto
             {
                 TotalSubscriptions = filteredSubscriptions.Count(),
@@ -34,7 +45,7 @@ namespace WebApiDotNet.Services
                 PendingSubscriptions = filteredSubscriptions.Count(s => s.Status == SubscriptionStatus.PENDING_ACTIVATION),
                 CancelledSubscriptions = filteredSubscriptions.Count(s => s.Status == SubscriptionStatus.CANCELLED),
                 
-                TotalRevenue = (decimal)filteredSubscriptions.Sum(s => s.PaymentHistory?.Sum(ph => ph.Amount) ?? 0),
+                TotalRevenue = packageRevenue + extraFromTechnicianEarning,
                 AvgRevenuePerSubscription = filteredSubscriptions.Any() ? 
                     (decimal)filteredSubscriptions.Average(s => s.PaymentHistory?.Sum(ph => ph.Amount) ?? 0) : 0m,
                 RevenueGrowth = CalculateRevenueGrowth(filteredSubscriptions, year),
@@ -48,13 +59,51 @@ namespace WebApiDotNet.Services
                 ExpiredChurnRate = CalculateExpiredChurnRate(filteredSubscriptions),
                 SuspendedChurnRate = CalculateSuspendedChurnRate(filteredSubscriptions),
                 
-                MonthlyMetrics = CalculateMonthlyMetrics(filteredSubscriptions, year, timeRange),
-                QuarterlyMetrics = CalculateQuarterlyMetrics(filteredSubscriptions, year, timeRange),
+                MonthlyMetrics = CalculateMonthlyMetrics(filteredSubscriptions, year, timeRange, allBookings),
+                QuarterlyMetrics = CalculateQuarterlyMetrics(filteredSubscriptions, year, timeRange, allBookings),
                 PackageAnalytics = await CalculatePackageAnalyticsAsync(filteredSubscriptions),
                 StatusAnalytics = CalculateStatusAnalytics(filteredSubscriptions)
             };
 
             return result;
+        }
+
+        private IEnumerable<Booking> FilterBookingsByTimeRange(
+            IEnumerable<Booking> bookings, int year, string timeRange)
+        {
+            var currentDate = DateTime.Now;
+            var currentYear = currentDate.Year;
+            var currentMonth = currentDate.Month;
+
+            switch (timeRange?.ToLower())
+            {
+                case "month":
+                    if (year == currentYear)
+                    {
+                        return bookings.Where(b => b.CreatedAt.Year == currentYear && b.CreatedAt.Month == currentMonth);
+                    }
+                    else
+                    {
+                        return bookings.Where(b => b.CreatedAt.Year == year && b.CreatedAt.Month == 1);
+                    }
+
+                case "quarter":
+                    var currentQuarter = (currentMonth - 1) / 3 + 1;
+                    var startMonth = (currentQuarter - 1) * 3 + 1;
+                    var endMonth = currentQuarter * 3;
+                    if (year == currentYear)
+                    {
+                        return bookings.Where(b => b.CreatedAt.Year == currentYear && b.CreatedAt.Month >= startMonth && b.CreatedAt.Month <= endMonth);
+                    }
+                    else
+                    {
+                        return bookings.Where(b => b.CreatedAt.Year == year && b.CreatedAt.Month >= 1 && b.CreatedAt.Month <= 3);
+                    }
+
+                case "year":
+                default:
+                    return bookings.Where(b => b.CreatedAt.Year == year);
+            }
         }
 
         private double CalculateConversionRate(IEnumerable<TechnicianSubscription> subscriptions)
@@ -190,7 +239,7 @@ namespace WebApiDotNet.Services
             }
         }
 
-        private List<MonthlyMetricDto> CalculateMonthlyMetrics(IEnumerable<TechnicianSubscription> subscriptions, int year, string timeRange)
+        private List<MonthlyMetricDto> CalculateMonthlyMetrics(IEnumerable<TechnicianSubscription> subscriptions, int year, string timeRange, IEnumerable<Booking> allBookings)
         {
             var months = new[] { "Jan", "Feb", "Mar", "Apr", "May", "Jun", 
                                 "Jul", "Aug", "Sep", "Oct", "Nov", "Dec" };
@@ -207,6 +256,8 @@ namespace WebApiDotNet.Services
                         var monthSubscriptions = subscriptions.Where(s => s.CreatedAt.Month == currentMonth).ToList();
                         var monthActive = monthSubscriptions.Count(s => s.Status == SubscriptionStatus.ACTIVE);
                         var monthRevenue = monthSubscriptions.Sum(s => s.PaymentHistory?.Sum(ph => ph.Amount) ?? 0);
+                        var monthBookings = allBookings.Where(b => b.CreatedAt.Year == DateTime.Now.Year && b.CreatedAt.Month == currentMonth && b.PaymentStatus == PaymentStatus.PAID);
+                        var monthExtra = monthBookings.Sum(b => (b.TechnicianEarning ?? 0) * 0.08);
                         var conversionRate = monthSubscriptions.Count > 0 ? 
                             (double)monthActive / monthSubscriptions.Count * 100 : 0;
                         
@@ -216,7 +267,7 @@ namespace WebApiDotNet.Services
                             MonthName = months[currentMonth - 1],
                             Subscriptions = monthSubscriptions.Count,
                             ActiveSubscriptions = monthActive,
-                            Revenue = (decimal)monthRevenue,
+                            Revenue = (decimal)(monthRevenue + monthExtra),
                             ConversionRate = conversionRate
                         });
                     }
@@ -226,6 +277,8 @@ namespace WebApiDotNet.Services
                         var monthSubscriptions = subscriptions.Where(s => s.CreatedAt.Month == 1).ToList();
                         var monthActive = monthSubscriptions.Count(s => s.Status == SubscriptionStatus.ACTIVE);
                         var monthRevenue = monthSubscriptions.Sum(s => s.PaymentHistory?.Sum(ph => ph.Amount) ?? 0);
+                        var monthBookings = allBookings.Where(b => b.CreatedAt.Year == year && b.CreatedAt.Month == 1 && b.PaymentStatus == PaymentStatus.PAID);
+                        var monthExtra = monthBookings.Sum(b => (b.TechnicianEarning ?? 0) * 0.08);
                         var conversionRate = monthSubscriptions.Count > 0 ? 
                             (double)monthActive / monthSubscriptions.Count * 100 : 0;
                         
@@ -235,7 +288,7 @@ namespace WebApiDotNet.Services
                             MonthName = months[0],
                             Subscriptions = monthSubscriptions.Count,
                             ActiveSubscriptions = monthActive,
-                            Revenue = (decimal)monthRevenue,
+                            Revenue = (decimal)(monthRevenue + monthExtra),
                             ConversionRate = conversionRate
                         });
                     }
@@ -254,6 +307,8 @@ namespace WebApiDotNet.Services
                             var monthSubscriptions = subscriptions.Where(s => s.CreatedAt.Month == i).ToList();
                             var monthActive = monthSubscriptions.Count(s => s.Status == SubscriptionStatus.ACTIVE);
                             var monthRevenue = monthSubscriptions.Sum(s => s.PaymentHistory?.Sum(ph => ph.Amount) ?? 0);
+                            var monthBookings = allBookings.Where(b => b.CreatedAt.Year == DateTime.Now.Year && b.CreatedAt.Month == i && b.PaymentStatus == PaymentStatus.PAID);
+                            var monthExtra = monthBookings.Sum(b => (b.TechnicianEarning ?? 0) * 0.08);
                             var conversionRate = monthSubscriptions.Count > 0 ? 
                                 (double)monthActive / monthSubscriptions.Count * 100 : 0;
                             
@@ -263,7 +318,7 @@ namespace WebApiDotNet.Services
                                 MonthName = months[i - 1],
                                 Subscriptions = monthSubscriptions.Count,
                                 ActiveSubscriptions = monthActive,
-                                Revenue = (decimal)monthRevenue,
+                                Revenue = (decimal)(monthRevenue + monthExtra),
                                 ConversionRate = conversionRate
                             });
                         }
@@ -276,6 +331,8 @@ namespace WebApiDotNet.Services
                             var monthSubscriptions = subscriptions.Where(s => s.CreatedAt.Month == i).ToList();
                             var monthActive = monthSubscriptions.Count(s => s.Status == SubscriptionStatus.ACTIVE);
                             var monthRevenue = monthSubscriptions.Sum(s => s.PaymentHistory?.Sum(ph => ph.Amount) ?? 0);
+                            var monthBookings = allBookings.Where(b => b.CreatedAt.Year == year && b.CreatedAt.Month == i && b.PaymentStatus == PaymentStatus.PAID);
+                            var monthExtra = monthBookings.Sum(b => (b.TechnicianEarning ?? 0) * 0.08);
                             var conversionRate = monthSubscriptions.Count > 0 ? 
                                 (double)monthActive / monthSubscriptions.Count * 100 : 0;
                             
@@ -285,7 +342,7 @@ namespace WebApiDotNet.Services
                                 MonthName = months[i - 1],
                                 Subscriptions = monthSubscriptions.Count,
                                 ActiveSubscriptions = monthActive,
-                                Revenue = (decimal)monthRevenue,
+                                Revenue = (decimal)(monthRevenue + monthExtra),
                                 ConversionRate = conversionRate
                             });
                         }
@@ -302,6 +359,8 @@ namespace WebApiDotNet.Services
                         
                         var monthActive = monthSubscriptions.Count(s => s.Status == SubscriptionStatus.ACTIVE);
                         var monthRevenue = monthSubscriptions.Sum(s => s.PaymentHistory?.Sum(ph => ph.Amount) ?? 0);
+                        var monthBookings = allBookings.Where(b => b.CreatedAt.Year == year && b.CreatedAt.Month == i + 1 && b.PaymentStatus == PaymentStatus.PAID);
+                        var monthExtra = monthBookings.Sum(b => (b.TechnicianEarning ?? 0) * 0.08);
                         var conversionRate = monthSubscriptions.Count > 0 ? 
                             (double)monthActive / monthSubscriptions.Count * 100 : 0;
                         
@@ -311,7 +370,7 @@ namespace WebApiDotNet.Services
                             MonthName = months[i],
                             Subscriptions = monthSubscriptions.Count,
                             ActiveSubscriptions = monthActive,
-                            Revenue = (decimal)monthRevenue,
+                            Revenue = (decimal)(monthRevenue + monthExtra),
                             ConversionRate = conversionRate
                         });
                     }
@@ -321,7 +380,7 @@ namespace WebApiDotNet.Services
             return result;
         }
 
-        private List<QuarterlyMetricDto> CalculateQuarterlyMetrics(IEnumerable<TechnicianSubscription> subscriptions, int year, string timeRange)
+        private List<QuarterlyMetricDto> CalculateQuarterlyMetrics(IEnumerable<TechnicianSubscription> subscriptions, int year, string timeRange, IEnumerable<Booking> allBookings)
         {
             var result = new List<QuarterlyMetricDto>();
             
@@ -345,6 +404,8 @@ namespace WebApiDotNet.Services
                         
                         var quarterActive = quarterSubscriptions.Count(s => s.Status == SubscriptionStatus.ACTIVE);
                         var quarterRevenue = quarterSubscriptions.Sum(s => s.PaymentHistory?.Sum(ph => ph.Amount) ?? 0);
+                        var quarterBookings = allBookings.Where(b => b.CreatedAt.Year == year && b.CreatedAt.Month >= startMonth && b.CreatedAt.Month <= endMonth && b.PaymentStatus == PaymentStatus.PAID);
+                        var quarterExtra = quarterBookings.Sum(b => (b.TechnicianEarning ?? 0) * 0.08);
                         var conversionRate = quarterSubscriptions.Count > 0 ? 
                             (double)quarterActive / quarterSubscriptions.Count * 100 : 0;
                         
@@ -353,7 +414,7 @@ namespace WebApiDotNet.Services
                             Quarter = quarter,
                             Subscriptions = quarterSubscriptions.Count,
                             ActiveSubscriptions = quarterActive,
-                            Revenue = (decimal)quarterRevenue,
+                            Revenue = (decimal)(quarterRevenue + quarterExtra),
                             ConversionRate = conversionRate
                         });
                     }
