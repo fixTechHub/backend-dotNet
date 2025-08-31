@@ -7,7 +7,7 @@ namespace WebApiDotNet.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    [Authorize]
+    [Authorize(Roles = "ADMIN")]
     public class BookingStatusLogController : ControllerBase
     {
         private readonly IBookingStatusLogService _service;

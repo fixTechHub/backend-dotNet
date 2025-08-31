@@ -2,11 +2,13 @@ using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Threading.Tasks;
 using WebApiDotNet.DTOs;
+using Microsoft.AspNetCore.Authorization;
 using WebApiDotNet.Services;
 
 namespace WebApiDotNet.Controllers
 {
     [ApiController]
+    [Authorize(Roles = "ADMIN")]
     [Route("api/[controller]")]
     public class AnalyticsController : ControllerBase
     {
