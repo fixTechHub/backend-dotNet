@@ -13,12 +13,24 @@ namespace WebApiDotNet.Services
         private readonly ITechnicianSubscriptionRepository _subscriptionRepository;
         private readonly IPackageRepository _packageRepository;
         private readonly IBookingRepository _bookingRepository;
+        private readonly IUserRepository _userRepository;
+        private readonly ITechnicianRepository _technicianRepository;
+        private readonly IServiceRepository _serviceRepository;
 
-        public AnalyticsService(ITechnicianSubscriptionRepository subscriptionRepository, IPackageRepository packageRepository, IBookingRepository bookingRepository)
+        public AnalyticsService(
+            ITechnicianSubscriptionRepository subscriptionRepository, 
+            IPackageRepository packageRepository, 
+            IBookingRepository bookingRepository,
+            IUserRepository userRepository,
+            ITechnicianRepository technicianRepository,
+            IServiceRepository serviceRepository)
         {
             _subscriptionRepository = subscriptionRepository;
             _packageRepository = packageRepository;
             _bookingRepository = bookingRepository;
+            _userRepository = userRepository;
+            _technicianRepository = technicianRepository;
+            _serviceRepository = serviceRepository;
         }
 
         public async Task<SubscriptionAnalyticsDto> GetSubscriptionAnalyticsAsync(int year, string timeRange)
@@ -36,6 +48,9 @@ namespace WebApiDotNet.Services
             var filteredBookings = FilterBookingsByTimeRange(allBookings, year, timeRange)
                 .Where(b => b.PaymentStatus == PaymentStatus.PAID);
             var extraFromTechnicianEarning = (decimal)filteredBookings.Sum(b => (b.TechnicianEarning ?? 0) * 0.08);
+
+            // Tính chi tiết ExtraFromTechnicianEarning theo thời gian
+            var technicianEarningDetails = await CalculateTechnicianEarningDetailsByTimeAsync(allBookings, year, timeRange);
 
             var result = new SubscriptionAnalyticsDto
             {
@@ -62,11 +77,17 @@ namespace WebApiDotNet.Services
                 MonthlyMetrics = CalculateMonthlyMetrics(filteredSubscriptions, year, timeRange, allBookings),
                 QuarterlyMetrics = CalculateQuarterlyMetrics(filteredSubscriptions, year, timeRange, allBookings),
                 PackageAnalytics = await CalculatePackageAnalyticsAsync(filteredSubscriptions),
-                StatusAnalytics = CalculateStatusAnalytics(filteredSubscriptions)
+                StatusAnalytics = CalculateStatusAnalytics(filteredSubscriptions),
+                
+                // Chi tiết ExtraFromTechnicianEarning
+                TechnicianEarningDetails = technicianEarningDetails,
+                TotalExtraFromTechnicianEarning = extraFromTechnicianEarning
             };
 
             return result;
         }
+
+
 
         private IEnumerable<Booking> FilterBookingsByTimeRange(
             IEnumerable<Booking> bookings, int year, string timeRange)
@@ -469,6 +490,158 @@ namespace WebApiDotNet.Services
                 .ToList();
             
             return statusGroups;
+        }
+
+        private async Task<List<TechnicianEarningDetailDto>> CalculateTechnicianEarningByMonthAsync(List<Booking> bookings, int year)
+        {
+            var months = new[] { "Jan", "Feb", "Mar", "Apr", "May", "Jun", 
+                                "Jul", "Aug", "Sep", "Oct", "Nov", "Dec" };
+            
+            var result = new List<TechnicianEarningDetailDto>();
+            
+            for (int month = 1; month <= 12; month++)
+            {
+                var monthBookings = bookings.Where(b => b.CreatedAt.Month == month).ToList();
+                var totalTechnicianEarning = monthBookings.Sum(b => b.TechnicianEarning ?? 0);
+                var extraEarning = (decimal)(totalTechnicianEarning * 0.08);
+                
+                var bookingDetails = new List<BookingEarningDetailDto>();
+                
+                foreach (var booking in monthBookings)
+                {
+                    var technicianName = "N/A";
+                    var serviceName = "N/A";
+                    
+                    // Lấy tên technician
+                    if (!string.IsNullOrEmpty(booking.TechnicianId))
+                    {
+                        var technician = await _technicianRepository.GetByIdAsync(booking.TechnicianId);
+                        if (technician != null)
+                        {
+                            var user = await _userRepository.GetByIdAsync(technician.UserId);
+                            technicianName = user?.FullName ?? "N/A";
+                        }
+                    }
+                    
+                    // Lấy tên service
+                    if (!string.IsNullOrEmpty(booking.ServiceId))
+                    {
+                        var service = await _serviceRepository.GetByIdAsync(booking.ServiceId);
+                        serviceName = service?.ServiceName ?? "N/A";
+                    }
+                    
+                    bookingDetails.Add(new BookingEarningDetailDto
+                    {
+                        BookingId = booking.Id,
+                        BookingDate = booking.CreatedAt,
+                        TechnicianId = booking.TechnicianId ?? "",
+                        TechnicianName = technicianName,
+                        ServiceName = serviceName,
+                        TechnicianEarning = (decimal)(booking.TechnicianEarning ?? 0),
+                        ExtraFromBooking = (decimal)((booking.TechnicianEarning ?? 0) * 0.08),
+                        PaymentStatus = booking.PaymentStatus.ToString()
+                    });
+                }
+                
+                result.Add(new TechnicianEarningDetailDto
+                {
+                    Date = new DateTime(year, month, 1),
+                    TimeLabel = months[month - 1],
+                    BookingCount = monthBookings.Count,
+                    TotalTechnicianEarning = (decimal)totalTechnicianEarning,
+                    ExtraFromTechnicianEarning = extraEarning,
+                    AveragePerBooking = monthBookings.Count > 0 ? extraEarning / monthBookings.Count : 0m,
+                    BookingDetails = bookingDetails
+                });
+            }
+            
+            return result;
+        }
+
+        private async Task<List<TechnicianEarningDetailDto>> CalculateTechnicianEarningByQuarterAsync(List<Booking> bookings, int year)
+        {
+            var result = new List<TechnicianEarningDetailDto>();
+            
+            for (int quarter = 1; quarter <= 4; quarter++)
+            {
+                var startMonth = (quarter - 1) * 3 + 1;
+                var endMonth = quarter * 3;
+                
+                var quarterBookings = bookings.Where(b => 
+                    b.CreatedAt.Month >= startMonth && b.CreatedAt.Month <= endMonth).ToList();
+                
+                var totalTechnicianEarning = quarterBookings.Sum(b => b.TechnicianEarning ?? 0);
+                var extraEarning = (decimal)(totalTechnicianEarning * 0.08);
+                
+                var bookingDetails = new List<BookingEarningDetailDto>();
+                
+                foreach (var booking in quarterBookings)
+                {
+                    var technicianName = "N/A";
+                    var serviceName = "N/A";
+                    
+                    // Lấy tên technician
+                    if (!string.IsNullOrEmpty(booking.TechnicianId))
+                    {
+                        var technician = await _technicianRepository.GetByIdAsync(booking.TechnicianId);
+                        if (technician != null)
+                        {
+                            var user = await _userRepository.GetByIdAsync(technician.UserId);
+                            technicianName = user?.FullName ?? "N/A";
+                        }
+                    }
+                    
+                    // Lấy tên service
+                    if (!string.IsNullOrEmpty(booking.ServiceId))
+                    {
+                        var service = await _serviceRepository.GetByIdAsync(booking.ServiceId);
+                        serviceName = service?.ServiceName ?? "N/A";
+                    }
+                    
+                    bookingDetails.Add(new BookingEarningDetailDto
+                    {
+                        BookingId = booking.Id,
+                        BookingDate = booking.CreatedAt,
+                        TechnicianId = booking.TechnicianId ?? "",
+                        TechnicianName = technicianName,
+                        ServiceName = serviceName,
+                        TechnicianEarning = (decimal)(booking.TechnicianEarning ?? 0),
+                        ExtraFromBooking = (decimal)((booking.TechnicianEarning ?? 0) * 0.08),
+                        PaymentStatus = booking.PaymentStatus.ToString()
+                    });
+                }
+                
+                result.Add(new TechnicianEarningDetailDto
+                {
+                    Date = new DateTime(year, startMonth, 1),
+                    TimeLabel = $"Q{quarter}",
+                    BookingCount = quarterBookings.Count,
+                    TotalTechnicianEarning = (decimal)totalTechnicianEarning,
+                    ExtraFromTechnicianEarning = extraEarning,
+                    AveragePerBooking = quarterBookings.Count > 0 ? extraEarning / quarterBookings.Count : 0m,
+                    BookingDetails = bookingDetails
+                });
+            }
+            
+            return result;
+        }
+
+        private async Task<List<TechnicianEarningDetailDto>> CalculateTechnicianEarningDetailsByTimeAsync(IEnumerable<Booking> allBookings, int year, string timeRange)
+        {
+            var yearBookings = allBookings.Where(b => b.CreatedAt.Year == year && b.PaymentStatus == PaymentStatus.PAID).ToList();
+            
+            switch (timeRange?.ToLower())
+            {
+                case "month":
+                    return await CalculateTechnicianEarningByMonthAsync(yearBookings, year);
+                    
+                case "quarter":
+                    return await CalculateTechnicianEarningByQuarterAsync(yearBookings, year);
+                    
+                case "year":
+                default:
+                    return await CalculateTechnicianEarningByMonthAsync(yearBookings, year);
+            }
         }
     }
 }
