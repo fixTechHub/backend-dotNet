@@ -95,6 +95,7 @@ namespace WebApiDotNet.DTOs
     public class BookingEarningDetailDto
     {
         public string BookingId { get; set; } = string.Empty;
+        public string BookingCode { get; set; } = string.Empty;
         public DateTime BookingDate { get; set; }
         public string TechnicianId { get; set; } = string.Empty;
         public string TechnicianName { get; set; } = string.Empty;

@@ -533,6 +533,7 @@ namespace WebApiDotNet.Services
                     bookingDetails.Add(new BookingEarningDetailDto
                     {
                         BookingId = booking.Id,
+                        BookingCode = booking.BookingCode ?? "",
                         BookingDate = booking.CreatedAt,
                         TechnicianId = booking.TechnicianId ?? "",
                         TechnicianName = technicianName,
@@ -601,6 +602,7 @@ namespace WebApiDotNet.Services
                     bookingDetails.Add(new BookingEarningDetailDto
                     {
                         BookingId = booking.Id,
+                        BookingCode = booking.BookingCode ?? "",
                         BookingDate = booking.CreatedAt,
                         TechnicianId = booking.TechnicianId ?? "",
                         TechnicianName = technicianName,
